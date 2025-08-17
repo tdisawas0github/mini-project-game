@@ -4,6 +4,7 @@ import DialogueSystem from '../components/DialogueSystem';
 import WorldMap from '../components/WorldMap';
 import LexiconSidebar from '../components/LexiconSidebar';
 import MemoryDive from '../components/MemoryDive';
+import DevInspector from '../components/DevInspector';
 import { prologueChapter, languageSelectionScene, hubScene } from '../data/dialogue';
 
 type GameScreen = 'prologue' | 'language_selection' | 'hub' | 'map' | 'lexicon' | 'memory_dive';
@@ -22,8 +23,6 @@ function GameContent() {
       setCurrentSceneId('hub_main');
     }
   };
-
-  // Removed unused handleHubChoice function since navigation is handled by buttons
 
   const returnToHub = () => {
     setCurrentScreen('hub');
@@ -66,16 +65,21 @@ function GameContent() {
               scenes={hubScene}
               currentSceneId={currentSceneId}
               onSceneChange={setCurrentSceneId}
-              onComplete={() => {
-                // Hub navigation handled by buttons below
+              onComplete={() => {}}
+              onChoiceSelect={(choiceId) => {
+                if (choiceId === 'open_map') setCurrentScreen('map');
+                else if (choiceId === 'open_lexicon') setCurrentScreen('lexicon');
+                else if (choiceId === 'memory_dive') setCurrentScreen('memory_dive');
+                else if (choiceId === 'check_languages') {
+                  alert(`Known languages: ${state.knownLanguages.join(', ')}`);
+                } else if (choiceId === 'view_consequences') {
+                  const consequences = Object.entries(state.consequenceMap)
+                    .map(([key, values]) => `${key}: ${values.join(', ')}`)
+                    .join('\n') || 'No consequences recorded yet.';
+                  alert(consequences);
+                }
               }}
             />
-            
-            <div className="hub-actions">
-              <button onClick={() => setCurrentScreen('map')}>🗺️ Open Map</button>
-              <button onClick={() => setCurrentScreen('lexicon')}>📚 Open Lexicon</button>
-              <button onClick={() => setCurrentScreen('memory_dive')}>🧠 Memory-Dive</button>
-            </div>
           </div>
         );
         
@@ -94,8 +98,9 @@ function GameContent() {
   };
 
   return (
-    <div className="game-container">
+    <div className="game-container" role="main">
       {renderScreen()}
+      <DevInspector />
     </div>
   );
 }

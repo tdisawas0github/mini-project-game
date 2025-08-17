@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useReducer, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { GameState, GameAction } from '../types/game';
 
@@ -94,16 +94,48 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   }
 }
 
+function loadPersisted(): Partial<GameState> | null {
+  try {
+    const raw = localStorage.getItem('ellidra.save');
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (parsed.version !== 1) return null;
+    return parsed.state as GameState;
+  } catch { return null; }
+}
+
+function persist(state: GameState) {
+  try {
+    const payload = { version: 1, timestamp: Date.now(), state };
+    localStorage.setItem('ellidra.save', JSON.stringify(payload));
+  } catch {}
+}
+
+export function deriveRipple(state: GameState) {
+  return {
+    factions: state.factionInfluence,
+    memoriesUnlocked: Object.values(state.memories).filter(m => !m.locked).map(m => m.id),
+    consequences: state.consequenceMap
+  };
+}
+
 const GameContext = createContext<{
   state: GameState;
   dispatch: React.Dispatch<GameAction>;
 } | null>(null);
 
 export function GameProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(gameReducer, initialState);
-  
+  const persisted = loadPersisted();
+  const [state, dispatch] = useReducer(gameReducer, { ...initialState, ...persisted });
+
+  function wrappedDispatch(action: GameAction) {
+    dispatch(action);
+  }
+
+  useEffect(() => { persist(state); }, [state]);
+
   return (
-    <GameContext.Provider value={{ state, dispatch }}>
+    <GameContext.Provider value={{ state, dispatch: wrappedDispatch }}>
       {children}
     </GameContext.Provider>
   );

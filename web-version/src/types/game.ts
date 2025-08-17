@@ -71,3 +71,22 @@ export type GameAction =
   | { type: 'UPDATE_FACTION_INFLUENCE'; payload: { faction: string; change: number } }
   | { type: 'SET_CURRENT_SCENE'; payload: string }
   | { type: 'COMPLETE_SCENE'; payload: string };
+
+export interface UnlockCondition {
+  type: 'language' | 'memory' | 'consequence' | 'faction_influence';
+  key: string;
+  op?: 'gte' | 'lte' | 'eq' | 'includes';
+  value?: any;
+}
+
+export interface RippleEffectSummary {
+  factions: Record<string, number>;
+  memoriesUnlocked: string[];
+  consequences: Record<string, string[]>;
+}
+
+export interface SaveGamePayload {
+  version: number;
+  timestamp: number;
+  state: GameState;
+}

@@ -112,31 +112,11 @@ export const hubScene: DialogueNode[] = [
     
     What do you choose to explore?`,
     choices: [
-      {
-        id: 'open_map',
-        text: 'Study the map of Valdaren',
-        consequences: ['opened_map']
-      },
-      {
-        id: 'open_lexicon', 
-        text: 'Consult your lexicon of glyphs',
-        consequences: ['opened_lexicon']
-      },
-      {
-        id: 'memory_dive',
-        text: 'Enter a Memory-Dive Chamber',
-        consequences: ['entered_memory_dive']
-      },
-      {
-        id: 'check_languages',
-        text: 'Review known languages',
-        consequences: ['checked_languages']
-      },
-      {
-        id: 'view_consequences',
-        text: 'Examine the ripples of your choices',
-        consequences: ['viewed_consequences']
-      }
+      { id: 'open_map', text: '🗺️ Study the map of Valdaren', consequences: ['opened_map'] },
+      { id: 'open_lexicon', text: '📚 Consult your lexicon of glyphs', consequences: ['opened_lexicon'] },
+      { id: 'memory_dive', text: '🧠 Enter a Memory-Dive Chamber', consequences: ['entered_memory_dive'] },
+      { id: 'check_languages', text: '🔤 Review known languages', consequences: ['checked_languages'] },
+      { id: 'view_consequences', text: '🌊 Examine the ripples of your choices', consequences: ['viewed_consequences'] }
     ]
   }
 ];

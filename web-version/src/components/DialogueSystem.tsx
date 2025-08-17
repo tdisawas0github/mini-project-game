@@ -7,13 +7,15 @@ interface DialogueSystemProps {
   currentSceneId: string;
   onSceneChange: (sceneId: string) => void;
   onComplete: () => void;
+  onChoiceSelect?: (choiceId: string) => void; // new optional callback
 }
 
 export default function DialogueSystem({ 
   scenes, 
   currentSceneId, 
   onSceneChange, 
-  onComplete 
+  onComplete,
+  onChoiceSelect
 }: DialogueSystemProps) {
   const { state, dispatch } = useGame();
   const [showNameInput, setShowNameInput] = useState(false);
@@ -26,6 +28,9 @@ export default function DialogueSystem({
   }
 
   const handleChoice = (choice: DialogueChoice) => {
+    // External notification first (so consumer can intercept)
+    onChoiceSelect?.(choice.id);
+
     // Handle name input specially
     if (choice.id === 'choose_name') {
       setShowNameInput(true);
@@ -56,7 +61,7 @@ export default function DialogueSystem({
       } });
     }
 
-    // Handle navigation
+    // Navigation & special routing
     if (choice.id === 'who_are_you') {
       onSceneChange('figure_response_identity');
     } else if (choice.id === 'return_from_where') {
@@ -64,9 +69,11 @@ export default function DialogueSystem({
     } else if (choice.id === 'use_glyph') {
       onSceneChange('figure_response_glyph');
     } else if (choice.id.startsWith('choose_') && currentSceneId === 'language_selection') {
-      onComplete(); // Go to hub after language selection
+      onComplete();
+    } else if ([ 'open_map','open_lexicon','memory_dive','check_languages','view_consequences' ].includes(choice.id)) {
+      // Hub commands: onChoiceSelect already informed parent; nothing more here.
+      // Keep dialogue on same scene so hub UI persists.
     } else {
-      // Default auto-advance or completion
       if (currentScene.autoAdvance) {
         onSceneChange(currentScene.autoAdvance);
       } else {
