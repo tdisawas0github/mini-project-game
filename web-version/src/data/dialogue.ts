@@ -61,7 +61,7 @@ export const prologueChapter: DialogueNode[] = [
     choices: [
       {
         id: 'choose_name',
-        text: '[Enter your name]',
+        text: '✍️ Choose your name',
         consequences: ['name_chosen']
       }
     ]

@@ -451,3 +451,109 @@ export const AutoPlayIndicator = styled.div<{ $isActive: boolean }>`
     opacity: 0.8;
   }
 `;
+
+// Name input container
+export const NameInputContainer = styled(motion.div)`
+  position: absolute;
+  bottom: 280px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, 
+    rgba(15, 15, 35, 0.95) 0%, 
+    rgba(26, 26, 46, 0.98) 50%, 
+    rgba(22, 33, 62, 0.95) 100%
+  );
+  border: 2px solid rgba(212, 175, 55, 0.4);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  padding: 30px 40px;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 20px rgba(212, 175, 55, 0.1);
+  min-width: 400px;
+  text-align: center;
+`;
+
+// Name input field
+export const NameInput = styled.input`
+  width: 100%;
+  background: rgba(15, 15, 35, 0.8);
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 10px;
+  color: #e2e8f0;
+  padding: 15px 20px;
+  font-family: 'Crimson Text', serif;
+  font-size: 1.1rem;
+  text-align: center;
+  margin: 20px 0;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+  
+  &:focus {
+    outline: none;
+    border-color: rgba(212, 175, 55, 0.8);
+    background: rgba(212, 175, 55, 0.05);
+    box-shadow: 
+      0 0 0 3px rgba(212, 175, 55, 0.2),
+      0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  &::placeholder {
+    color: rgba(226, 232, 240, 0.5);
+    font-style: italic;
+  }
+`;
+
+// Input label
+export const InputLabel = styled.div`
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  color: #d4af37;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+`;
+
+// Input confirm button
+export const InputButton = styled(motion.button)`
+  background: linear-gradient(135deg, 
+    rgba(212, 175, 55, 0.8) 0%, 
+    rgba(184, 134, 11, 0.9) 100%
+  );
+  border: none;
+  color: #0f0f23;
+  padding: 12px 30px;
+  border-radius: 10px;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 15px;
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, 
+      rgba(212, 175, 55, 1) 0%, 
+      rgba(184, 134, 11, 1) 100%
+    );
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+  }
+  
+  &:active {
+    transform: translateY(-2px) scale(0.98);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+`;

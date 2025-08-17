@@ -13,7 +13,11 @@ import {
   TopUIBar,
   UIButton,
   AutoPlayIndicator,
-  StatusIndicator
+  StatusIndicator,
+  NameInputContainer,
+  NameInput,
+  InputLabel,
+  InputButton
 } from '../styles/visualnovel';
 import { useGame } from '../context/GameContext';
 
@@ -42,6 +46,8 @@ export function VNDialogueSystem({
   const [isTextComplete, setIsTextComplete] = useState(false);
   const [autoPlay, setAutoPlay] = useState(false);
   const [typingSpeed, setTypingSpeed] = useState(30);
+  const [showNameInput, setShowNameInput] = useState(false);
+  const [playerName, setPlayerName] = useState('');
 
   const currentScene = scenes.find(scene => scene.id === currentSceneId);
 
@@ -173,8 +179,13 @@ export function VNDialogueSystem({
       nextSceneId = 'figure_response_memory';
     } else if (choice.id === 'use_glyph') {
       nextSceneId = 'figure_response_glyph';
-    } else if (choice.id.startsWith('choose_')) {
-      // Handle language selection or other choice-based progression
+    } else if (choice.id === 'choose_name') {
+      // Show name input interface
+      setShowNameInput(true);
+      return;
+    } else if (choice.id.startsWith('choose_english') || choice.id.startsWith('choose_dutch') || 
+               choice.id.startsWith('choose_latin') || choice.id.startsWith('choose_greek')) {
+      // Handle language selection
       if (choice.id === 'choose_english') {
         dispatch({ type: 'LEARN_LANGUAGE', payload: 'English' });
       } else if (choice.id === 'choose_dutch') {
@@ -216,6 +227,19 @@ export function VNDialogueSystem({
       // Load logic would need to be implemented based on your game structure
       console.log('Loading:', saveData);
     }
+  };
+
+  const handleNameSubmit = () => {
+    if (!playerName.trim()) return;
+    
+    // Save the player name to game state
+    dispatch({ type: 'SET_PLAYER_NAME', payload: playerName.trim() });
+    
+    // Hide the name input
+    setShowNameInput(false);
+    
+    // Continue to next scene or complete
+    onComplete?.();
   };
 
   if (!currentScene) {
@@ -299,7 +323,7 @@ export function VNDialogueSystem({
         </AnimatePresence>
 
         {/* Choices */}
-        {currentScene.choices && isTextComplete && (
+        {currentScene.choices && isTextComplete && !showNameInput && (
           <ChoicesContainer>
             <AnimatePresence>
               {currentScene.choices.map((choice: any, index: number) => {
@@ -334,6 +358,39 @@ export function VNDialogueSystem({
               })}
             </AnimatePresence>
           </ChoicesContainer>
+        )}
+
+        {/* Name Input */}
+        {showNameInput && (
+          <NameInputContainer
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+          >
+            <InputLabel>What name shall echo through the ages?</InputLabel>
+            <NameInput
+              type="text"
+              value={playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
+              placeholder="Enter your name..."
+              maxLength={20}
+              autoFocus
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && playerName.trim()) {
+                  handleNameSubmit();
+                }
+              }}
+            />
+            <InputButton
+              disabled={!playerName.trim()}
+              onClick={handleNameSubmit}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Inscribe Name
+            </InputButton>
+          </NameInputContainer>
         )}
 
         {/* Auto-play indicator */}
