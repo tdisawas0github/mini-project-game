@@ -1,26 +1,50 @@
 /* Game Container */
+/* Game Container */
 .game-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f172a 100%);
   color: #e2e8f0;
   font-family: 'Georgia', serif;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 24px;
+  box-sizing: border-box;
 }
 
-/* Dialogue System */
+.game-container {
+  transform: scale(1);
+  transform-origin: top center;
+}
+
+/* /* Memory Dive */
+.memory-dive {
+  width: 100%;
+  max-width: 1300px;
+  background: rgba(30, 41, 59, 0.95);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 16px 50px -10px rgba(0,0,0,.6);
+  backdrop-filter: blur(8px);
+} System */
 .dialogue-system {
-  max-width: 800px;
+  width: 100%;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .dialogue-box {
-  background: rgba(30, 41, 59, 0.9);
+  background: rgba(30, 41, 59, 0.95);
   border: 2px solid #475569;
-  border-radius: 12px;
-  padding: 30px;
-  margin-bottom: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
 }
 
 .speaker-name {
@@ -34,15 +58,15 @@
 
 .dialogue-text {
   line-height: 1.8;
-  font-size: 1.1em;
+  font-size: clamp(.95rem, 1.1vw, 1.1rem);
   white-space: pre-line;
 }
 
 .dialogue-choices {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: 600px;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+  max-width: 700px;
   margin: 0 auto;
 }
 
@@ -55,7 +79,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: left;
-  font-size: 1em;
+  font-size: clamp(.85rem, 1vw, 1rem);
 }
 
 .choice-button:hover:not(.disabled) {
@@ -122,13 +146,17 @@
 
 /* Hub Screen */
 .hub-screen {
-  max-width: 1000px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding-bottom: 80px;
 }
 
 .hub-header {
   text-align: center;
-  margin-bottom: 40px;
 }
 
 .hub-header h1 {
@@ -172,11 +200,13 @@
 
 /* World Map */
 .map-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 1400px;
   background: rgba(30, 41, 59, 0.95);
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 16px 50px -10px rgba(0,0,0,.6);
+  backdrop-filter: blur(8px);
 }
 
 .map-header {
@@ -204,8 +234,9 @@
 
 .map-content {
   display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 20px;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+  align-items: start;
 }
 
 .map-image-container {
@@ -227,6 +258,7 @@
   border: 2px solid transparent;
   cursor: pointer;
   transition: all 0.3s ease;
+  border-radius: 6px;
 }
 
 .region-hotspot:hover {
@@ -321,12 +353,14 @@
   right: 0;
   top: 0;
   bottom: 0;
-  width: 400px;
+  width: min(450px, 40vw);
   background: rgba(30, 41, 59, 0.98);
   border-left: 2px solid #475569;
-  padding: 20px;
+  padding: 32px 24px;
   overflow-y: auto;
   z-index: 100;
+  box-shadow: -8px 0 32px -8px rgba(0,0,0,.6);
+  backdrop-filter: blur(12px);
 }
 
 .lexicon-header {
@@ -407,7 +441,7 @@
 
 /* Memory Dive */
 .memory-dive {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
   background: rgba(30, 41, 59, 0.95);
   border-radius: 12px;
@@ -435,12 +469,12 @@
 .memory-options {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .memory-option {
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: minmax(160px, 220px) 1fr;
   gap: 20px;
   align-items: start;
 }
@@ -546,20 +580,56 @@
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
-  .lexicon-sidebar {
-    width: 100%;
-  }
-  
+@media (max-width: 1024px) {
   .map-content {
     grid-template-columns: 1fr;
+    gap: 24px;
   }
   
   .memory-option {
     grid-template-columns: 1fr;
-  }
-  
-  .hub-actions {
-    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
+
+@media (max-width: 768px) {
+  .lexicon-sidebar {
+    width: 100vw;
+    padding: 24px 16px;
+  }
+  
+  .game-container {
+    padding: 16px;
+  }
+  
+  .dialogue-box {
+    padding: 24px;
+    border-radius: 12px;
+  }
+  
+  .hub-header h1 {
+    font-size: 2.5em;
+  }
+  
+  .map-container, .memory-dive {
+    padding: 24px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dialogue-system {
+    padding: 16px;
+  }
+  
+  .dialogue-box {
+    padding: 20px;
+  }
+  
+  .hub-header h1 {
+    font-size: 2em;
+  }
+}
+
+@media (min-width: 1600px){ .game-container { transform: scale(1.05); transform-origin: top center; } }
+@media (max-width: 900px){ .dialogue-box { padding: 20px; } .hub-header h1 { font-size: 2.3em; } }
