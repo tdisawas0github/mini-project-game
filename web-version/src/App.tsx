@@ -1,8 +1,17 @@
-import Game from './components/Game'
-import './App.css'
+import React from 'react';
+import Game from './components/Game';
+import { GameProvider } from './context/GameContext';
+import { ThemeProvider } from './context/ThemeContext';
+import './App.css';
 
 function App() {
-  return <Game />
+  return (
+    <ThemeProvider>
+      <GameProvider>
+        <Game />
+      </GameProvider>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;

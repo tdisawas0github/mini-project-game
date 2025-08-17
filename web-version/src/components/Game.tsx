@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { GameProvider, useGame } from '../context/GameContext';
+import { Container, Surface, Button, Typography, Flex } from './ui';
+import { useTheme } from '../context/ThemeContext';
 import DialogueSystem from '../components/DialogueSystem';
 import WorldMap from '../components/WorldMap';
 import LexiconSidebar from '../components/LexiconSidebar';
@@ -11,6 +13,7 @@ type GameScreen = 'prologue' | 'language_selection' | 'hub' | 'map' | 'lexicon' 
 
 function GameContent() {
   const { state } = useGame();
+  const { toggleTheme, isDark } = useTheme();
   const [currentScreen, setCurrentScreen] = useState<GameScreen>('prologue');
   const [currentSceneId, setCurrentSceneId] = useState('prologue_start');
 
@@ -33,75 +36,127 @@ function GameContent() {
     switch (currentScreen) {
       case 'prologue':
         return (
-          <DialogueSystem
-            scenes={prologueChapter}
-            currentSceneId={currentSceneId}
-            onSceneChange={setCurrentSceneId}
-            onComplete={handleSceneComplete}
-          />
+          <Surface>
+            <DialogueSystem
+              scenes={prologueChapter}
+              currentSceneId={currentSceneId}
+              onSceneChange={setCurrentSceneId}
+              onComplete={handleSceneComplete}
+            />
+          </Surface>
         );
         
       case 'language_selection':
         return (
-          <DialogueSystem
-            scenes={languageSelectionScene}
-            currentSceneId={currentSceneId}
-            onSceneChange={setCurrentSceneId}
-            onComplete={handleSceneComplete}
-          />
+          <Surface>
+            <DialogueSystem
+              scenes={languageSelectionScene}
+              currentSceneId={currentSceneId}
+              onSceneChange={setCurrentSceneId}
+              onComplete={handleSceneComplete}
+            />
+          </Surface>
         );
         
       case 'hub':
         return (
-          <div className="hub-screen">
-            <div className="hub-header">
-              <h1>Echoes of Ellidra</h1>
-              <div className="player-info">
+          <Surface>
+            <Flex align="center">
+              <Typography variant="h1" style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                Echoes of Ellidra
+              </Typography>
+              <Typography style={{ textAlign: 'center', marginBottom: '2rem' }}>
                 Welcome, <strong>{state.playerName}</strong>
-              </div>
-            </div>
-            
-            <DialogueSystem
-              scenes={hubScene}
-              currentSceneId={currentSceneId}
-              onSceneChange={setCurrentSceneId}
-              onComplete={() => {}}
-              onChoiceSelect={(choiceId) => {
-                if (choiceId === 'open_map') setCurrentScreen('map');
-                else if (choiceId === 'open_lexicon') setCurrentScreen('lexicon');
-                else if (choiceId === 'memory_dive') setCurrentScreen('memory_dive');
-                else if (choiceId === 'check_languages') {
-                  alert(`Known languages: ${state.knownLanguages.join(', ')}`);
-                } else if (choiceId === 'view_consequences') {
-                  const consequences = Object.entries(state.consequenceMap)
-                    .map(([key, values]) => `${key}: ${values.join(', ')}`)
-                    .join('\n') || 'No consequences recorded yet.';
-                  alert(consequences);
-                }
-              }}
-            />
-          </div>
+              </Typography>
+              
+              <DialogueSystem
+                scenes={hubScene}
+                currentSceneId={currentSceneId}
+                onSceneChange={setCurrentSceneId}
+                onComplete={() => {}}
+                onChoiceSelect={(choiceId) => {
+                  if (choiceId === 'open_map') setCurrentScreen('map');
+                  else if (choiceId === 'open_lexicon') setCurrentScreen('lexicon');
+                  else if (choiceId === 'memory_dive') setCurrentScreen('memory_dive');
+                  else if (choiceId === 'check_languages') {
+                    alert(`Known languages: ${state.knownLanguages.join(', ')}`);
+                  } else if (choiceId === 'view_consequences') {
+                    const consequences = Object.entries(state.consequenceMap)
+                      .map(([key, values]) => `${key}: ${values.join(', ')}`)
+                      .join('\n') || 'No consequences recorded yet.';
+                    alert(consequences);
+                  }
+                }}
+              />
+            </Flex>
+          </Surface>
         );
         
       case 'map':
-        return <WorldMap onClose={returnToHub} />;
+        return (
+          <Surface>
+            <Flex>
+              <Button variant="ghost" onClick={returnToHub} style={{ alignSelf: 'flex-start' }}>
+                ← Back to Hub
+              </Button>
+              <WorldMap onClose={returnToHub} />
+            </Flex>
+          </Surface>
+        );
         
       case 'lexicon':
-        return <LexiconSidebar onClose={returnToHub} />;
+        return (
+          <Surface>
+            <Flex>
+              <Button variant="ghost" onClick={returnToHub} style={{ alignSelf: 'flex-start' }}>
+                ← Back to Hub
+              </Button>
+              <LexiconSidebar onClose={returnToHub} />
+            </Flex>
+          </Surface>
+        );
         
       case 'memory_dive':
-        return <MemoryDive onClose={returnToHub} />;
+        return (
+          <Surface>
+            <Flex>
+              <Button variant="ghost" onClick={returnToHub} style={{ alignSelf: 'flex-start' }}>
+                ← Back to Hub
+              </Button>
+              <MemoryDive onClose={returnToHub} />
+            </Flex>
+          </Surface>
+        );
         
       default:
-        return <div>Screen not found</div>;
+        return (
+          <Surface>
+            <Typography>Screen not found</Typography>
+          </Surface>
+        );
     }
   };
 
   return (
-    <div className="game-container" role="main">
+    <Container>
+      {/* Theme Toggle */}
+      <Button
+        variant="ghost"
+        onClick={toggleTheme}
+        style={{
+          position: 'fixed',
+          top: '1rem',
+          right: '1rem',
+          zIndex: 50,
+          fontSize: '1.2rem',
+        }}
+      >
+        {isDark ? '☀️' : '🌙'}
+      </Button>
+
       {renderScreen()}
       <DevInspector />
-    </div>
+    </Container>
   );
 }
 
