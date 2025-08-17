@@ -125,9 +125,12 @@ export const UILayer = styled.div`
 // Main dialogue box
 export const DialogueBox = styled(motion.div)`
   position: absolute;
-  bottom: 20px;
-  left: 20px;
-  right: 20px;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+  max-width: 900px;
+  min-height: 160px;
   background: linear-gradient(135deg, 
     rgba(15, 15, 35, 0.95) 0%, 
     rgba(26, 26, 46, 0.98) 50%, 
@@ -137,13 +140,27 @@ export const DialogueBox = styled(motion.div)`
   border-radius: 15px;
   backdrop-filter: blur(10px);
   box-shadow: 
-    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 15px 35px rgba(0, 0, 0, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 0 20px rgba(212, 175, 55, 0.1);
-  padding: 25px 30px;
-  max-height: 250px;
+    0 0 25px rgba(212, 175, 55, 0.15);
+  padding: 30px 35px;
+  max-height: 280px;
   overflow-y: auto;
   animation: ${slideInFromBottom} 0.5s ease-out;
+  
+  @media (max-width: 768px) {
+    width: 90%;
+    padding: 25px;
+    bottom: 30px;
+    min-height: 140px;
+  }
+  
+  @media (max-width: 480px) {
+    width: 95%;
+    padding: 20px;
+    bottom: 20px;
+    min-height: 120px;
+  }
 `;
 
 // Character name box
@@ -170,11 +187,14 @@ export const NameBox = styled.div`
 // Dialogue text
 export const DialogueText = styled.div`
   font-family: 'Crimson Text', serif;
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-size: 1.15rem;
+  line-height: 1.7;
   color: #e2e8f0;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
   animation: ${textReveal} 0.8s ease-out;
+  margin-top: 8px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
   
   /* Special text styling for glyphs/foreign text */
   .glyph {
@@ -207,14 +227,26 @@ export const DialogueText = styled.div`
 // Choice buttons container
 export const ChoicesContainer = styled.div`
   position: absolute;
-  bottom: 280px;
+  bottom: 320px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   gap: 12px;
-  min-width: 300px;
-  max-width: 600px;
+  min-width: 320px;
+  max-width: 650px;
+  width: 80%;
+  
+  @media (max-width: 768px) {
+    width: 85%;
+    bottom: 290px;
+  }
+  
+  @media (max-width: 480px) {
+    width: 90%;
+    bottom: 270px;
+    min-width: 280px;
+  }
 `;
 
 // Individual choice button
