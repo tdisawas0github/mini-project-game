@@ -18,7 +18,7 @@ import {
 import { useGame } from '../context/GameContext';
 
 interface VNDialogueSystemProps {
-  scenes: Record<string, any>;
+  scenes: any[]; // Array of dialogue nodes
   currentSceneId: string;
   onSceneChange: (sceneId: string) => void;
   onComplete?: () => void;
@@ -43,7 +43,7 @@ export function VNDialogueSystem({
   const [autoPlay, setAutoPlay] = useState(false);
   const [typingSpeed, setTypingSpeed] = useState(30);
 
-  const currentScene = scenes[currentSceneId];
+  const currentScene = scenes.find(scene => scene.id === currentSceneId);
 
   // Text typewriter effect
   useEffect(() => {
@@ -114,9 +114,14 @@ export function VNDialogueSystem({
     }
 
     // Handle scene transitions
-    if (currentScene.next) {
-      onSceneChange(currentScene.next);
-      setCurrentTextIndex(0);
+    if (currentScene.autoAdvance) {
+      const nextScene = scenes.find(scene => scene.id === currentScene.autoAdvance);
+      if (nextScene) {
+        onSceneChange(currentScene.autoAdvance);
+        setCurrentTextIndex(0);
+      } else {
+        onComplete?.();
+      }
     } else if (currentScene.choices) {
       // Choices will be displayed
     } else {
@@ -125,46 +130,72 @@ export function VNDialogueSystem({
   };
 
   const handleChoice = (choice: any) => {
-    if (choice.requirements) {
-      const hasRequirement = choice.requirements.every((req: any) => {
-        if (req.type === 'language') {
-          return state.knownLanguages.includes(req.value);
-        }
-        return true;
+    // Check requirements
+    if (choice.requiresLanguages) {
+      const hasRequirement = choice.requiresLanguages.every((lang: string) => {
+        return state.knownLanguages.includes(lang);
       });
       
       if (!hasRequirement) return;
     }
 
-    // Apply choice effects - use existing action types
-    if (choice.effects) {
-      choice.effects.forEach((effect: any) => {
-        if (effect.type === 'learn_language') {
-          dispatch({ type: 'LEARN_LANGUAGE', payload: effect.value });
-        } else if (effect.type === 'unlock_memory') {
-          dispatch({ type: 'UNLOCK_MEMORY', payload: effect.value });
-        } else if (effect.type === 'faction_influence') {
-          dispatch({ 
-            type: 'UPDATE_FACTION_INFLUENCE', 
-            payload: { faction: effect.faction, change: effect.value } 
-          });
-        }
+    // Apply effects based on choice properties
+    if (choice.unlocks) {
+      choice.unlocks.forEach((memory: string) => {
+        dispatch({ type: 'UNLOCK_MEMORY', payload: memory });
       });
     }
 
-    // Record choice consequence
-    if (choice.consequence) {
-      dispatch({
-        type: 'ADD_CONSEQUENCE',
-        payload: { key: choice.consequence.key, value: choice.consequence.value }
+    if (choice.glyphUsed) {
+      // Learn the glyph as a word
+      dispatch({ type: 'LEARN_LANGUAGE', payload: choice.glyphUsed });
+    }
+
+    // Record consequences
+    if (choice.consequences) {
+      choice.consequences.forEach((consequence: string) => {
+        dispatch({
+          type: 'ADD_CONSEQUENCE',
+          payload: { key: 'choice', value: consequence }
+        });
       });
     }
 
     onChoiceSelect?.(choice.id);
 
-    if (choice.next) {
-      onSceneChange(choice.next);
-      setCurrentTextIndex(0);
+    // Find the next scene based on choice
+    let nextSceneId = null;
+    
+    // Look for specific response scenes
+    if (choice.id === 'who_are_you') {
+      nextSceneId = 'figure_response_identity';
+    } else if (choice.id === 'return_from_where') {
+      nextSceneId = 'figure_response_memory';
+    } else if (choice.id === 'use_glyph') {
+      nextSceneId = 'figure_response_glyph';
+    } else if (choice.id.startsWith('choose_')) {
+      // Handle language selection or other choice-based progression
+      if (choice.id === 'choose_english') {
+        dispatch({ type: 'LEARN_LANGUAGE', payload: 'English' });
+      } else if (choice.id === 'choose_dutch') {
+        dispatch({ type: 'LEARN_LANGUAGE', payload: 'Dutch' });
+      } else if (choice.id === 'choose_latin') {
+        dispatch({ type: 'LEARN_LANGUAGE', payload: 'Latin' });
+      } else if (choice.id === 'choose_greek') {
+        dispatch({ type: 'LEARN_LANGUAGE', payload: 'Greek' });
+      }
+      
+      // For language selection, complete the scene to move to next screen
+      onComplete?.();
+      return;
+    }
+
+    if (nextSceneId) {
+      const nextScene = scenes.find(scene => scene.id === nextSceneId);
+      if (nextScene) {
+        onSceneChange(nextSceneId);
+        setCurrentTextIndex(0);
+      }
     }
   };
 
@@ -272,11 +303,8 @@ export function VNDialogueSystem({
           <ChoicesContainer>
             <AnimatePresence>
               {currentScene.choices.map((choice: any, index: number) => {
-                const isDisabled = choice.requirements && !choice.requirements.every((req: any) => {
-                  if (req.type === 'language') {
-                    return state.knownLanguages.includes(req.value);
-                  }
-                  return true;
+                const isDisabled = choice.requiresLanguages && !choice.requiresLanguages.every((lang: string) => {
+                  return state.knownLanguages.includes(lang);
                 });
 
                 return (
@@ -293,7 +321,12 @@ export function VNDialogueSystem({
                     {choice.text}
                     {isDisabled && (
                       <span style={{ opacity: 0.6, fontSize: '0.8rem', display: 'block' }}>
-                        (Requires: {choice.requirements?.[0]?.value})
+                        (Requires: {choice.requiresLanguages?.join(', ')})
+                      </span>
+                    )}
+                    {choice.glyphUsed && (
+                      <span style={{ color: '#d4af37', fontSize: '0.8rem', display: 'block', fontStyle: 'italic' }}>
+                        Uses glyph: {choice.glyphUsed}
                       </span>
                     )}
                   </ChoiceButton>
