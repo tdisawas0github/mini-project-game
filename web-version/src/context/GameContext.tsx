@@ -1,6 +1,7 @@
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useReducer, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { GameState, GameAction } from '../types/game';
+import { saveGameState } from '../utils/gameUtils';
 
 const initialMemories = {
   m_intro: {
@@ -94,25 +95,34 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   }
 }
 
-const GameContext = createContext<{
+function loadPersisted(): Partial<GameState> | null {
+  try {
+    const raw = localStorage.getItem('ellidra.save');
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (parsed.version !== 1) return null;
+    return parsed.state as GameState;
+  } catch { return null; }
+}
+
+export const GameContext = createContext<{
   state: GameState;
   dispatch: React.Dispatch<GameAction>;
 } | null>(null);
 
 export function GameProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(gameReducer, initialState);
-  
+  const persisted = loadPersisted();
+  const [state, dispatch] = useReducer(gameReducer, { ...initialState, ...persisted });
+
+  function wrappedDispatch(action: GameAction) {
+    dispatch(action);
+  }
+
+  useEffect(() => { saveGameState(state); }, [state]);
+
   return (
-    <GameContext.Provider value={{ state, dispatch }}>
+    <GameContext.Provider value={{ state, dispatch: wrappedDispatch }}>
       {children}
     </GameContext.Provider>
   );
-}
-
-export function useGame() {
-  const context = useContext(GameContext);
-  if (!context) {
-    throw new Error('useGame must be used within GameProvider');
-  }
-  return context;
 }

@@ -1,8 +1,8 @@
-import Game from './components/Game'
-import './App.css'
+import Game from './components/Game';
+import './App.css';
 
 function App() {
-  return <Game />
+  return <Game />;
 }
 
-export default App
+export default App;

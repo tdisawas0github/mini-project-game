@@ -1,4 +1,4 @@
-import { useGame } from '../context/GameContext';
+import { useGame } from '../hooks/useGame';
 
 interface MemoryDiveProps {
   onClose: () => void;
