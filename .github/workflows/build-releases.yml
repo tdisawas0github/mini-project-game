@@ -1,0 +1,227 @@
+name: Build Multi-Platform Releases
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  web-build:
+    name: Build Web Version
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'web-version/package-lock.json'
+        
+    - name: Install dependencies
+      run: |
+        cd web-version
+        npm ci
+        
+    - name: Run tests
+      run: |
+        cd web-version
+        npm run test
+        
+    - name: Build PWA
+      run: |
+        cd web-version
+        npm run build
+        
+    - name: Upload web build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: web-build
+        path: web-version/dist/
+        retention-days: 30
+
+  renpy-desktop:
+    name: Build Ren'Py Desktop (${{ matrix.platform }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - platform: Windows
+            os: windows-latest
+            renpy-version: "8.2.3"
+            build-target: "pc"
+          - platform: Linux
+            os: ubuntu-latest
+            renpy-version: "8.2.3"  
+            build-target: "pc"
+          - platform: macOS
+            os: macos-latest
+            renpy-version: "8.2.3"
+            build-target: "mac"
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Download Ren'Py SDK (Windows)
+      if: matrix.platform == 'Windows'
+      run: |
+        Invoke-WebRequest -Uri "https://github.com/renpy/renpy/releases/download/${{ matrix.renpy-version }}/renpy-${{ matrix.renpy-version }}-sdk.zip" -OutFile "renpy-sdk.zip"
+        Expand-Archive -Path "renpy-sdk.zip" -DestinationPath "."
+        
+    - name: Download Ren'Py SDK (Linux/macOS)
+      if: matrix.platform != 'Windows'
+      run: |
+        wget "https://github.com/renpy/renpy/releases/download/${{ matrix.renpy-version }}/renpy-${{ matrix.renpy-version }}-sdk.tar.bz2"
+        tar -xjf "renpy-${{ matrix.renpy-version }}-sdk.tar.bz2"
+        
+    - name: Build game (Windows)
+      if: matrix.platform == 'Windows'
+      run: |
+        cd renpy-*-sdk
+        python renpy.py ../Valdaren distribute ${{ matrix.build-target }}
+        
+    - name: Build game (Linux/macOS) 
+      if: matrix.platform != 'Windows'
+      run: |
+        cd renpy-*-sdk
+        python renpy.py ../Valdaren distribute ${{ matrix.build-target }}
+        
+    - name: Upload desktop build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: desktop-${{ matrix.platform }}
+        path: Valdaren-dists/
+        retention-days: 30
+
+  renpy-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        api-level: 34
+        build-tools: 34.0.0
+        
+    - name: Download Ren'Py SDK
+      run: |
+        wget "https://github.com/renpy/renpy/releases/download/8.2.3/renpy-8.2.3-sdk.tar.bz2"
+        tar -xjf "renpy-8.2.3-sdk.tar.bz2"
+        
+    - name: Build Android APK
+      run: |
+        cd renpy-*-sdk
+        python renpy.py android_build ../Valdaren
+        
+    - name: Upload Android APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-apk
+        path: Valdaren-android/
+        retention-days: 30
+
+  create-release:
+    name: Create Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [web-build, renpy-desktop, renpy-android]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts/
+        
+    - name: Create release archives
+      run: |
+        cd artifacts
+        
+        # Create web version archive
+        cd web-build
+        zip -r ../echoes-of-ellidra-web.zip .
+        cd ..
+        
+        # Create desktop archives
+        if [ -d "desktop-Windows" ]; then
+          cd desktop-Windows
+          zip -r ../echoes-of-ellidra-windows.zip .
+          cd ..
+        fi
+        
+        if [ -d "desktop-Linux" ]; then
+          cd desktop-Linux
+          tar -czf ../echoes-of-ellidra-linux.tar.gz .
+          cd ..
+        fi
+        
+        if [ -d "desktop-macOS" ]; then
+          cd desktop-macOS
+          zip -r ../echoes-of-ellidra-macos.zip .
+          cd ..
+        fi
+        
+        # Android APK
+        if [ -d "android-apk" ]; then
+          cp android-apk/*.apk ./echoes-of-ellidra.apk 2>/dev/null || true
+        fi
+        
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          artifacts/*.zip
+          artifacts/*.tar.gz
+          artifacts/*.apk
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+        body: |
+          ## 🎮 Echoes of Ellidra - Multi-Platform Release
+          
+          **Available Platforms:**
+          - 🌐 **Web Version**: Play directly in your browser (PWA-enabled for mobile installation)
+          - 💻 **Windows Desktop**: Traditional Ren'Py visual novel experience  
+          - 🐧 **Linux Desktop**: Native Linux build
+          - 🍎 **macOS Desktop**: Native macOS application
+          - 📱 **Android**: Native Android APK
+          
+          ### Installation Instructions:
+          - **Web**: Visit the deployment URL or extract and host the web archive
+          - **Desktop**: Download and extract the appropriate archive for your platform
+          - **Android**: Download and install the APK (may require "Unknown Sources" enabled)
+          
+          ### Features:
+          - Full cross-platform compatibility
+          - Mobile-optimized UI for touch devices
+          - Progressive Web App capabilities
+          - Save/load system across all platforms
+          - Responsive design for various screen sizes

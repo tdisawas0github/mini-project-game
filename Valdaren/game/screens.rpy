@@ -1623,7 +1623,8 @@ style slider_slider:
 init python:
     import json, os
     def load_faction_map():
-        path = os.path.join(r"c:\Users\theet\OneDrive\0.at\School\mini-project-game\Valdaren\game\data\faction_map.json")
+        # Use relative path for cross-platform compatibility
+        path = os.path.join(config.gamedir, "data", "faction_map.json")
         try:
             with open(path, 'r', encoding='utf-8') as f:
                 return json.load(f)

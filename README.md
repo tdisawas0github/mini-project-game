@@ -3,7 +3,7 @@
 A multilingual visual novel where language is memory, and memory shapes reality.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Platform](https://img.shields.io/badge/platform-Web%20%7C%20Desktop-brightgreen)
+![Platform](https://img.shields.io/badge/platform-Web%20%7C%20Windows%20%7C%20Linux%20%7C%20macOS%20%7C%20Android-brightgreen)
 ![Status](https://img.shields.io/badge/status-In%20Development-yellow)
 
 ## 🎮 About the Game
@@ -27,26 +27,58 @@ You awaken in the snow-choked forests of Valdaren without memory, but the ancien
 
 Your choices will determine not only your lost identity but the fate of language itself in Valdaren.
 
-## 🚀 Available Versions
+## 🚀 Available Platforms
 
-This project offers two distinct gaming experiences:
+This project offers multiple gaming experiences across all major platforms:
 
-### 🖥️ Desktop Version (Ren'Py)
-- **Location**: `Valdaren/`
-- **Platform**: Windows, Mac, Linux
+### 🖥️ Desktop Versions (Ren'Py)
+- **Location**: `Valdaren/`  
+- **Platforms**: Windows, macOS, Linux
 - **Engine**: Ren'Py Visual Novel Engine
 - **Features**: Traditional visual novel experience with save/load system
+- **Download**: Available from [GitHub Releases](../../releases)
 
-### 🌐 Web Version (React)
+### 📱 Mobile Version (Android)
+- **Platform**: Android 6.0+ (API 23+)
+- **Engine**: Ren'Py Android Build
+- **Features**: Touch-optimized UI with mobile-specific controls
+- **Download**: APK available from [GitHub Releases](../../releases)
+
+### 🌐 Web Version (React) 
 - **Location**: `web-version/`
-- **Platform**: Modern web browsers
-- **Technology**: React + TypeScript + Vite
-- **Features**: Interactive web experience with responsive design
+- **Platforms**: Modern web browsers (all devices)
+- **Technology**: React + TypeScript + Vite + PWA
+- **Features**: 
+  - Progressive Web App (installable on mobile devices)
+  - Responsive design for all screen sizes
+  - Works offline after first visit
+- **Play Online**: [Live Demo](https://echoes-of-ellidra.vercel.app)
 
 ## 📋 Installation & Setup
 
-### Desktop Version (Ren'Py)
+### 📱 Mobile (Android)
 
+**Option 1: Direct APK Install**
+1. **Download APK** from [GitHub Releases](../../releases)
+2. **Enable "Unknown Sources"** in Android Settings → Security
+3. **Install the APK** and launch the game
+
+**Option 2: PWA Installation**  
+1. **Visit** [the web version](https://echoes-of-ellidra.vercel.app) in your mobile browser
+2. **Tap "Add to Home Screen"** when prompted (or in browser menu)
+3. **Launch** the installed app like any native app
+
+### 🖥️ Desktop Versions
+
+**Pre-built Downloads** *(Recommended)*
+1. **Download** the appropriate build from [GitHub Releases](../../releases):
+   - `echoes-of-ellidra-windows.zip` for Windows
+   - `echoes-of-ellidra-linux.tar.gz` for Linux  
+   - `echoes-of-ellidra-macos.zip` for macOS
+2. **Extract** the archive
+3. **Run** the executable file
+
+**Build from Source** *(For Developers)*
 1. **Install Ren'Py SDK** from [renpy.org](https://www.renpy.org/latest.html)
 2. **Clone the repository**:
    ```bash
@@ -181,14 +213,14 @@ This project is open source. Please check with the repository maintainer for lic
 
 ### 🚀 Quick Start
 
-**🌐 Web Version (Ready for Deployment)**  
-The game is now deployment-ready for:
-- **Vercel**: One-click deployment with `vercel.json` 
-- **Netlify**: SPA-ready with `netlify.toml` configuration
-- **Other Static Hosts**: Optimized build output in `web-version/dist/`
+**🌐 Web Version (Ready for All Platforms)**  
+- **Play Instantly**: [https://echoes-of-ellidra.vercel.app](https://echoes-of-ellidra.vercel.app)
+- **Mobile PWA**: Installable as native app on iOS and Android  
+- **Offline Support**: Works offline after first visit
 
-**📖 Deployment Guide**: See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions
+**💻 Desktop Downloads**: [GitHub Releases](../../releases)
+- Windows (.zip) | Linux (.tar.gz) | macOS (.zip)
 
-**💻 Download desktop version**: [Releases] *(coming soon)*
+**📱 Android**: [Download APK](../../releases) or install PWA from web
 
-**First time playing?** Start with the web version for the best introduction to the world of *Ellidric*.
+**First time playing?** Try the web version - it works great on all devices and is instantly accessible.
