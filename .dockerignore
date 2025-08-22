@@ -1,0 +1,40 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+!README.md
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs
+
+# Temporary files
+tmp/
+temp/
+
+# Mobile and other platform directories (not needed for web Docker)
+mobile/
+Valdaren/
+about/
+
+# Config files not needed in container
+.vite/
+appwrite.json
+netlify.toml
+vercel.json
+
+# GitHub workflows
+.github/

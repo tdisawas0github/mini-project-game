@@ -1,0 +1,58 @@
+services:
+  # Web application - Production build (uses pre-built dist folder)
+  web:
+    build:
+      context: ./web-version
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Web application - Production build from source (builds everything)
+  web-build:
+    build:
+      context: ./web-version
+      dockerfile: Dockerfile.build
+    ports:
+      - "3001:80"
+    restart: unless-stopped
+    profiles:
+      - build
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Web application - Development build
+  web-dev:
+    build:
+      context: ./web-version
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./web-version:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
+    profiles:
+      - dev
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:5173/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  default:
+    name: echoes-of-ellidra-network
