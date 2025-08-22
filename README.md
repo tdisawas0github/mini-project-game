@@ -38,11 +38,15 @@ This project offers multiple gaming experiences across all major platforms:
 - **Features**: Traditional visual novel experience with save/load system
 - **Download**: Available from [GitHub Releases](../../releases)
 
-### 📱 Mobile Version (Android)
+### 📱 Mobile Version (React Native)
+- **Location**: `mobile/android/ValdavenGame/`
 - **Platform**: Android 6.0+ (API 23+)
-- **Engine**: Ren'Py Android Build
-- **Features**: Touch-optimized UI with mobile-specific controls
-- **Download**: APK available from [GitHub Releases](../../releases)
+- **Technology**: React Native + TypeScript
+- **Features**: 
+  - Native mobile components and navigation
+  - AsyncStorage for persistent game saves
+  - Touch-optimized UI with mobile-specific controls
+- **Setup**: See [Mobile README](mobile/android/MOBILE_README.md) for development setup
 
 ### 🌐 Web Version (React) 
 - **Location**: `web-version/`
@@ -58,12 +62,19 @@ This project offers multiple gaming experiences across all major platforms:
 
 ### 📱 Mobile (Android)
 
-**Option 1: Direct APK Install**
-1. **Download APK** from [GitHub Releases](../../releases)
-2. **Enable "Unknown Sources"** in Android Settings → Security
-3. **Install the APK** and launch the game
+**React Native Development** *(Current Version)*
+1. **Prerequisites**: Node.js 18+, React Native environment, Android Studio
+2. **Navigate to mobile project**:
+   ```bash
+   cd mobile/android/ValdavenGame
+   npm install
+   ```
+3. **Run on Android device/emulator**:
+   ```bash
+   npm run android
+   ```
 
-**Option 2: PWA Installation**  
+**Alternative: PWA Installation**  
 1. **Visit** [the web version](https://echoes-of-ellidra.vercel.app) in your mobile browser
 2. **Tap "Add to Home Screen"** when prompted (or in browser menu)
 3. **Launch** the installed app like any native app
@@ -149,6 +160,9 @@ mini-project-game/
 │   │   └── 📁 styles/        # Styled-components
 │   ├── package.json          # Dependencies and scripts
 │   └── vite.config.ts        # Vite configuration
+├── 📁 mobile/                # Mobile versions
+│   └── 📁 android/           # React Native Android version
+│       └── 📁 ValdavenGame/  # React Native project
 ├── 📁 about/                 # Game documentation
 │   ├── game-lore.md          # World-building and lore
 │   ├── gameplay.md           # Gameplay mechanics
@@ -179,6 +193,12 @@ mini-project-game/
 - **Build Tool**: Vite
 - **Testing**: Vitest + Testing Library
 - **Linting**: ESLint with TypeScript support
+
+### Mobile Version Tech Stack
+- **Framework**: React Native + TypeScript
+- **Storage**: AsyncStorage for game saves
+- **Styling**: React Native StyleSheet
+- **Development**: See [Mobile README](mobile/android/MOBILE_README.md)
 
 ### Contributing
 1. Fork the repository
@@ -230,16 +250,13 @@ This project is open source. Please check with the repository maintainer for lic
 
 ---
 
-### 🚀 Quick Start
+### 🚀 Quick Start Guide
 
-**🌐 Web Version (Ready for All Platforms)**  
+**🌐 Web Version (Recommended for New Players)**  
 - **Play Instantly**: [https://echoes-of-ellidra.vercel.app](https://echoes-of-ellidra.vercel.app)
-- **Mobile PWA**: Installable as native app on iOS and Android  
-- **Offline Support**: Works offline after first visit
+- **Works on**: All devices with modern browsers
+- **Features**: PWA installable on mobile, offline support
 
-**💻 Desktop Downloads**: [GitHub Releases](../../releases)
-- Windows (.zip) | Linux (.tar.gz) | macOS (.zip)
+**💻 Desktop**: Download from [GitHub Releases](../../releases) for your platform
 
-**📱 Android**: [Download APK](../../releases) or install PWA from web
-
-**First time playing?** Try the web version - it works great on all devices and is instantly accessible.
+**📱 Mobile Development**: See [Mobile README](mobile/android/MOBILE_README.md) for React Native setup
