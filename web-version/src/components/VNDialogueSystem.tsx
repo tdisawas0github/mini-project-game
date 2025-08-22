@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import {
   VisualNovelContainer,
@@ -19,10 +19,11 @@ import {
   InputLabel,
   InputButton
 } from '../styles/visualnovel';
-import { useGame } from '../context/GameContext';
+import { useGame } from '../hooks/useGame';
+import type { DialogueNode, SceneEffect, DialogueChoice } from '../types/game';
 
 interface VNDialogueSystemProps {
-  scenes: any[]; // Array of dialogue nodes
+  scenes: DialogueNode[];
   currentSceneId: string;
   onSceneChange: (sceneId: string) => void;
   onComplete?: () => void;
@@ -51,6 +52,19 @@ export function VNDialogueSystem({
 
   const currentScene = scenes.find(scene => scene.id === currentSceneId);
 
+  if (!currentScene) {
+    return (
+      <VisualNovelContainer>
+        <BackgroundLayer $backgroundImage={backgroundImage} />
+        <UILayer>
+          <div style={{ textAlign: 'center', color: 'white', padding: '50px' }}>
+            Scene not found: {currentSceneId}
+          </div>
+        </UILayer>
+      </VisualNovelContainer>
+    );
+  }
+
   // Text typewriter effect
   useEffect(() => {
     if (!currentScene?.text) return;
@@ -76,18 +90,9 @@ export function VNDialogueSystem({
     return () => clearInterval(typeInterval);
   }, [currentScene, currentTextIndex, typingSpeed]);
 
-  // Auto-play functionality
-  useEffect(() => {
-    if (!autoPlay || !isTextComplete) return;
-
-    const autoAdvanceDelay = setTimeout(() => {
-      handleNext();
-    }, 2000);
-
-    return () => clearTimeout(autoAdvanceDelay);
-  }, [autoPlay, isTextComplete]);
-
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
+    if (!currentScene) return;
+    
     if (!isTextComplete) {
       // Skip typing animation
       const text = Array.isArray(currentScene.text) 
@@ -105,7 +110,7 @@ export function VNDialogueSystem({
 
     // Process scene completion
     if (currentScene.effects) {
-      currentScene.effects.forEach((effect: any) => {
+      currentScene.effects.forEach((effect: SceneEffect) => {
         if (effect.type === 'learn_language') {
           dispatch({ type: 'LEARN_LANGUAGE', payload: effect.value });
         } else if (effect.type === 'unlock_memory') {
@@ -113,7 +118,7 @@ export function VNDialogueSystem({
         } else if (effect.type === 'faction_influence') {
           dispatch({ 
             type: 'UPDATE_FACTION_INFLUENCE', 
-            payload: { faction: effect.faction, change: effect.value } 
+            payload: { faction: effect.faction || '', change: effect.amount || 0 } 
           });
         }
       });
@@ -133,9 +138,20 @@ export function VNDialogueSystem({
     } else {
       onComplete?.();
     }
-  };
+  }, [currentScene, currentTextIndex, onSceneChange, onComplete, scenes, dispatch, isTextComplete]);
 
-  const handleChoice = (choice: any) => {
+  // Auto-play functionality
+  useEffect(() => {
+    if (!autoPlay || !isTextComplete) return;
+
+    const autoAdvanceDelay = setTimeout(() => {
+      handleNext();
+    }, 2000);
+
+    return () => clearTimeout(autoAdvanceDelay);
+  }, [autoPlay, isTextComplete, handleNext]);
+
+  const handleChoice = useCallback((choice: DialogueChoice) => {
     // Check requirements
     if (choice.requiresLanguages) {
       const hasRequirement = choice.requiresLanguages.every((lang: string) => {
@@ -208,7 +224,7 @@ export function VNDialogueSystem({
         setCurrentTextIndex(0);
       }
     }
-  };
+  }, [state.knownLanguages, dispatch, onChoiceSelect, setShowNameInput, scenes, onSceneChange, setCurrentTextIndex, onComplete]);
 
   const handleSave = () => {
     const saveData = {
@@ -326,7 +342,7 @@ export function VNDialogueSystem({
         {currentScene.choices && isTextComplete && !showNameInput && (
           <ChoicesContainer>
             <AnimatePresence>
-              {currentScene.choices.map((choice: any, index: number) => {
+              {currentScene.choices.map((choice: DialogueChoice, index: number) => {
                 const isDisabled = choice.requiresLanguages && !choice.requiresLanguages.every((lang: string) => {
                   return state.knownLanguages.includes(lang);
                 });

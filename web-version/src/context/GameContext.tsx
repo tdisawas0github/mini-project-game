@@ -1,6 +1,7 @@
-import { createContext, useContext, useReducer, useEffect } from 'react';
+import { createContext, useReducer, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { GameState, GameAction } from '../types/game';
+import { saveGameState } from '../utils/gameUtils';
 
 const initialMemories = {
   m_intro: {
@@ -104,22 +105,7 @@ function loadPersisted(): Partial<GameState> | null {
   } catch { return null; }
 }
 
-function persist(state: GameState) {
-  try {
-    const payload = { version: 1, timestamp: Date.now(), state };
-    localStorage.setItem('ellidra.save', JSON.stringify(payload));
-  } catch {}
-}
-
-export function deriveRipple(state: GameState) {
-  return {
-    factions: state.factionInfluence,
-    memoriesUnlocked: Object.values(state.memories).filter(m => !m.locked).map(m => m.id),
-    consequences: state.consequenceMap
-  };
-}
-
-const GameContext = createContext<{
+export const GameContext = createContext<{
   state: GameState;
   dispatch: React.Dispatch<GameAction>;
 } | null>(null);
@@ -132,19 +118,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
     dispatch(action);
   }
 
-  useEffect(() => { persist(state); }, [state]);
+  useEffect(() => { saveGameState(state); }, [state]);
 
   return (
     <GameContext.Provider value={{ state, dispatch: wrappedDispatch }}>
       {children}
     </GameContext.Provider>
   );
-}
-
-export function useGame() {
-  const context = useContext(GameContext);
-  if (!context) {
-    throw new Error('useGame must be used within GameProvider');
-  }
-  return context;
 }

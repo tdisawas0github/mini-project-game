@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { DialogueNode, DialogueChoice } from '../types/game';
-import { useGame } from '../context/GameContext';
+import { useGame } from '../hooks/useGame';
 
 interface DialogueSystemProps {
   scenes: DialogueNode[];
