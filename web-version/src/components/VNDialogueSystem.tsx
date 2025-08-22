@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   VisualNovelContainer,
   BackgroundLayer,
@@ -9,17 +9,17 @@ import {
   NameBox,
   DialogueText,
   ChoicesContainer,
-  ChoiceButton,
   TopUIBar,
-  UIButton,
   AutoPlayIndicator,
   StatusIndicator,
   NameInputContainer,
   NameInput,
-  InputLabel,
-  InputButton
+  InputLabel
 } from '../styles/visualnovel';
 import { useGame } from '../hooks/useGame';
+import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation';
+import { playSound } from '../utils/audioManager';
+import { EnhancedButton } from './EnhancedButton';
 import type { DialogueNode, SceneEffect, DialogueChoice } from '../types/game';
 
 interface VNDialogueSystemProps {
@@ -64,31 +64,6 @@ export function VNDialogueSystem({
       </VisualNovelContainer>
     );
   }
-
-  // Text typewriter effect
-  useEffect(() => {
-    if (!currentScene?.text) return;
-    
-    const text = Array.isArray(currentScene.text) 
-      ? currentScene.text[currentTextIndex] 
-      : currentScene.text;
-    
-    let charIndex = 0;
-    setDisplayedText('');
-    setIsTextComplete(false);
-    
-    const typeInterval = setInterval(() => {
-      if (charIndex < text.length) {
-        setDisplayedText(text.slice(0, charIndex + 1));
-        charIndex++;
-      } else {
-        setIsTextComplete(true);
-        clearInterval(typeInterval);
-      }
-    }, typingSpeed);
-
-    return () => clearInterval(typeInterval);
-  }, [currentScene, currentTextIndex, typingSpeed]);
 
   const handleNext = useCallback(() => {
     if (!currentScene) return;
@@ -258,6 +233,59 @@ export function VNDialogueSystem({
     onComplete?.();
   };
 
+  // Enhanced click to advance with sound effects
+  const handleAdvanceClick = useCallback(() => {
+    playSound('dialogue-advance');
+    handleNext();
+  }, [handleNext]);
+
+  // Keyboard navigation
+  useKeyboardNavigation({
+    onNext: handleAdvanceClick,
+    onChoice: (index: number) => {
+      if (currentScene.choices && index < currentScene.choices.length) {
+        const choice = currentScene.choices[index];
+        if (!choice.requiresLanguages || choice.requiresLanguages.every(lang => state.knownLanguages.includes(lang))) {
+          playSound('choice-select');
+          handleChoice(choice);
+        }
+      }
+    },
+    onMenu: () => console.log('Menu - TODO'),
+    choices: currentScene.choices || [],
+    disabled: showNameInput
+  });
+
+  // Auto-advance dialogue text with enhanced feedback
+  useEffect(() => {
+    if (!currentScene?.text) return;
+    
+    const text = Array.isArray(currentScene.text) 
+      ? currentScene.text[currentTextIndex] 
+      : currentScene.text;
+    
+    let charIndex = 0;
+    setDisplayedText('');
+    setIsTextComplete(false);
+    
+    // Play a subtle sound when starting new dialogue
+    playSound('mystery', 0.2);
+    
+    const typeInterval = setInterval(() => {
+      if (charIndex < text.length) {
+        setDisplayedText(text.slice(0, charIndex + 1));
+        charIndex++;
+      } else {
+        setIsTextComplete(true);
+        clearInterval(typeInterval);
+        // Play completion sound
+        playSound('dialogue-advance', 0.3);
+      }
+    }, typingSpeed);
+
+    return () => clearInterval(typeInterval);
+  }, [currentScene, currentTextIndex, typingSpeed]);
+
   if (!currentScene) {
     return <div>Scene not found: {currentSceneId}</div>;
   }
@@ -287,21 +315,40 @@ export function VNDialogueSystem({
         {/* Top UI Bar */}
         <TopUIBar>
           <div style={{ display: 'flex', gap: '10px' }}>
-            <UIButton onClick={() => console.log('Menu - TODO')}>
+            <EnhancedButton 
+              variant="ghost" 
+              size="small"
+              onClick={() => console.log('Menu - TODO')}
+            >
               Menu
-            </UIButton>
-            <UIButton onClick={handleSave}>
+            </EnhancedButton>
+            <EnhancedButton 
+              variant="ghost" 
+              size="small"
+              onClick={handleSave}
+              soundEffect="click"
+            >
               Save
-            </UIButton>
-            <UIButton onClick={handleLoad}>
+            </EnhancedButton>
+            <EnhancedButton 
+              variant="ghost" 
+              size="small"
+              onClick={handleLoad}
+              soundEffect="click"
+            >
               Load
-            </UIButton>
+            </EnhancedButton>
           </div>
           
           <div style={{ display: 'flex', gap: '10px' }}>
-            <UIButton onClick={() => setTypingSpeed(typingSpeed === 30 ? 10 : 30)}>
+            <EnhancedButton 
+              variant="ghost" 
+              size="small"
+              onClick={() => setTypingSpeed(typingSpeed === 30 ? 10 : 30)}
+              soundEffect="click"
+            >
               Speed: {typingSpeed === 30 ? 'Normal' : 'Fast'}
-            </UIButton>
+            </EnhancedButton>
           </div>
         </TopUIBar>
 
@@ -320,7 +367,7 @@ export function VNDialogueSystem({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 100 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
-              onClick={handleNext}
+              onClick={handleAdvanceClick}
             >
               {currentScene.speaker && (
                 <NameBox>{currentScene.speaker}</NameBox>
@@ -329,11 +376,43 @@ export function VNDialogueSystem({
               <DialogueText
                 dangerouslySetInnerHTML={{
                   __html: displayedText
-                    .replace(/\[glyph\](.*?)\[\/glyph\]/g, '<span class="glyph">$1</span>')
-                    .replace(/\[emphasis\](.*?)\[\/emphasis\]/g, '<span class="emphasis">$1</span>')
-                    .replace(/\[whisper\](.*?)\[\/whisper\]/g, '<span class="whisper">$1</span>')
+                    .replace(/\[glyph\](.*?)\[\/glyph\]/g, '<span style="color: #fbbf24; text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);">✨ $1</span>')
+                    .replace(/\[emphasis\](.*?)\[\/emphasis\]/g, '<span style="font-style: italic; color: #f59e0b;">$1</span>')
+                    .replace(/\[whisper\](.*?)\[\/whisper\]/g, '<span style="opacity: 0.7; font-size: 0.9em;">$1</span>')
                 }}
               />
+              {!isTextComplete && (
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  style={{
+                    color: '#64748b',
+                    marginLeft: '4px',
+                    fontSize: '1.2em'
+                  }}
+                >
+                  <motion.span
+                    animate={{ opacity: [0, 1, 0] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                  >
+                    ▊
+                  </motion.span>
+                </motion.span>
+              )}
+              {isTextComplete && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.6 }}
+                  style={{
+                    textAlign: 'center',
+                    marginTop: '12px',
+                    fontSize: '0.8em',
+                    color: '#64748b'
+                  }}
+                >
+                  Press Space or click to continue...
+                </motion.div>
+              )}
             </DialogueBox>
           )}
         </AnimatePresence>
@@ -348,28 +427,38 @@ export function VNDialogueSystem({
                 });
 
                 return (
-                  <ChoiceButton
+                  <motion.div
                     key={choice.id}
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    disabled={isDisabled}
-                    onClick={() => handleChoice(choice)}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
                   >
-                    {choice.text}
-                    {isDisabled && (
-                      <span style={{ opacity: 0.6, fontSize: '0.8rem', display: 'block' }}>
-                        (Requires: {choice.requiresLanguages?.join(', ')})
-                      </span>
-                    )}
-                    {choice.glyphUsed && (
-                      <span style={{ color: '#d4af37', fontSize: '0.8rem', display: 'block', fontStyle: 'italic' }}>
-                        Uses glyph: {choice.glyphUsed}
-                      </span>
-                    )}
-                  </ChoiceButton>
+                    <EnhancedButton
+                      variant={choice.glyphUsed ? 'primary' : 'secondary'}
+                      glowEffect={!!choice.glyphUsed}
+                      disabled={isDisabled}
+                      onClick={() => handleChoice(choice)}
+                      soundEffect={choice.glyphUsed ? 'glyph-activate' : 'choice-select'}
+                      style={{ width: '100%', textAlign: 'left', marginBottom: '12px' }}
+                    >
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ fontWeight: 'normal', color: '#94a3b8', fontSize: '0.9rem' }}>{index + 1}.</span>
+                          <span>{choice.text}</span>
+                        </div>
+                        {isDisabled && (
+                          <div style={{ opacity: 0.6, fontSize: '0.8rem', marginTop: '4px' }}>
+                            (Requires: {choice.requiresLanguages?.join(', ')})
+                          </div>
+                        )}
+                        {choice.glyphUsed && (
+                          <div style={{ color: '#fbbf24', fontSize: '0.8rem', marginTop: '4px', fontStyle: 'italic' }}>
+                            ✨ Uses glyph: {choice.glyphUsed}
+                          </div>
+                        )}
+                      </div>
+                    </EnhancedButton>
+                  </motion.div>
                 );
               })}
             </AnimatePresence>
@@ -398,14 +487,15 @@ export function VNDialogueSystem({
                 }
               }}
             />
-            <InputButton
+            <EnhancedButton
+              variant="primary"
               disabled={!playerName.trim()}
               onClick={handleNameSubmit}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              glowEffect
+              soundEffect="choice-select"
             >
-              Inscribe Name
-            </InputButton>
+              Inscribe Your Name
+            </EnhancedButton>
           </NameInputContainer>
         )}
 

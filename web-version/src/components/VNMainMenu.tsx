@@ -11,6 +11,7 @@ import {
   LoadingScreen,
   LoadingSpinner
 } from '../styles/visualnovel';
+import { EnhancedButton } from './EnhancedButton';
 
 interface VNMainMenuProps {
   onStartGame: () => void;
@@ -113,39 +114,44 @@ export function VNMainMenu({
               minWidth: '300px'
             }}
           >
-            <MenuButton
-              whileHover={{ scale: 1.05, x: 10 }}
-              whileTap={{ scale: 0.95 }}
+            <EnhancedButton
+              variant="primary"
+              size="large"
+              glowEffect
               onClick={onStartGame}
+              soundEffect="choice-select"
             >
               Begin Your Journey
-            </MenuButton>
+            </EnhancedButton>
 
             {hasSaveFile && (
-              <MenuButton
-                whileHover={{ scale: 1.05, x: 10 }}
-                whileTap={{ scale: 0.95 }}
+              <EnhancedButton
+                variant="secondary"
+                size="large"
                 onClick={onLoadGame}
+                soundEffect="click"
               >
                 Continue Journey
-              </MenuButton>
+              </EnhancedButton>
             )}
 
-            <MenuButton
-              whileHover={{ scale: 1.05, x: 10 }}
-              whileTap={{ scale: 0.95 }}
+            <EnhancedButton
+              variant="secondary"
+              size="large"
               onClick={onSettings}
+              soundEffect="click"
             >
               Settings
-            </MenuButton>
+            </EnhancedButton>
 
-            <MenuButton
-              whileHover={{ scale: 1.05, x: 10 }}
-              whileTap={{ scale: 0.95 }}
+            <EnhancedButton
+              variant="ghost"
+              size="large"
               onClick={() => setShowCredits(true)}
+              soundEffect="click"
             >
               Credits
-            </MenuButton>
+            </EnhancedButton>
           </motion.div>
 
           {/* Version info */}
