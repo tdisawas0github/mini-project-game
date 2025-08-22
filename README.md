@@ -181,7 +181,14 @@ This project is open source. Please check with the repository maintainer for lic
 
 ### 🚀 Quick Start
 
-**Try the web version**: [Demo Link] *(coming soon)*  
-**Download desktop version**: [Releases] *(coming soon)*
+**🌐 Web Version (Ready for Deployment)**  
+The game is now deployment-ready for:
+- **Vercel**: One-click deployment with `vercel.json` 
+- **Netlify**: SPA-ready with `netlify.toml` configuration
+- **Other Static Hosts**: Optimized build output in `web-version/dist/`
+
+**📖 Deployment Guide**: See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions
+
+**💻 Download desktop version**: [Releases] *(coming soon)*
 
 **First time playing?** Start with the web version for the best introduction to the world of *Ellidric*.
