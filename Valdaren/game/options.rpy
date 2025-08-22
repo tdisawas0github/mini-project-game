@@ -196,11 +196,40 @@ init python:
     build.documentation('*.txt')
 
 
+## Android Configuration ###############################################################
+
+## Android package configuration.
+define build.package_name = "com.valdaren.ellidra"
+define config.package_name = "com.valdaren.ellidra"
+
+## Android version configuration.
+define build.version_code = 1
+define config.version = "1.0"
+
+## Android permissions.
+define build.android_permissions = [
+    "WRITE_EXTERNAL_STORAGE",
+    "READ_EXTERNAL_STORAGE",
+]
+
+## Android store configuration.
+define build.google_play_store = True
+
 ## A Google Play license key is required to perform in-app purchases. It can be
 ## found in the Google Play developer console, under "Monetize" > "Monetization
 ## Setup" > "Licensing".
 
 # define build.google_play_key = "..."
+
+## Android APK build configuration
+## Enable Android builds
+init python:
+    ## Configure Android build settings
+    build.android_minimum_sdk = 23  # Android 6.0
+    build.android_target_sdk = 34   # Android 14
+    
+    ## Configure Android icon
+    build.android_icon = "gui/android_icon.png"
 
 
 ## The username and project name associated with an itch.io project, separated
