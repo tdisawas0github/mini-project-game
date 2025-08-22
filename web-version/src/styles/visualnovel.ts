@@ -37,7 +37,7 @@ export const VisualNovelGlobalStyle = createGlobalStyle`
 `;
 
 // Animations
-const fadeIn = keyframes`
+export const fadeIn = keyframes`
   from { opacity: 0; }
   to { opacity: 1; }
 `;
