@@ -1,0 +1,25 @@
+# Development Dockerfile for Echoes of Ellidra Web Version
+
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including dev dependencies)
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Expose development port
+EXPOSE 5173
+
+# Health check for development server
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD wget -q --spider http://localhost:5173/ || exit 1
+
+# Start development server
+CMD ["npm", "run", "dev", "--", "--host"]

@@ -4,9 +4,10 @@ This guide explains how to deploy **Echoes of Ellidra** to various hosting platf
 
 ## 📋 Prerequisites
 
-- Node.js 18+ installed locally
+- Node.js 18+ installed locally (for local development)
 - Git repository access
 - Account on your chosen hosting platform
+- **For Docker deployment**: Docker and Docker Compose installed
 
 ## 🌐 Platform-Specific Deployment
 
@@ -63,6 +64,66 @@ For other static hosting services (GitHub Pages, Firebase Hosting, etc.):
    - Upload the contents of `web-version/dist/` to your hosting service
    - Ensure your server is configured to serve `index.html` for all routes
 
+### Docker Deployment
+
+Docker provides a containerized deployment option that works on any platform supporting Docker.
+
+#### Prerequisites
+
+- Docker installed on your system
+- Docker Compose (optional, for easier management)
+
+#### Quick Start with Docker Compose
+
+1. **Production Deployment**:
+   ```bash
+   # Clone the repository (if not already done)
+   git clone https://github.com/tdisawas0github/mini-project-game.git
+   cd mini-project-game
+   
+   # Build and start the production container
+   docker-compose up --build web
+   ```
+   
+   The application will be available at `http://localhost:3000`
+
+2. **Development Environment**:
+   ```bash
+   # Start development container with hot reload
+   docker-compose --profile dev up --build web-dev
+   ```
+   
+   The development server will be available at `http://localhost:5173`
+
+#### Manual Docker Commands
+
+1. **Build the Docker image**:
+   ```bash
+   cd web-version
+   docker build -t echoes-of-ellidra .
+   ```
+
+2. **Run the container**:
+   ```bash
+   docker run -d -p 3000:80 --name echoes-game echoes-of-ellidra
+   ```
+
+3. **For development**:
+   ```bash
+   # Build development image
+   docker build -f Dockerfile.dev -t echoes-of-ellidra-dev .
+   
+   # Run development container
+   docker run -d -p 5173:5173 -v $(pwd):/app -v /app/node_modules --name echoes-dev echoes-of-ellidra-dev
+   ```
+
+#### Docker Configuration Details
+
+- **Production**: Uses Nginx to serve the built static files
+- **Development**: Runs the Vite development server with hot reload
+- **Health Checks**: Built-in health monitoring for container orchestration
+- **Security**: Includes security headers and optimized Nginx configuration
+
 ## 🔧 Build Optimization
 
 The project is configured with:
@@ -104,6 +165,28 @@ Visit `http://localhost:4173` to test the production build.
 **Assets Not Loading**:
 - Verify that asset paths are correct and relative
 - Check that the base URL is properly configured
+
+**Docker Issues**:
+
+*Container fails to start*:
+- Check if ports 3000 (production) or 5173 (development) are available
+- Verify Docker is running: `docker --version`
+- Check container logs: `docker logs <container-name>`
+
+*Build fails in Docker*:
+- Ensure all source files are properly copied (check .dockerignore)
+- Verify Node.js dependencies can be installed in the container
+- Check available disk space: `docker system df`
+
+*Health checks failing*:
+- Wait for the application to fully start (health checks have a grace period)
+- Check if the application is responding: `docker exec <container-name> curl -f http://localhost/`
+- Review container logs for startup errors
+
+*Development container not reflecting changes*:
+- Ensure volume mounts are correct in docker-compose.yml
+- Check that file changes are being detected by Vite
+- Restart the development container if hot reload stops working
 
 ## 🌟 Performance Tips
 

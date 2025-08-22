@@ -112,6 +112,25 @@ npm run lint         # Run linter
 
 The development server will start at `http://localhost:5173`
 
+#### Docker Deployment
+
+For containerized deployment:
+
+```bash
+# Quick start with Docker Compose
+docker compose up --build web
+
+# Development with hot reload
+docker compose --profile dev up --build web-dev
+
+# Or use the helper script
+./docker-helper.sh compose-prod    # Production
+./docker-helper.sh compose-dev     # Development
+./docker-helper.sh help           # Show all options
+```
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed Docker instructions.
+
 ## 🏗️ Project Structure
 
 ```
