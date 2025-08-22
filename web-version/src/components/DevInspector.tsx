@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useGame } from '../context/GameContext';
-import { deriveRipple } from '../context/GameContext';
+import { useGame } from '../hooks/useGame';
+import { deriveRipple } from '../utils/gameUtils';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function DevInspector() {

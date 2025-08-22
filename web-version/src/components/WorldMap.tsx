@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import type { FactionMapData, Region } from '../types/game';
-import { useGame } from '../context/GameContext';
+import { useGame } from '../hooks/useGame';
 
 interface WorldMapProps {
   onClose: () => void;

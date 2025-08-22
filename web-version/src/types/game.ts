@@ -46,14 +46,17 @@ export interface DialogueChoice {
 export interface DialogueNode {
   id: string;
   speaker: string;
-  text: string;
+  text: string | string[];
   choices?: DialogueChoice[];
   autoAdvance?: string;
-  effects?: {
-    memories?: string[];
-    languages?: string[];
-    factionChanges?: Record<string, number>;
-  };
+  effects?: SceneEffect[];
+}
+
+export interface SceneEffect {
+  type: 'learn_language' | 'unlock_memory' | 'faction_influence' | 'add_consequence';
+  value: string;
+  faction?: string;
+  amount?: number;
 }
 
 export interface Chapter {
@@ -76,7 +79,7 @@ export interface UnlockCondition {
   type: 'language' | 'memory' | 'consequence' | 'faction_influence';
   key: string;
   op?: 'gte' | 'lte' | 'eq' | 'includes';
-  value?: any;
+  value?: string | number | boolean | string[];
 }
 
 export interface RippleEffectSummary {

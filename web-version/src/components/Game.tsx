@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { GameProvider, useGame } from '../context/GameContext';
+import { GameProvider } from '../context/GameContext';
+import { useGame } from '../hooks/useGame';
 import { VisualNovelGlobalStyle } from '../styles/visualnovel';
 import { VNMainMenu } from './VNMainMenu';
 import { VNDialogueSystem } from './VNDialogueSystem';
