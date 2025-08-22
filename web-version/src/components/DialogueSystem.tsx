@@ -10,6 +10,25 @@ interface DialogueSystemProps {
   onChoiceSelect?: (choiceId: string) => void; // new optional callback
 }
 
+/**
+ * Interactive dialogue UI that presents a dialogue node, optional name-entry, and choice buttons.
+ *
+ * Renders the active scene (speaker and text), optionally a name-input flow, and the scene's choices.
+ * Selecting a choice notifies an optional external callback, applies consequences/unlocks, may teach a language,
+ * may record glyph usage, and then routes the dialogue (scene change, completion, or stays on-screen for hub commands).
+ *
+ * Important behaviors:
+ * - onChoiceSelect is invoked first with the chosen choice id (if provided) so parent components can intercept hub commands.
+ * - Choosing `choose_name` opens a name-entry UI; submitting a non-empty name dispatches `SET_PLAYER_NAME` and calls onComplete.
+ * - Choices may dispatch actions: `ADD_CONSEQUENCE` (choices and glyphs), `UNLOCK_MEMORY`, and `LEARN_LANGUAGE`.
+ * - Language-restricted choices are disabled unless the required languages are known or flagged in game state.
+ *
+ * @param scenes - Array of dialogue scenes available to the component.
+ * @param currentSceneId - Id of the scene to render.
+ * @param onSceneChange - Callback(sceneId) to request a scene change.
+ * @param onComplete - Callback invoked when the current dialogue flow finishes.
+ * @param onChoiceSelect - Optional callback(choiceId) notified immediately when a choice is selected (used for hub commands).
+ */
 export default function DialogueSystem({ 
   scenes, 
   currentSceneId, 

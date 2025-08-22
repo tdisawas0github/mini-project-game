@@ -20,6 +20,19 @@ interface VNMainMenuProps {
   backgroundImage?: string;
 }
 
+/**
+ * Visual novel main menu component with loading screen, menu actions, and a credits modal.
+ *
+ * Renders a startup loading screen for ~2s while checking for an existing save in localStorage (`ellidra_save`).
+ * After loading completes, displays a background, title and subtitle, primary and secondary menu actions
+ * (Start, Continue if a save exists, Settings, Credits), version info, and an animated credits modal.
+ *
+ * @param onStartGame - Callback invoked when the player starts a new game.
+ * @param onLoadGame - Callback invoked when the player continues from an existing save (shown only if a save is detected).
+ * @param onSettings - Callback invoked to open the settings UI.
+ * @param backgroundImage - Optional URL for the background image; defaults to '/assets/map-of-valdaren.png'.
+ * @returns The main menu JSX element.
+ */
 export function VNMainMenu({ 
   onStartGame, 
   onLoadGame, 

@@ -8,6 +8,15 @@ interface BaseProps {
   style?: CSSProperties;
 }
 
+/**
+ * Full-viewport themed container that centers content vertically and horizontally.
+ *
+ * Renders a div that fills the viewport height and applies theme-driven background, text color,
+ * font family, layout (column flex, centered), and padding. Any passed `style` overrides are merged
+ * on top of the theme-derived styles; `className` and `children` are forwarded to the root element.
+ *
+ * @returns The themed container element.
+ */
 export function Container({ children, className, style }: BaseProps) {
   const { theme } = useTheme();
   
@@ -31,6 +40,18 @@ export function Container({ children, className, style }: BaseProps) {
   );
 }
 
+/**
+ * A themed, animated surface container (card) with responsive width constraints.
+ *
+ * Renders a motion-enabled div styled from the current theme (surface background, border, border radius,
+ * shadow, blur, and padding). Constrains width to 100% with a max of 900px and merges any provided
+ * inline style overrides.
+ *
+ * The element mounts with a short entrance animation (fade in and slight upward motion; 0.3s).
+ *
+ * @param style - Optional inline style merged into the computed theme styles (overrides take precedence).
+ * @returns A React element containing the provided children wrapped in a themed, animated surface.
+ */
 export function Surface({ children, className, style }: BaseProps) {
   const { theme } = useTheme();
   
@@ -66,6 +87,20 @@ interface ButtonProps extends BaseProps {
   onClick?: () => void;
 }
 
+/**
+ * Themed, animated button primitive with variants, sizes, and disabled state.
+ *
+ * Renders a Framer Motion-powered <button> styled from the current theme. Supports
+ * three visual variants (`primary`, `secondary`, `ghost`), three sizes (`sm`, `md`, `lg`),
+ * and disables interaction/animations when `disabled` is true. Merges any provided
+ * `style` overrides and forwards `onClick`.
+ *
+ * @param variant - Visual style of the button (`primary` | `secondary` | `ghost`). Defaults to `primary`.
+ * @param size - Button size affecting padding and font size (`sm` | `md` | `lg`). Defaults to `md`.
+ * @param disabled - When true, disables pointer interaction and disables motion variants. Defaults to `false`.
+ * @param onClick - Click handler invoked when the button is activated (ignored when `disabled`).
+ * @returns A themed, animated React button element.
+ */
 export function Button({ 
   children, 
   className, 
@@ -143,6 +178,14 @@ interface TypographyProps extends BaseProps {
   color?: string;
 }
 
+/**
+ * Renders themed text with semantic heading elements for h1–h3 variants and a div for other variants.
+ *
+ * Uses theme typography sizes and theme text color by default; `color` overrides the text color.
+ *
+ * @param variant - One of `'h1' | 'h2' | 'h3' | 'body' | 'caption'`. Chooses font size and, for h1–h3, the corresponding semantic heading element.
+ * @param color - Optional CSS color to override the theme's text color.
+ */
 export function Typography({ 
   children, 
   className, 
@@ -194,6 +237,17 @@ interface FlexProps extends BaseProps {
   justify?: string;
 }
 
+/**
+ * A themed flex container that lays out children using CSS flexbox.
+ *
+ * Renders a div with display:flex and applies direction, alignment, justification, and gap.
+ * Merges any provided `style` overrides into the final style.
+ *
+ * @param direction - Flex direction; defaults to `'column'`.
+ * @param gap - Spacing between children. If omitted, falls back to `theme.spacing.md`.
+ * @param align - Maps to `align-items`; defaults to `'stretch'`.
+ * @param justify - Maps to `justify-content`; defaults to `'flex-start'`.
+ */
 export function Flex({ 
   children, 
   className, 

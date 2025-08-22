@@ -32,6 +32,25 @@ interface VNDialogueSystemProps {
   characterSprite?: string;
 }
 
+/**
+ * Visual novel dialogue system component that renders and drives a multi-scene interactive dialogue UI.
+ *
+ * Renders background and optional character sprite, displays typed dialogue with inline markup support, presents choices,
+ * manages per-character typewriter animation (configurable speed), supports auto-play, saves/loads a simple snapshot to
+ * localStorage, and exposes keyboard navigation. The component applies scene and choice effects to the global game state
+ * (learn languages, unlock memories, update faction influence, add consequences, set player name) via the game's dispatch,
+ * and notifies the host via onSceneChange, onChoiceSelect, and onComplete callbacks.
+ *
+ * @param scenes - Array of dialogue scene nodes defining text, speaker, effects, autoAdvance, and choices.
+ * @param currentSceneId - Id of the currently active scene to render.
+ * @param onSceneChange - Callback invoked to request a transition to another scene id.
+ * @param onComplete - Optional callback invoked when the narrative reaches a completion point.
+ * @param onChoiceSelect - Optional callback invoked with the selected choice id after a choice is processed.
+ * @param backgroundImage - Optional background image URL shown behind the UI.
+ * @param characterSprite - Optional character sprite image URL shown above the background.
+ *
+ * @returns JSX element containing the visual novel UI.
+ */
 export function VNDialogueSystem({
   scenes,
   currentSceneId,
