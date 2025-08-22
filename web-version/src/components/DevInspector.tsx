@@ -3,6 +3,11 @@ import { useGame } from '../hooks/useGame';
 import { deriveRipple } from '../utils/gameUtils';
 import { motion, AnimatePresence } from 'framer-motion';
 
+/**
+ * Renders a toggleable developer inspector UI that displays the current game state and a derived ripple summary.
+ *
+ * The panel is fixed to the bottom-right of the viewport and can be opened or closed by the user. Internally it reads game state via `useGame()` and computes a ripple summary with `deriveRipple(state)`, then renders both as JSON for debugging.
+ */
 export default function DevInspector() {
   const { state } = useGame();
   const [open, setOpen] = useState(false);

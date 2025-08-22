@@ -29,6 +29,24 @@ const initialState: GameState = {
   completedScenes: []
 };
 
+/**
+ * Pure reducer that returns a new GameState for a given GameAction.
+ *
+ * Handles the following action types:
+ * - `SET_PLAYER_NAME`: sets `playerName`.
+ * - `LEARN_LANGUAGE`: adds a lowercased language to `knownLanguages` if missing and sets the corresponding `languageFlags` entry to `true`.
+ * - `UNLOCK_MEMORY`: marks the specified memory's `locked` field as `false`.
+ * - `ADD_CONSEQUENCE`: appends a value to the array at `consequenceMap[key]`, creating the array if necessary.
+ * - `UPDATE_FACTION_INFLUENCE`: increments the named faction's influence by `change` (treats missing values as 0).
+ * - `SET_CURRENT_SCENE`: sets `currentScene`.
+ * - `COMPLETE_SCENE`: adds a scene to `completedScenes` if not already present.
+ *
+ * Unknown action types return the original state unchanged. This function is pure and has no side effects.
+ *
+ * @param state - Current game state.
+ * @param action - Action describing the state update.
+ * @returns The next game state.
+ */
 function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case 'SET_PLAYER_NAME':
@@ -95,6 +113,14 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   }
 }
 
+/**
+ * Load a previously persisted game state from localStorage.
+ *
+ * Attempts to read the 'ellidra.save' key, parse its JSON payload, and return the contained state only if the saved payload has `version === 1`.
+ * Any missing key, parse error, unexpected version, or other failure results in `null`.
+ *
+ * @returns The persisted partial GameState when a valid v1 save is present; otherwise `null`.
+ */
 function loadPersisted(): Partial<GameState> | null {
   try {
     const raw = localStorage.getItem('ellidra.save');
@@ -110,6 +136,15 @@ export const GameContext = createContext<{
   dispatch: React.Dispatch<GameAction>;
 } | null>(null);
 
+/**
+ * Provides GameContext to descendants, initializing state from persisted storage and persisting updates.
+ *
+ * Merges any persisted game state into the default initial state, sets up the reducer, and saves the state
+ * to persistent storage whenever it changes. The context value exposes `{ state, dispatch }` for consumers.
+ *
+ * @param children - React nodes rendered inside the provider.
+ * @returns A context provider element supplying the game state and dispatch function.
+ */
 export function GameProvider({ children }: { children: ReactNode }) {
   const persisted = loadPersisted();
   const [state, dispatch] = useReducer(gameReducer, { ...initialState, ...persisted });

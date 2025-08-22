@@ -11,7 +11,28 @@ interface KeyboardNavigationConfig {
 }
 
 /**
- * Custom hook for keyboard navigation in the visual novel
+ * Hook that registers global keyboard shortcuts for visual-novel navigation.
+ *
+ * When enabled (not `disabled`) this hook listens for `keydown` on `document`
+ * and invokes the provided callbacks for mapped keys. Key behavior:
+ * - Space or Enter → `onNext`
+ * - ArrowLeft or Backspace → `onPrevious`
+ * - Escape → `onMenu`
+ * - Tab → `onSkip`
+ * - Digit `1`–`9` → `onChoice(index)` where `index = digit - 1` (only called if
+ *   `index < choices.length`)
+ *
+ * The handler ignores events originating from input or textarea elements and
+ * prevents default browser behavior for handled keys.
+ *
+ * @param onNext - Called to advance the scene (Space/Enter).
+ * @param onPrevious - Called to go to the previous scene (ArrowLeft/Backspace).
+ * @param onChoice - Called with zero-based choice index for digit keys `1`–`9`.
+ * @param onMenu - Called to open/close the menu (Escape).
+ * @param onSkip - Called to skip (Tab).
+ * @param choices - Array of available choices; used to bound choice indices.
+ * @param disabled - When true, keyboard handling is disabled.
+ * @returns An object containing a `shortcuts` map describing the supported keys.
  */
 export function useKeyboardNavigation({
   onNext,

@@ -122,6 +122,20 @@ interface ThemeContextType {
 
 export const ThemeContext = createContext<ThemeContextType | null>(null);
 
+/**
+ * Provides theme state (dark/light) and toggle functionality to descendants via ThemeContext.
+ *
+ * Initializes theme name in an SSR-safe way: when running in the browser, prefers a persisted
+ * choice from localStorage key `ellidra-theme` (if valid), otherwise falls back to the user's
+ * `prefers-color-scheme` media setting; when rendered server-side, defaults to `'dark'`.
+ *
+ * The provider exposes the current theme tokens, the theme name, an `isDark` flag, and a
+ * `toggleTheme` function that switches between `'dark'` and `'light'` and persists the choice
+ * to localStorage under `ellidra-theme`.
+ *
+ * @param children - React children to be wrapped by the ThemeContext provider.
+ * @returns A ThemeContext provider element wrapping the given children.
+ */
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [themeName, setThemeName] = useState<string>(() => {
     if (typeof window !== 'undefined') {

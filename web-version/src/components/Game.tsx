@@ -11,6 +11,27 @@ import { prologueChapter, languageSelectionScene, hubScene } from '../data/dialo
 
 type GameScreen = 'main-menu' | 'prologue' | 'language_selection' | 'hub' | 'map' | 'lexicon' | 'memory_dive';
 
+/**
+ * Renders the game's main UI and manages screen/scene navigation for the visual novel.
+ *
+ * This component owns local UI state for the current screen and active scene ID, drives transitions
+ * between the prologue, language selection, and hub flows, and renders the appropriate screen
+ * components (main menu, VN dialogue system, map, lexicon, memory dive). It supplies a background
+ * image for the main menu, prologue, language selection, and hub screens and provides a helper to
+ * return to the hub.
+ *
+ * Notable behaviors:
+ * - Starting a new game switches to the prologue and sets the prologue start scene.
+ * - Loading a game reads the saved data from localStorage key `"ellidra_save"` and restores the
+ *   saved scene ID (falls back to `hub_main`).
+ * - Completing the prologue advances to the language selection; completing language selection moves
+ *   to the hub.
+ * - The hub's choice handler navigates to map, lexicon, or memory dive screens; two choices
+ *   ("check_languages" and "view_consequences") log information derived from the game state
+ *   (`knownLanguages` and `consequenceMap` respectively).
+ *
+ * @returns The rendered JSX tree for the currently active screen.
+ */
 function GameContent() {
   const { state } = useGame();
   const [currentScreen, setCurrentScreen] = useState<GameScreen>('main-menu');

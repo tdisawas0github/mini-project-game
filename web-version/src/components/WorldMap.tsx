@@ -6,6 +6,17 @@ interface WorldMapProps {
   onClose: () => void;
 }
 
+/**
+ * Interactive world map component that displays a scalable image with clickable region hotspots,
+ * a faction influence panel, and a region detail modal.
+ *
+ * The component loads map data from "/data/faction_map.json", measures the map image's natural
+ * and displayed sizes to scale hotspot coordinates correctly, and dispatches game consequences
+ * when regions are inspected or investigated.
+ *
+ * @param onClose - Called to close the map UI.
+ * @returns A React element rendering the world map interface.
+ */
 export default function WorldMap({ onClose }: WorldMapProps) {
   const { state, dispatch } = useGame();
   const [mapData, setMapData] = useState<FactionMapData | null>(null);
