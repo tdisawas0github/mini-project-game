@@ -125,7 +125,7 @@ export const UILayer = styled.div`
 // Main dialogue box
 export const DialogueBox = styled(motion.div)`
   position: absolute;
-  bottom: 40px;
+  bottom: 0px;
   left: 50%;
   transform: translateX(-50%);
   width: 85%;
@@ -137,7 +137,7 @@ export const DialogueBox = styled(motion.div)`
     rgba(22, 33, 62, 0.95) 100%
   );
   border: 2px solid rgba(212, 175, 55, 0.3);
-  border-radius: 15px;
+  border-radius: 15px 15px 0px 0px;
   backdrop-filter: blur(10px);
   box-shadow: 
     0 15px 35px rgba(0, 0, 0, 0.6),
@@ -151,14 +151,14 @@ export const DialogueBox = styled(motion.div)`
   @media (max-width: 768px) {
     width: 90%;
     padding: 25px;
-    bottom: 30px;
+    bottom: 0px;
     min-height: 140px;
   }
   
   @media (max-width: 480px) {
     width: 95%;
     padding: 20px;
-    bottom: 20px;
+    bottom: 0px;
     min-height: 120px;
   }
 `;
@@ -227,7 +227,7 @@ export const DialogueText = styled.div`
 // Choice buttons container
 export const ChoicesContainer = styled.div`
   position: absolute;
-  bottom: 320px;
+  bottom: 280px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -239,12 +239,12 @@ export const ChoicesContainer = styled.div`
   
   @media (max-width: 768px) {
     width: 85%;
-    bottom: 290px;
+    bottom: 250px;
   }
   
   @media (max-width: 480px) {
     width: 90%;
-    bottom: 270px;
+    bottom: 220px;
     min-width: 280px;
   }
 `;
@@ -487,7 +487,7 @@ export const AutoPlayIndicator = styled.div<{ $isActive: boolean }>`
 // Name input container
 export const NameInputContainer = styled(motion.div)`
   position: absolute;
-  bottom: 280px;
+  bottom: 300px;
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(135deg, 
