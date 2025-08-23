@@ -31,6 +31,17 @@ Your choices will determine not only your lost identity but the fate of language
 
 This project offers multiple gaming experiences across all major platforms:
 
+### 🌐 Web Version (React) - **Recommended for New Players**
+- **Location**: `web-version/`
+- **Platforms**: Modern web browsers (all devices)
+- **Technology**: React + TypeScript + Vite + PWA
+- **Features**: 
+  - Progressive Web App (installable on mobile devices)
+  - Responsive design for all screen sizes
+  - Works offline after first visit
+- **Play Online**: [Live Demo](https://echoes-of-ellidra.vercel.app)
+- **Deploy Your Own**: See [📚 Complete Deployment Guide](docs/README.md)
+
 ### 🖥️ Desktop Versions (Ren'Py)
 - **Location**: `Valdaren/`  
 - **Platforms**: Windows, macOS, Linux
@@ -47,16 +58,6 @@ This project offers multiple gaming experiences across all major platforms:
   - AsyncStorage for persistent game saves
   - Touch-optimized UI with mobile-specific controls
 - **Setup**: See [Mobile README](mobile/android/MOBILE_README.md) for development setup
-
-### 🌐 Web Version (React) 
-- **Location**: `web-version/`
-- **Platforms**: Modern web browsers (all devices)
-- **Technology**: React + TypeScript + Vite + PWA
-- **Features**: 
-  - Progressive Web App (installable on mobile devices)
-  - Responsive design for all screen sizes
-  - Works offline after first visit
-- **Play Online**: [Live Demo](https://echoes-of-ellidra.vercel.app)
 
 ## 📋 Installation & Setup
 
@@ -141,6 +142,24 @@ docker compose --profile dev up --build web-dev
 ```
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed Docker instructions.
+
+## 🚀 Quick Deployment Guide
+
+Want to deploy your own version? We've got you covered with comprehensive tutorials:
+
+### 🎯 Choose Your Platform
+
+| Platform | Best For | Time Required | Features |
+|----------|----------|---------------|----------|
+| **[🔥 Vercel](docs/VERCEL_TUTORIAL.md)** | Fastest deployment | 2-5 minutes | Serverless functions, Auto-scaling |
+| **[🌊 Netlify](docs/NETLIFY_TUTORIAL.md)** | Rich CI/CD features | 3-8 minutes | Forms, Functions, Split testing |
+| **[☁️ Appwrite](docs/APPWRITE_TUTORIAL.md)** | Full-stack with backend | 10-30 minutes | Database, Auth, Storage, Real-time |
+| **[🐳 Docker](DEPLOYMENT.md#docker-deployment)** | Self-hosting control | 10+ minutes | Complete infrastructure control |
+
+### 📚 Complete Documentation
+- **[📋 Deployment Hub](docs/README.md)** - Compare all platforms and choose the best fit
+- **[🚀 Main Deployment Guide](DEPLOYMENT.md)** - Quick start for all platforms
+- **Detailed Tutorials** - Step-by-step guides with troubleshooting and best practices
 
 ## 🏗️ Project Structure
 
