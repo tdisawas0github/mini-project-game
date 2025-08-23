@@ -3,7 +3,7 @@ import { GameProvider } from '../context/GameContext';
 import { useGame } from '../hooks/useGame';
 import { VisualNovelGlobalStyle } from '../styles/visualnovel';
 import { VNMainMenu } from './VNMainMenu';
-import { VNDialogueSystem } from './VNDialogueSystem';
+import { NewDialogSystem } from './NewDialogSystem';
 import WorldMap from '../components/WorldMap';
 import LexiconSidebar from '../components/LexiconSidebar';
 import MemoryDive from '../components/MemoryDive';
@@ -74,7 +74,7 @@ function GameContent() {
         
       case 'prologue':
         return (
-          <VNDialogueSystem
+          <NewDialogSystem
             scenes={prologueChapter}
             currentSceneId={currentSceneId}
             onSceneChange={setCurrentSceneId}
@@ -85,7 +85,7 @@ function GameContent() {
         
       case 'language_selection':
         return (
-          <VNDialogueSystem
+          <NewDialogSystem
             scenes={languageSelectionScene}
             currentSceneId={currentSceneId}
             onSceneChange={setCurrentSceneId}
@@ -96,7 +96,7 @@ function GameContent() {
         
       case 'hub':
         return (
-          <VNDialogueSystem
+          <NewDialogSystem
             scenes={hubScene}
             currentSceneId={currentSceneId}
             onSceneChange={setCurrentSceneId}
