@@ -131,11 +131,9 @@ export const DialogueBox = styled(motion.div)`
   width: 85%;
   max-width: 900px;
   min-height: 160px;
-  background: linear-gradient(135deg, 
-    rgba(15, 15, 35, 0.95) 0%, 
-    rgba(26, 26, 46, 0.98) 50%, 
-    rgba(22, 33, 62, 0.95) 100%
-  );
+  background: url('/assets/dialog.png') center center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
   border: 2px solid rgba(212, 175, 55, 0.3);
   border-radius: 15px;
   backdrop-filter: blur(10px);
