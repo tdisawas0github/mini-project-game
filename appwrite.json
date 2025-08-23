@@ -1,8 +1,213 @@
 {
   "projectId": "echoes-of-ellidra",
   "projectName": "Echoes of Ellidra",
-  "functions": [],
-  "databases": [],
-  "storage": [],
-  "collections": []
+  "functions": [
+    {
+      "$id": "game-leaderboard",
+      "name": "Game Leaderboard",
+      "runtime": "node-18.0",
+      "execute": ["users", "guests"],
+      "events": [],
+      "schedule": "",
+      "timeout": 15,
+      "enabled": true,
+      "logging": true,
+      "entrypoint": "src/main.js",
+      "commands": "npm install",
+      "ignore": [".git", "node_modules"]
+    },
+    {
+      "$id": "save-game",
+      "name": "Save Game State",
+      "runtime": "node-18.0",
+      "execute": ["users"],
+      "events": ["databases.*.collections.*.documents.*.create"],
+      "schedule": "",
+      "timeout": 10,
+      "enabled": true,
+      "logging": true,
+      "entrypoint": "src/main.js",
+      "commands": "npm install"
+    }
+  ],
+  "databases": [
+    {
+      "$id": "game-data",
+      "name": "Game Data",
+      "collections": [
+        {
+          "$id": "player-saves",
+          "$collection": "player-saves", 
+          "name": "Player Saves",
+          "enabled": true,
+          "documentSecurity": true,
+          "attributes": [
+            {
+              "key": "userId",
+              "type": "string",
+              "status": "available",
+              "error": "",
+              "required": true,
+              "array": false,
+              "size": 255,
+              "default": null
+            },
+            {
+              "key": "saveData",
+              "type": "string", 
+              "status": "available",
+              "error": "",
+              "required": true,
+              "array": false,
+              "size": 100000,
+              "default": null
+            },
+            {
+              "key": "sceneName",
+              "type": "string",
+              "status": "available", 
+              "error": "",
+              "required": true,
+              "array": false,
+              "size": 255,
+              "default": null
+            },
+            {
+              "key": "timestamp",
+              "type": "datetime",
+              "status": "available",
+              "error": "",
+              "required": true,
+              "array": false,
+              "default": null
+            },
+            {
+              "key": "gameVersion", 
+              "type": "string",
+              "status": "available",
+              "error": "",
+              "required": false,
+              "array": false,
+              "size": 50,
+              "default": "1.0.0"
+            }
+          ],
+          "indexes": [
+            {
+              "key": "userId_index",
+              "type": "key",
+              "status": "available",
+              "error": "",
+              "attributes": ["userId"]
+            },
+            {
+              "key": "timestamp_index", 
+              "type": "key",
+              "status": "available",
+              "error": "",
+              "attributes": ["timestamp"]
+            }
+          ]
+        },
+        {
+          "$id": "game-stats",
+          "$collection": "game-stats",
+          "name": "Game Statistics",
+          "enabled": true,
+          "documentSecurity": true,
+          "attributes": [
+            {
+              "key": "userId",
+              "type": "string",
+              "status": "available",
+              "error": "",
+              "required": true,
+              "array": false,
+              "size": 255,
+              "default": null
+            },
+            {
+              "key": "completedScenes",
+              "type": "integer",
+              "status": "available",
+              "error": "",
+              "required": true,
+              "array": false,
+              "min": 0,
+              "max": 1000,
+              "default": 0
+            },
+            {
+              "key": "totalPlayTime",
+              "type": "integer",
+              "status": "available", 
+              "error": "",
+              "required": true,
+              "array": false,
+              "min": 0,
+              "max": 999999999,
+              "default": 0
+            },
+            {
+              "key": "achievementsUnlocked",
+              "type": "string",
+              "status": "available",
+              "error": "",
+              "required": false,
+              "array": false,
+              "size": 10000,
+              "default": "[]"
+            },
+            {
+              "key": "lastPlayedDate",
+              "type": "datetime",
+              "status": "available",
+              "error": "",
+              "required": true,
+              "array": false,
+              "default": null
+            }
+          ],
+          "indexes": [
+            {
+              "key": "completedScenes_index",
+              "type": "key", 
+              "status": "available",
+              "error": "",
+              "attributes": ["completedScenes"]
+            },
+            {
+              "key": "lastPlayed_index",
+              "type": "key",
+              "status": "available", 
+              "error": "",
+              "attributes": ["lastPlayedDate"]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "storage": [
+    {
+      "$id": "game-assets",
+      "name": "Game Assets", 
+      "enabled": true,
+      "maximumFileSize": 52428800,
+      "allowedFileExtensions": ["jpg", "jpeg", "png", "gif", "webp", "mp3", "ogg", "wav", "webm"],
+      "compression": "gzip",
+      "encryption": true,
+      "antivirus": true
+    },
+    {
+      "$id": "user-content",
+      "name": "User Generated Content",
+      "enabled": true,
+      "maximumFileSize": 10485760,
+      "allowedFileExtensions": ["jpg", "jpeg", "png", "gif", "webp"],
+      "compression": "gzip",
+      "encryption": true,
+      "antivirus": true
+    }
+  ]
 }
