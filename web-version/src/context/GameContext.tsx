@@ -24,7 +24,7 @@ const initialState: GameState = {
   languageFlags: { english: false, dutch: false, latin: false, greek: false },
   memories: initialMemories,
   consequenceMap: {},
-  factionInfluence: { ravengard: 60, whispering_woods: 50, fringe_ruins: 30 },
+  factionInfluence: { Institute: 60, Clans: 50, Echoborn: 30 },
   currentScene: 'start',
   completedScenes: []
 };
