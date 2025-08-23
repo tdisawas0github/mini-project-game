@@ -56,7 +56,6 @@ function dialogReducer(state: DialogState, action: DialogAction): DialogState {
       return {
         ...state,
         isTextComplete: action.payload,
-        showChoices: action.payload,
       };
       
     case 'SET_DISPLAYED_TEXT':

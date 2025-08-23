@@ -40,6 +40,11 @@ export class DialogEngine {
       }
     });
 
+    this.effectHandlers.set('custom', (effect) => {
+      // Custom effects can be handled by the game state or external systems
+      console.log('Processing custom effect:', effect);
+    });
+
     // Default requirement checkers
     this.requirementCheckers.set('language', (requirement, gameState) => {
       return gameState.knownLanguages.includes(requirement.key) || 

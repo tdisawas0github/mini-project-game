@@ -94,7 +94,7 @@ export function useDialogNavigation(): UseDialogNavigation {
  */
 export function useDialogKeyboard(enabled: boolean = true) {
   const { advanceText, selectChoice, canUseChoice } = useDialog();
-  const { choices } = useDialogChoices();
+  const { choices, showChoices } = useDialogChoices();
   const [selectedChoiceIndex, setSelectedChoiceIndex] = useState(0);
 
   useEffect(() => {
@@ -105,7 +105,7 @@ export function useDialogKeyboard(enabled: boolean = true) {
         case ' ':
         case 'Enter':
           event.preventDefault();
-          if (choices.length > 0) {
+          if (showChoices && choices.length > 0) {
             const selectedChoice = choices[selectedChoiceIndex];
             if (selectedChoice && canUseChoice(selectedChoice)) {
               selectChoice(selectedChoice);
@@ -117,7 +117,7 @@ export function useDialogKeyboard(enabled: boolean = true) {
 
         case 'ArrowUp':
           event.preventDefault();
-          if (choices.length > 0) {
+          if (showChoices && choices.length > 0) {
             setSelectedChoiceIndex(prev => 
               prev > 0 ? prev - 1 : choices.length - 1
             );
@@ -126,7 +126,7 @@ export function useDialogKeyboard(enabled: boolean = true) {
 
         case 'ArrowDown':
           event.preventDefault();
-          if (choices.length > 0) {
+          if (showChoices && choices.length > 0) {
             setSelectedChoiceIndex(prev => 
               prev < choices.length - 1 ? prev + 1 : 0
             );
@@ -143,7 +143,7 @@ export function useDialogKeyboard(enabled: boolean = true) {
         case '8':
         case '9': {
           const choiceIndex = parseInt(event.key) - 1;
-          if (choices[choiceIndex] && canUseChoice(choices[choiceIndex])) {
+          if (showChoices && choices[choiceIndex] && canUseChoice(choices[choiceIndex])) {
             selectChoice(choices[choiceIndex]);
           }
           break;
@@ -153,7 +153,7 @@ export function useDialogKeyboard(enabled: boolean = true) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [enabled, choices, selectedChoiceIndex, advanceText, selectChoice, canUseChoice]);
+  }, [enabled, showChoices, choices, selectedChoiceIndex, advanceText, selectChoice, canUseChoice]);
 
   // Reset selected choice index when choices change
   useEffect(() => {
