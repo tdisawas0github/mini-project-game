@@ -12,6 +12,7 @@ import {
   LoadingSpinner
 } from '../styles/visualnovel';
 import { EnhancedButton } from './EnhancedButton';
+import { useOptimizedBackgroundImage } from '../hooks/useOptimizedImage';
 
 interface VNMainMenuProps {
   onStartGame: () => void;
@@ -29,16 +30,29 @@ export function VNMainMenu({
   const [loading, setLoading] = useState(true);
   const [showCredits, setShowCredits] = useState(false);
   const [hasSaveFile, setHasSaveFile] = useState(false);
+  
+  // Use optimized background image with WebP support
+  const { backgroundImage: optimizedBg, isLoading: bgLoading } = useOptimizedBackgroundImage(backgroundImage);
 
   useEffect(() => {
     // Check for existing save file
     const saveData = localStorage.getItem('ellidra_save');
     setHasSaveFile(!!saveData);
     
-    // Simulate loading
-    const timer = setTimeout(() => setLoading(false), 2000);
+    // Simulate loading - wait for both timer and background image
+    const timer = setTimeout(() => {
+      if (!bgLoading) {
+        setLoading(false);
+      }
+    }, 2000);
+    
+    // Also check if background is loaded
+    if (!bgLoading && !loading) {
+      setLoading(false);
+    }
+    
     return () => clearTimeout(timer);
-  }, []);
+  }, [bgLoading]);
 
   if (loading) {
     return (
@@ -65,8 +79,8 @@ export function VNMainMenu({
 
   return (
     <VisualNovelContainer>
-      {/* Background */}
-      <BackgroundLayer $backgroundImage={backgroundImage} />
+      {/* Background with optimized image */}
+      <BackgroundLayer style={{ backgroundImage: optimizedBg }} />
       
       {/* Main Menu UI */}
       <UILayer>

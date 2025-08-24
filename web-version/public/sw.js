@@ -1,24 +1,70 @@
-const CACHE_NAME = 'ellidra-v1';
+const CACHE_NAME = 'ellidra-v2';
+const STATIC_CACHE = 'ellidra-static-v2';
+const IMAGE_CACHE = 'ellidra-images-v2';
+
 const urlsToCache = [
   '/',
-  '/static/js/bundle.js',
-  '/static/css/main.css',
   '/manifest.json',
   '/android-chrome-192x192.png',
   '/android-chrome-512x512.png'
 ];
 
+// Critical WebP images to cache
+const imagesToCache = [
+  '/assets/map-of-valdaren.webp',
+  '/assets/factions-of-valdaren.webp',
+  '/assets/problems-map.webp'
+];
+
+// Fallback PNG images
+const fallbackImages = [
+  '/assets/map-of-valdaren.png',
+  '/assets/factions-of-valdaren.png',
+  '/assets/problems-map.png'
+];
+
 // Install event - cache resources
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('Service Worker: Caching files');
-        return cache.addAll(urlsToCache);
-      })
-      .catch((err) => {
-        console.log('Service Worker: Cache failed', err);
-      })
+    Promise.all([
+      // Cache static resources
+      caches.open(STATIC_CACHE)
+        .then((cache) => {
+          console.log('Service Worker: Caching static files');
+          return cache.addAll(urlsToCache);
+        }),
+      // Cache WebP images with fallback
+      caches.open(IMAGE_CACHE)
+        .then(async (cache) => {
+          console.log('Service Worker: Caching optimized images');
+          
+          // Try to cache WebP images first
+          for (const webpUrl of imagesToCache) {
+            try {
+              const response = await fetch(webpUrl);
+              if (response.ok) {
+                await cache.put(webpUrl, response);
+              }
+            } catch (error) {
+              console.log(`Failed to cache ${webpUrl}, will use fallback`);
+            }
+          }
+          
+          // Cache PNG fallbacks
+          for (const pngUrl of fallbackImages) {
+            try {
+              const response = await fetch(pngUrl);
+              if (response.ok) {
+                await cache.put(pngUrl, response);
+              }
+            } catch (error) {
+              console.log(`Failed to cache fallback ${pngUrl}`);
+            }
+          }
+        })
+    ]).catch((err) => {
+      console.log('Service Worker: Cache failed', err);
+    })
   );
 });
 
@@ -28,8 +74,10 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('Service Worker: Clearing old cache');
+          if (cacheName !== CACHE_NAME && 
+              cacheName !== STATIC_CACHE && 
+              cacheName !== IMAGE_CACHE) {
+            console.log('Service Worker: Clearing old cache', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -38,11 +86,24 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch event - serve cached content when offline
+// Fetch event - serve cached content when offline with image optimization
 self.addEventListener('fetch', (event) => {
   // Only handle GET requests
   if (event.request.method !== 'GET') return;
   
+  const url = new URL(event.request.url);
+  
+  // Handle image requests with WebP optimization
+  if (url.pathname.includes('/assets/') && 
+      (url.pathname.endsWith('.png') || url.pathname.endsWith('.webp'))) {
+    
+    event.respondWith(
+      handleImageRequest(event.request)
+    );
+    return;
+  }
+  
+  // Handle other requests
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
@@ -62,7 +123,12 @@ self.addEventListener('fetch', (event) => {
             // Clone response for cache
             const responseToCache = response.clone();
             
-            caches.open(CACHE_NAME)
+            // Cache in appropriate cache based on content type
+            const cacheToUse = response.headers.get('content-type')?.includes('image/') 
+              ? IMAGE_CACHE 
+              : STATIC_CACHE;
+              
+            caches.open(cacheToUse)
               .then((cache) => {
                 cache.put(event.request, responseToCache);
               });
@@ -78,6 +144,54 @@ self.addEventListener('fetch', (event) => {
       })
   );
 });
+
+// Handle image requests with WebP optimization
+async function handleImageRequest(request) {
+  const url = new URL(request.url);
+  
+  // Check if request is for PNG and browser supports WebP
+  if (url.pathname.endsWith('.png') && 
+      request.headers.get('accept')?.includes('image/webp')) {
+    
+    const webpUrl = url.pathname.replace('.png', '.webp');
+    
+    // Try WebP from cache first
+    const webpCached = await caches.match(webpUrl);
+    if (webpCached) {
+      return webpCached;
+    }
+    
+    // Try to fetch WebP from network
+    try {
+      const webpResponse = await fetch(webpUrl);
+      if (webpResponse.ok) {
+        // Cache the WebP version
+        const cache = await caches.open(IMAGE_CACHE);
+        cache.put(webpUrl, webpResponse.clone());
+        return webpResponse;
+      }
+    } catch (error) {
+      console.log('WebP not available, falling back to PNG');
+    }
+  }
+  
+  // Fall back to original request
+  const cachedResponse = await caches.match(request);
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+  
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse.ok) {
+      const cache = await caches.open(IMAGE_CACHE);
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (error) {
+    return new Response('Image not available', { status: 404 });
+  }
+}
 
 // Background sync for offline functionality
 self.addEventListener('sync', (event) => {
