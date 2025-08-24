@@ -4,10 +4,24 @@ import { useGame } from '../hooks/useGame';
 import { VisualNovelGlobalStyle } from '../styles/visualnovel';
 import { VNMainMenu } from './VNMainMenu';
 import { NewDialogSystem } from './NewDialogSystem';
-import WorldMap from '../components/WorldMap';
-import LexiconSidebar from '../components/LexiconSidebar';
-import MemoryDive from '../components/MemoryDive';
 import { prologueChapter, languageSelectionScene, hubScene } from '../data/dialogue';
+import { createLazyComponent } from '../utils/lazyLoading';
+
+// Lazy load heavy components
+const LazyWorldMap = createLazyComponent(
+  () => import('../components/WorldMap'),
+  'Loading the mystical world map...'
+);
+
+const LazyLexiconSidebar = createLazyComponent(
+  () => import('../components/LexiconSidebar'),
+  'Loading ancient knowledge...'
+);
+
+const LazyMemoryDive = createLazyComponent(
+  () => import('../components/MemoryDive'),
+  'Diving into memories...'
+);
 
 type GameScreen = 'main-menu' | 'prologue' | 'language_selection' | 'hub' | 'map' | 'lexicon' | 'memory_dive';
 
@@ -32,15 +46,15 @@ function GameContent() {
   };
 
   const getBackgroundImage = () => {
+    // Use optimized image path - the hook/component will handle WebP detection
+    const basePath = '/assets/map-of-valdaren.png';
+    
     switch (currentScreen) {
       case 'main-menu':
-        return '/assets/map-of-valdaren.png';
       case 'prologue':
-        return '/assets/map-of-valdaren.png';
       case 'language_selection':
-        return '/assets/map-of-valdaren.png';
       case 'hub':
-        return '/assets/map-of-valdaren.png';
+        return basePath;
       default:
         return undefined;
     }
@@ -141,7 +155,7 @@ function GameContent() {
             >
               ← Return to Hub
             </button>
-            <WorldMap onClose={returnToHub} />
+            <LazyWorldMap onClose={returnToHub} />
           </div>
         );
         
@@ -167,7 +181,7 @@ function GameContent() {
             >
               ← Return to Hub
             </button>
-            <LexiconSidebar onClose={returnToHub} />
+            <LazyLexiconSidebar onClose={returnToHub} />
           </div>
         );
         
@@ -193,7 +207,7 @@ function GameContent() {
             >
               ← Return to Hub
             </button>
-            <MemoryDive onClose={returnToHub} />
+            <LazyMemoryDive onClose={returnToHub} />
           </div>
         );
         
