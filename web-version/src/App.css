@@ -41,10 +41,7 @@
 
 .dialogue-box {
   background: rgba(255, 255, 255, 0.8);
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  border-radius: 16px;
   padding: 32px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(8px);
 }
 
