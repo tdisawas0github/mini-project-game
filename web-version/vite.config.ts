@@ -1,9 +1,23 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import compression from 'vite-plugin-compression'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    // Gzip compression for production builds
+    compression({
+      algorithm: 'gzip',
+      threshold: 1024, // Only compress files larger than 1KB
+    }),
+    // Brotli compression for modern browsers
+    compression({
+      algorithm: 'brotliCompress',
+      ext: '.br',
+      threshold: 1024,
+    })
+  ],
   base: '/',
   build: {
     outDir: 'dist',
@@ -16,6 +30,10 @@ export default defineConfig({
         drop_console: true,
         drop_debugger: true,
         pure_funcs: ['console.log'],
+        passes: 2,
+      },
+      mangle: {
+        safari10: true,
       },
     },
     rollupOptions: {
@@ -24,7 +42,7 @@ export default defineConfig({
           vendor: ['react', 'react-dom'],
           animations: ['framer-motion'],
           styling: ['styled-components'],
-          utils: ['./src/utils/imageOptimization']
+          utils: ['./src/utils/imageOptimization', './src/utils/performanceMonitor']
         },
         chunkFileNames: 'js/[name]-[hash].js',
         entryFileNames: 'js/[name]-[hash].js',
@@ -40,6 +58,10 @@ export default defineConfig({
           }
           return `assets/[name]-[hash].${extType}`;
         }
+      },
+      treeshake: {
+        preset: 'recommended',
+        moduleSideEffects: false,
       }
     },
     reportCompressedSize: true,

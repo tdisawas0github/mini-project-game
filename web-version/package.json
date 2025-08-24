@@ -38,6 +38,7 @@
     "typescript-eslint": "^8.39.1",
     "vite": "^7.1.2",
     "vite-bundle-analyzer": "^1.2.1",
+    "vite-plugin-compression": "^0.5.1",
     "vitest": "^2.0.0"
   }
 }
