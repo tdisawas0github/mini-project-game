@@ -132,9 +132,9 @@ export const DialogueBox = styled(motion.div)`
   max-width: 900px;
   min-height: 160px;
   background: linear-gradient(135deg, 
-    rgba(15, 15, 35, 0.95) 0%, 
-    rgba(26, 26, 46, 0.98) 50%, 
-    rgba(22, 33, 62, 0.95) 100%
+    rgba(15, 15, 35, 0.7) 0%, 
+    rgba(26, 26, 46, 0.75) 50%, 
+    rgba(22, 33, 62, 0.7) 100%
   );
   border: 2px solid rgba(212, 175, 55, 0.3);
   border-radius: 15px 15px 0px 0px;
@@ -169,8 +169,8 @@ export const NameBox = styled.div`
   top: -15px;
   left: 30px;
   background: linear-gradient(135deg, 
-    rgba(212, 175, 55, 0.9) 0%, 
-    rgba(184, 134, 11, 0.95) 100%
+    rgba(212, 175, 55, 0.8) 0%, 
+    rgba(184, 134, 11, 0.85) 100%
   );
   color: #0f0f23;
   padding: 8px 20px;
@@ -252,9 +252,9 @@ export const ChoicesContainer = styled.div`
 // Individual choice button
 export const ChoiceButton = styled(motion.button)`
   background: linear-gradient(135deg, 
-    rgba(15, 15, 35, 0.9) 0%, 
-    rgba(26, 26, 46, 0.95) 50%, 
-    rgba(22, 33, 62, 0.9) 100%
+    rgba(15, 15, 35, 0.7) 0%, 
+    rgba(26, 26, 46, 0.75) 50%, 
+    rgba(22, 33, 62, 0.7) 100%
   );
   border: 2px solid rgba(212, 175, 55, 0.4);
   color: #e2e8f0;
@@ -272,8 +272,8 @@ export const ChoiceButton = styled(motion.button)`
     border-color: rgba(212, 175, 55, 0.8);
     background: linear-gradient(135deg, 
       rgba(212, 175, 55, 0.1) 0%, 
-      rgba(26, 26, 46, 0.95) 50%, 
-      rgba(22, 33, 62, 0.9) 100%
+      rgba(26, 26, 46, 0.75) 50%, 
+      rgba(22, 33, 62, 0.7) 100%
     );
     transform: translateX(10px);
     box-shadow: 
@@ -294,9 +294,9 @@ export const ChoiceButton = styled(motion.button)`
     &:hover {
       transform: none;
       background: linear-gradient(135deg, 
-        rgba(15, 15, 35, 0.9) 0%, 
-        rgba(26, 26, 46, 0.95) 50%, 
-        rgba(22, 33, 62, 0.9) 100%
+        rgba(15, 15, 35, 0.7) 0%, 
+        rgba(26, 26, 46, 0.75) 50%, 
+        rgba(22, 33, 62, 0.7) 100%
       );
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
@@ -374,9 +374,9 @@ export const MenuOverlay = styled(motion.div)`
 // Menu content
 export const MenuContent = styled(motion.div)`
   background: linear-gradient(135deg, 
-    rgba(15, 15, 35, 0.95) 0%, 
-    rgba(26, 26, 46, 0.98) 50%, 
-    rgba(22, 33, 62, 0.95) 100%
+    rgba(15, 15, 35, 0.75) 0%, 
+    rgba(26, 26, 46, 0.8) 50%, 
+    rgba(22, 33, 62, 0.75) 100%
   );
   border: 2px solid rgba(212, 175, 55, 0.3);
   border-radius: 20px;
@@ -491,9 +491,9 @@ export const NameInputContainer = styled(motion.div)`
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(135deg, 
-    rgba(15, 15, 35, 0.95) 0%, 
-    rgba(26, 26, 46, 0.98) 50%, 
-    rgba(22, 33, 62, 0.95) 100%
+    rgba(15, 15, 35, 0.7) 0%, 
+    rgba(26, 26, 46, 0.75) 50%, 
+    rgba(22, 33, 62, 0.7) 100%
   );
   border: 2px solid rgba(212, 175, 55, 0.4);
   border-radius: 15px;
