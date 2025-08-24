@@ -40,8 +40,8 @@
 }
 
 .dialogue-box {
-  background: rgba(30, 41, 59, 0.7);
-  border: 2px solid #475569;
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: 16px;
   padding: 32px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
@@ -50,7 +50,7 @@
 
 .speaker-name {
   font-weight: bold;
-  color: #fbbf24;
+  color: #374151;
   font-size: 1.1em;
   margin-bottom: 15px;
   text-transform: uppercase;
@@ -61,6 +61,7 @@
   line-height: 1.8;
   font-size: clamp(.95rem, 1.1vw, 1.1rem);
   white-space: pre-line;
+  color: #1f2937;
 }
 
 .dialogue-choices {
