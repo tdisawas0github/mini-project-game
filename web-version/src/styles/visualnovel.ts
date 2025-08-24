@@ -132,13 +132,7 @@ export const DialogueBox = styled(motion.div)`
   max-width: 900px;
   min-height: 160px;
   background: rgba(255, 255, 255, 0.8);
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  border-radius: 15px 15px 0px 0px;
   backdrop-filter: blur(10px);
-  box-shadow: 
-    0 15px 35px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    0 0 25px rgba(0, 0, 0, 0.1);
   padding: 30px 35px;
   max-height: 280px;
   overflow-y: auto;
