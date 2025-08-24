@@ -131,18 +131,14 @@ export const DialogueBox = styled(motion.div)`
   width: 85%;
   max-width: 900px;
   min-height: 160px;
-  background: linear-gradient(135deg, 
-    rgba(15, 15, 35, 0.7) 0%, 
-    rgba(26, 26, 46, 0.75) 50%, 
-    rgba(22, 33, 62, 0.7) 100%
-  );
-  border: 2px solid rgba(212, 175, 55, 0.3);
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: 15px 15px 0px 0px;
   backdrop-filter: blur(10px);
   box-shadow: 
     0 15px 35px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 0 25px rgba(212, 175, 55, 0.15);
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 0 25px rgba(0, 0, 0, 0.1);
   padding: 30px 35px;
   max-height: 280px;
   overflow-y: auto;
@@ -169,10 +165,10 @@ export const NameBox = styled.div`
   top: -15px;
   left: 30px;
   background: linear-gradient(135deg, 
-    rgba(212, 175, 55, 0.8) 0%, 
-    rgba(184, 134, 11, 0.85) 100%
+    rgba(75, 85, 99, 0.9) 0%, 
+    rgba(55, 65, 81, 0.95) 100%
   );
-  color: #0f0f23;
+  color: #ffffff;
   padding: 8px 20px;
   border-radius: 20px;
   font-family: 'Cinzel', serif;
@@ -181,7 +177,7 @@ export const NameBox = styled.div`
   text-transform: uppercase;
   letter-spacing: 1px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
 `;
 
 // Dialogue text
@@ -189,8 +185,8 @@ export const DialogueText = styled.div`
   font-family: 'Crimson Text', serif;
   font-size: 1.15rem;
   line-height: 1.7;
-  color: #e2e8f0;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  color: #1f2937;
+  text-shadow: none;
   animation: ${textReveal} 0.8s ease-out;
   margin-top: 8px;
   white-space: pre-wrap;
@@ -198,28 +194,28 @@ export const DialogueText = styled.div`
   
   /* Special text styling for glyphs/foreign text */
   .glyph {
-    color: #d4af37;
+    color: #b45309;
     font-style: italic;
     text-decoration: underline;
     cursor: help;
     transition: all 0.3s ease;
     
     &:hover {
-      color: #fbbf24;
-      filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.5));
+      color: #d97706;
+      filter: drop-shadow(0 0 5px rgba(217, 119, 6, 0.3));
     }
   }
   
   /* Emphasis text */
   .emphasis {
     font-weight: 600;
-    color: #fbbf24;
+    color: #d97706;
   }
   
   /* Whisper text */
   .whisper {
     font-style: italic;
-    color: #94a3b8;
+    color: #6b7280;
     font-size: 0.95em;
   }
 `;
