@@ -2,6 +2,11 @@
  * Performance monitoring utilities for game optimization
  */
 
+// Extended types for performance API
+interface PerformanceEventTiming extends PerformanceEntry {
+  processingStart: number;
+}
+
 interface PerformanceMetric {
   name: string;
   value: number;
@@ -31,7 +36,7 @@ export class PerformanceMonitor {
 
       // FID (First Input Delay)
       this.observeMetric('first-input', (entries) => {
-        const fidEntry = entries[0] as any;
+        const fidEntry = entries[0] as PerformanceEventTiming;
         const fid = fidEntry.processingStart - fidEntry.startTime;
         this.recordMetricInternal('FID', fid);
       });
@@ -40,8 +45,9 @@ export class PerformanceMonitor {
       this.observeMetric('layout-shift', (entries) => {
         let clsValue = 0;
         for (const entry of entries) {
-          if (!(entry as any).hadRecentInput) {
-            clsValue += (entry as any).value;
+          const layoutShiftEntry = entry as PerformanceEntry & { hadRecentInput?: boolean; value?: number };
+          if (!layoutShiftEntry.hadRecentInput) {
+            clsValue += layoutShiftEntry.value || 0;
           }
         }
         this.recordMetricInternal('CLS', clsValue);
@@ -135,12 +141,14 @@ export class PerformanceMonitor {
    */
   getMemoryUsage() {
     if ('memory' in performance) {
-      const memory = (performance as any).memory;
-      return {
-        used: Math.round(memory.usedJSHeapSize / 1048576), // MB
-        total: Math.round(memory.totalJSHeapSize / 1048576), // MB
-        limit: Math.round(memory.jsHeapSizeLimit / 1048576) // MB
-      };
+      const memory = (performance as { memory?: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
+      if (memory) {
+        return {
+          used: Math.round(memory.usedJSHeapSize / 1048576), // MB
+          total: Math.round(memory.totalJSHeapSize / 1048576), // MB
+          limit: Math.round(memory.jsHeapSizeLimit / 1048576) // MB
+        };
+      }
     }
     return null;
   }
@@ -170,8 +178,8 @@ export function initializePerformanceMonitoring(): PerformanceMonitor {
         const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
         if (navigation) {
           performanceMonitor!.recordMetric('TTFB', navigation.responseStart - navigation.requestStart);
-          performanceMonitor!.recordMetric('DOMContentLoaded', navigation.domContentLoadedEventEnd - (navigation as any).navigationStart);
-          performanceMonitor!.recordMetric('Load', navigation.loadEventEnd - (navigation as any).navigationStart);
+          performanceMonitor!.recordMetric('DOMContentLoaded', navigation.domContentLoadedEventEnd - navigation.fetchStart);
+          performanceMonitor!.recordMetric('Load', navigation.loadEventEnd - navigation.fetchStart);
         }
       }, 0);
     });

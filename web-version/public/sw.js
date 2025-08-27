@@ -1,6 +1,14 @@
-const CACHE_NAME = 'ellidra-v2';
-const STATIC_CACHE = 'ellidra-static-v2';
-const IMAGE_CACHE = 'ellidra-images-v2';
+const CACHE_NAME = 'ellidra-v3';
+const STATIC_CACHE = 'ellidra-static-v3';
+const IMAGE_CACHE = 'ellidra-images-v3';
+const RUNTIME_CACHE = 'ellidra-runtime-v3';
+
+// Cache strategies
+const CACHE_STRATEGIES = {
+  STALE_WHILE_REVALIDATE: 'stale-while-revalidate',
+  CACHE_FIRST: 'cache-first',
+  NETWORK_FIRST: 'network-first',
+};
 
 const urlsToCache = [
   '/',
@@ -71,22 +79,28 @@ self.addEventListener('install', (event) => {
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME && 
-              cacheName !== STATIC_CACHE && 
-              cacheName !== IMAGE_CACHE) {
-            console.log('Service Worker: Clearing old cache', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    Promise.all([
+      // Clean up old caches
+      caches.keys().then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((cacheName) => {
+            if (cacheName !== CACHE_NAME && 
+                cacheName !== STATIC_CACHE && 
+                cacheName !== IMAGE_CACHE &&
+                cacheName !== RUNTIME_CACHE) {
+              console.log('Service Worker: Clearing old cache', cacheName);
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      }),
+      // Claim clients immediately
+      self.clients.claim()
+    ])
   );
 });
 
-// Fetch event - serve cached content when offline with image optimization
+// Enhanced fetch handler with better caching strategies
 self.addEventListener('fetch', (event) => {
   // Only handle GET requests
   if (event.request.method !== 'GET') return;
@@ -95,57 +109,99 @@ self.addEventListener('fetch', (event) => {
   
   // Handle image requests with WebP optimization
   if (url.pathname.includes('/assets/') && 
-      (url.pathname.endsWith('.png') || url.pathname.endsWith('.webp'))) {
+      (url.pathname.endsWith('.png') || url.pathname.endsWith('.webp') || 
+       url.pathname.endsWith('.jpg') || url.pathname.endsWith('.jpeg'))) {
     
-    event.respondWith(
-      handleImageRequest(event.request)
-    );
+    event.respondWith(handleImageRequest(event.request));
     return;
   }
   
-  // Handle other requests
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        
-        // Make network request and cache successful responses
-        return fetch(event.request)
-          .then((response) => {
-            // Check if valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-            
-            // Clone response for cache
-            const responseToCache = response.clone();
-            
-            // Cache in appropriate cache based on content type
-            const cacheToUse = response.headers.get('content-type')?.includes('image/') 
-              ? IMAGE_CACHE 
-              : STATIC_CACHE;
-              
-            caches.open(cacheToUse)
-              .then((cache) => {
-                cache.put(event.request, responseToCache);
-              });
-            
-            return response;
-          })
-          .catch(() => {
-            // Return offline fallback for navigation requests
-            if (event.request.destination === 'document') {
-              return caches.match('/');
-            }
-          });
-      })
-  );
+  // Handle JavaScript and CSS files with cache-first strategy
+  if (url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) {
+    event.respondWith(handleStaticAsset(event.request));
+    return;
+  }
+  
+  // Handle HTML pages with network-first strategy
+  if (event.request.destination === 'document') {
+    event.respondWith(handleDocumentRequest(event.request));
+    return;
+  }
+  
+  // Default cache strategy for other resources
+  event.respondWith(handleDefaultRequest(event.request));
 });
 
-// Handle image requests with WebP optimization
+// Handle static assets (JS, CSS) with cache-first strategy
+async function handleStaticAsset(request) {
+  const cached = await caches.match(request);
+  if (cached) {
+    return cached;
+  }
+  
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(STATIC_CACHE);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch (error) {
+    console.log('Static asset fetch failed:', error);
+    throw error;
+  }
+}
+
+// Handle document requests with network-first strategy
+async function handleDocumentRequest(request) {
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(RUNTIME_CACHE);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch (error) {
+    const cached = await caches.match(request);
+    if (cached) {
+      return cached;
+    }
+    
+    // Return offline fallback
+    return caches.match('/') || new Response('Offline', { status: 503 });
+  }
+}
+
+// Handle default requests
+async function handleDefaultRequest(request) {
+  const cached = await caches.match(request);
+  if (cached) {
+    // Stale-while-revalidate: return cached version, update in background
+    fetch(request).then(response => {
+      if (response.ok) {
+        const cache = caches.open(RUNTIME_CACHE);
+        cache.then(c => c.put(request, response));
+      }
+    }).catch(() => {
+      // Ignore background update failures
+    });
+    
+    return cached;
+  }
+  
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(RUNTIME_CACHE);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch (error) {
+    return new Response('Resource not available', { status: 404 });
+  }
+}
+
+// Enhanced image request handler with better caching and format support
 async function handleImageRequest(request) {
   const url = new URL(request.url);
   
@@ -165,13 +221,47 @@ async function handleImageRequest(request) {
     try {
       const webpResponse = await fetch(webpUrl);
       if (webpResponse.ok) {
-        // Cache the WebP version
+        // Cache the WebP version with appropriate headers
+        const cache = await caches.open(IMAGE_CACHE);
+        const responseToCache = webpResponse.clone();
+        
+        // Add cache headers for better performance
+        const headers = new Headers(responseToCache.headers);
+        headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+        
+        cache.put(webpUrl, new Response(responseToCache.body, {
+          status: responseToCache.status,
+          statusText: responseToCache.statusText,
+          headers: headers
+        }));
+        
+        return webpResponse;
+      }
+    } catch (error) {
+      console.log('WebP not available, falling back to PNG');
+    }
+  }
+  
+  // Handle other image formats (JPEG, etc.)
+  if (url.pathname.match(/\.(jpg|jpeg)$/i) && 
+      request.headers.get('accept')?.includes('image/webp')) {
+    
+    const webpUrl = url.pathname.replace(/\.(jpg|jpeg)$/i, '.webp');
+    
+    try {
+      const webpCached = await caches.match(webpUrl);
+      if (webpCached) {
+        return webpCached;
+      }
+      
+      const webpResponse = await fetch(webpUrl);
+      if (webpResponse.ok) {
         const cache = await caches.open(IMAGE_CACHE);
         cache.put(webpUrl, webpResponse.clone());
         return webpResponse;
       }
     } catch (error) {
-      console.log('WebP not available, falling back to PNG');
+      console.log('WebP not available for JPEG, using original');
     }
   }
   
@@ -185,11 +275,23 @@ async function handleImageRequest(request) {
     const networkResponse = await fetch(request);
     if (networkResponse.ok) {
       const cache = await caches.open(IMAGE_CACHE);
-      cache.put(request, networkResponse.clone());
+      
+      // Add appropriate cache headers
+      const headers = new Headers(networkResponse.headers);
+      headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+      
+      cache.put(request, new Response(networkResponse.body, {
+        status: networkResponse.status,
+        statusText: networkResponse.statusText,
+        headers: headers
+      }));
     }
     return networkResponse;
   } catch (error) {
-    return new Response('Image not available', { status: 404 });
+    return new Response('Image not available', { 
+      status: 404,
+      headers: { 'Content-Type': 'text/plain' }
+    });
   }
 }
 
