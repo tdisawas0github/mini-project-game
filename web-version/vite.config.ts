@@ -29,11 +29,21 @@ export default defineConfig({
       compress: {
         drop_console: true,
         drop_debugger: true,
-        pure_funcs: ['console.log'],
-        passes: 2,
+        pure_funcs: ['console.log', 'console.info', 'console.debug'],
+        passes: 3,
+        unsafe_arrows: true,
+        unsafe_methods: true,
+        unsafe_proto: true,
+        unsafe_regexp: true,
       },
       mangle: {
         safari10: true,
+        properties: {
+          regex: /^_/,
+        },
+      },
+      format: {
+        comments: false,
       },
     },
     rollupOptions: {
@@ -42,7 +52,12 @@ export default defineConfig({
           vendor: ['react', 'react-dom'],
           animations: ['framer-motion'],
           styling: ['styled-components'],
-          utils: ['./src/utils/imageOptimization', './src/utils/performanceMonitor']
+          utils: [
+            './src/utils/imageOptimization', 
+            './src/utils/performanceMonitor',
+            './src/utils/resourcePreloader',
+            './src/hooks/usePerformance'
+          ]
         },
         chunkFileNames: 'js/[name]-[hash].js',
         entryFileNames: 'js/[name]-[hash].js',
@@ -62,6 +77,8 @@ export default defineConfig({
       treeshake: {
         preset: 'recommended',
         moduleSideEffects: false,
+        propertyReadSideEffects: false,
+        tryCatchDeoptimization: false,
       }
     },
     reportCompressedSize: true,
@@ -81,5 +98,9 @@ export default defineConfig({
     esbuildOptions: {
       target: 'es2015'
     }
-  }
+  },
+  esbuild: {
+    legalComments: 'none',
+    treeShaking: true,
+  },
 })
