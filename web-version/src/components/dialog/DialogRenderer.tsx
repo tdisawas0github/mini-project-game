@@ -101,6 +101,9 @@ export function DialogRenderer({
               transition={{ duration: 0.5, ease: 'easeOut' }}
               onClick={handleTextClick}
               style={{ cursor: isTyping ? 'pointer' : 'default' }}
+              role="dialog"
+              aria-live="polite"
+              aria-label={`Dialog from ${currentScene.speaker}`}
             >
               {currentScene.speaker && (
                 <NameBox>{currentScene.speaker}</NameBox>
@@ -153,7 +156,7 @@ export function DialogRenderer({
 
         {/* Choices */}
         {showChoices && !showNameInput && (
-          <ChoicesContainer>
+          <ChoicesContainer role="menu" aria-label="Dialog choices">
             <AnimatePresence>
               {choices.map((choice: DialogChoice, index: number) => {
                 const isDisabled = !canUseChoice(choice);
@@ -165,6 +168,7 @@ export function DialogRenderer({
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
+                    role="none"
                   >
                     <EnhancedButton
                       variant={choice.metadata?.glyphUsed ? 'primary' : 'secondary'}
@@ -176,15 +180,32 @@ export function DialogRenderer({
                         width: '100%', 
                         textAlign: 'left', 
                         marginBottom: '12px',
-                        border: isSelected ? '2px solid #fbbf24' : undefined,
+                        border: isSelected ? '3px solid #fbbf24' : '2px solid rgba(212, 175, 55, 0.3)',
+                        backgroundColor: isSelected ? 'rgba(251, 191, 36, 0.1)' : undefined,
+                        boxShadow: isSelected ? '0 0 20px rgba(251, 191, 36, 0.4)' : undefined,
+                        transform: isSelected ? 'scale(1.02)' : undefined,
+                        transition: 'all 0.3s ease',
                       }}
+                      aria-selected={isSelected}
+                      aria-label={`Choice ${index + 1}: ${choice.text}${isDisabled ? ' (disabled)' : ''}`}
                     >
                       <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span style={{ fontWeight: 'normal', color: '#94a3b8', fontSize: '0.9rem' }}>
+                          <span style={{ 
+                            fontWeight: isSelected ? 'bold' : 'normal', 
+                            color: isSelected ? '#fbbf24' : '#94a3b8', 
+                            fontSize: '0.9rem',
+                            backgroundColor: isSelected ? 'rgba(251, 191, 36, 0.2)' : 'transparent',
+                            padding: '2px 6px',
+                            borderRadius: '4px',
+                            minWidth: '24px',
+                            textAlign: 'center',
+                          }}>
                             {index + 1}.
                           </span>
-                          <span>{choice.text}</span>
+                          <span style={{ color: isSelected ? '#fff' : undefined }}>
+                            {choice.text}
+                          </span>
                         </div>
                         
                         {isDisabled && choice.requirements && (
@@ -222,10 +243,13 @@ export function DialogRenderer({
               background: 'rgba(15, 15, 35, 0.95)',
               border: '2px solid #fbbf24',
               borderRadius: '15px',
-              padding: '30px',
+              padding: '32px',
               textAlign: 'center',
-              minWidth: '300px',
-              backdropFilter: 'blur(10px)',
+              minWidth: '320px',
+              maxWidth: '500px',
+              width: '90vw',
+              backdropFilter: 'blur(12px)',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(251, 191, 36, 0.3)',
               zIndex: 1000,
             }}
           >
@@ -244,6 +268,7 @@ export function DialogRenderer({
               placeholder="Enter your name..."
               maxLength={20}
               autoFocus
+              aria-label="Character name input"
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && playerName.trim()) {
                   submitName(playerName);
@@ -253,15 +278,17 @@ export function DialogRenderer({
               }}
               style={{
                 width: '100%',
-                padding: '12px',
-                marginBottom: '20px',
-                border: '1px solid #fbbf24',
+                padding: '14px 16px',
+                marginBottom: '24px',
+                border: '2px solid #fbbf24',
                 borderRadius: '8px',
-                background: 'rgba(0, 0, 0, 0.5)',
+                background: 'rgba(0, 0, 0, 0.6)',
                 color: 'white',
                 fontSize: '16px',
                 textAlign: 'center',
                 outline: 'none',
+                boxShadow: '0 0 10px rgba(251, 191, 36, 0.3)',
+                transition: 'all 0.3s ease',
               }}
             />
             
