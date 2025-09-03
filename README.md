@@ -1,281 +1,69 @@
-# 🧭 Echoes of Ellidra
+# React + TypeScript + Vite
 
-A multilingual visual novel where language is memory, and memory shapes reality.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Platform](https://img.shields.io/badge/platform-Web%20%7C%20Windows%20%7C%20Linux%20%7C%20macOS%20%7C%20Android-brightgreen)
-![Status](https://img.shields.io/badge/status-In%20Development-yellow)
+Currently, two official plugins are available:
 
-## 🎮 About the Game
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-**Echoes of Ellidra** is an innovative visual novel set in the frost-wrapped land of **Valdaren**, where the ancient constructed language *Ellidric* possesses the power to manipulate memory and reality itself. Players awaken without memory but with an mysterious connection to glyphs that respond as if recognizing their creator.
+## Expanding the ESLint configuration
 
-### 🌟 Core Concept
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-- **Language as Power**: Master *Ellidric*, a constructed tongue where each glyph has four layers: Sound, Emotion, Mnemonic Tether, and Ethical Resonance
-- **Memory Manipulation**: Use glyphs to unlock buried memories, alter perceptions, and change loyalties
-- **Multilingual Experience**: English, Dutch, Classical Latin, and Modern Greek each reveal different aspects of *Ellidric*
-- **Branching Narrative**: Every conversation is a puzzle where word choice and glyph usage steer the story
+```js
+export default tseslint.config([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-### 📖 Story
+      // Remove tseslint.configs.recommended and replace with this
+      ...tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      ...tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      ...tseslint.configs.stylisticTypeChecked,
 
-You awaken in the snow-choked forests of Valdaren without memory, but the ancient *Ellidric* glyphs hum with power when you approach them. Navigate between three factions:
-
-- **🏛️ Institute of Lingua Arcanum** - Seeks to codify and control *Ellidric* like a science
-- **🌲 Clans of the Whispering Woods** - Protect the oral tradition and view *Ellidric* as alive
-- **👁️ The Echoborn** - Entities claiming to be reborn from glyphs themselves
-
-Your choices will determine not only your lost identity but the fate of language itself in Valdaren.
-
-## 🚀 Available Platforms
-
-This project offers multiple gaming experiences across all major platforms:
-
-### 🌐 Web Version (React) - **Recommended for New Players**
-- **Location**: `web-version/`
-- **Platforms**: Modern web browsers (all devices)
-- **Technology**: React + TypeScript + Vite + PWA
-- **Features**: 
-  - Progressive Web App (installable on mobile devices)
-  - Responsive design for all screen sizes
-  - Works offline after first visit
-- **Play Online**: [Live Demo](https://echoes-of-ellidra.vercel.app)
-- **Deploy Your Own**: See [📚 Complete Deployment Guide](docs/README.md)
-
-### 🖥️ Desktop Versions (Ren'Py)
-- **Location**: `Valdaren/`  
-- **Platforms**: Windows, macOS, Linux
-- **Engine**: Ren'Py Visual Novel Engine
-- **Features**: Traditional visual novel experience with save/load system
-- **Download**: Available from [GitHub Releases](../../releases)
-
-### 📱 Mobile Version (React Native)
-- **Location**: `mobile/android/ValdavenGame/`
-- **Platform**: Android 6.0+ (API 23+)
-- **Technology**: React Native + TypeScript
-- **Features**: 
-  - Native mobile components and navigation
-  - AsyncStorage for persistent game saves
-  - Touch-optimized UI with mobile-specific controls
-- **Setup**: See [Mobile README](mobile/android/MOBILE_README.md) for development setup
-
-## 📋 Installation & Setup
-
-### 📱 Mobile (Android)
-
-**React Native Development** *(Current Version)*
-1. **Prerequisites**: Node.js 18+, React Native environment, Android Studio
-2. **Navigate to mobile project**:
-   ```bash
-   cd mobile/android/ValdavenGame
-   npm install
-   ```
-3. **Run on Android device/emulator**:
-   ```bash
-   npm run android
-   ```
-
-**Alternative: PWA Installation**  
-1. **Visit** [the web version](https://echoes-of-ellidra.vercel.app) in your mobile browser
-2. **Tap "Add to Home Screen"** when prompted (or in browser menu)
-3. **Launch** the installed app like any native app
-
-### 🖥️ Desktop Versions
-
-**Pre-built Downloads** *(Recommended)*
-1. **Download** the appropriate build from [GitHub Releases](../../releases):
-   - `echoes-of-ellidra-windows.zip` for Windows
-   - `echoes-of-ellidra-linux.tar.gz` for Linux  
-   - `echoes-of-ellidra-macos.zip` for macOS
-2. **Extract** the archive
-3. **Run** the executable file
-
-**Build from Source** *(For Developers)*
-1. **Install Ren'Py SDK** from [renpy.org](https://www.renpy.org/latest.html)
-2. **Clone the repository**:
-   ```bash
-   git clone https://github.com/tdisawas0github/mini-project-game.git
-   cd mini-project-game
-   ```
-3. **Open in Ren'Py Launcher**:
-   - Launch Ren'Py SDK
-   - Click "Preferences" and add the project directory
-   - Select "Valdaren" project and click "Launch Project"
-
-### Web Version
-
-#### Prerequisites
-- Node.js 18+ and npm
-
-#### Installation
-```bash
-cd web-version
-npm install
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-#### Development
-```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run preview      # Preview production build
-npm run test         # Run tests
-npm run lint         # Run linter
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default tseslint.config([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-
-The development server will start at `http://localhost:5173`
-
-#### Docker Deployment
-
-For containerized deployment:
-
-```bash
-# Quick start with Docker Compose
-docker compose up --build web
-
-# Development with hot reload
-docker compose --profile dev up --build web-dev
-
-# Or use the helper script
-./docker-helper.sh compose-prod    # Production
-./docker-helper.sh compose-dev     # Development
-./docker-helper.sh help           # Show all options
-```
-
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed Docker instructions.
-
-## 🚀 Quick Deployment Guide
-
-Want to deploy your own version? We've got you covered with comprehensive tutorials:
-
-### 🎯 Choose Your Platform
-
-| Platform | Best For | Time Required | Features |
-|----------|----------|---------------|----------|
-| **[🔥 Vercel](docs/VERCEL_TUTORIAL.md)** | Fastest deployment | 2-5 minutes | Serverless functions, Auto-scaling |
-| **[🌊 Netlify](docs/NETLIFY_TUTORIAL.md)** | Rich CI/CD features | 3-8 minutes | Forms, Functions, Split testing |
-| **[☁️ Appwrite](docs/APPWRITE_TUTORIAL.md)** | Full-stack with backend | 10-30 minutes | Database, Auth, Storage, Real-time |
-| **[🐳 Docker](DEPLOYMENT.md#docker-deployment)** | Self-hosting control | 10+ minutes | Complete infrastructure control |
-
-### 📚 Complete Documentation
-- **[📋 Deployment Hub](docs/README.md)** - Compare all platforms and choose the best fit
-- **[🚀 Main Deployment Guide](DEPLOYMENT.md)** - Quick start for all platforms
-- **Detailed Tutorials** - Step-by-step guides with troubleshooting and best practices
-
-## 🏗️ Project Structure
-
-```
-mini-project-game/
-├── 📁 Valdaren/              # Ren'Py desktop version
-│   └── 📁 game/              # Game scripts and assets
-│       ├── script.rpy        # Main game script
-│       ├── options.rpy       # Game configuration
-│       └── screens.rpy       # UI definitions
-├── 📁 web-version/           # React web version
-│   ├── 📁 src/
-│   │   ├── 📁 components/    # React components
-│   │   ├── 📁 hooks/         # Custom React hooks
-│   │   ├── 📁 context/       # React contexts
-│   │   ├── 📁 utils/         # Utility functions
-│   │   └── 📁 styles/        # Styled-components
-│   ├── package.json          # Dependencies and scripts
-│   └── vite.config.ts        # Vite configuration
-├── 📁 mobile/                # Mobile versions
-│   └── 📁 android/           # React Native Android version
-│       └── 📁 ValdavenGame/  # React Native project
-├── 📁 about/                 # Game documentation
-│   ├── game-lore.md          # World-building and lore
-│   ├── gameplay.md           # Gameplay mechanics
-│   └── *.png                 # Concept art and maps
-└── README.md                 # This file
-```
-
-## 🎯 Key Features
-
-### Game Mechanics
-- **Dialogue Glyph Casting**: Insert *Ellidric* glyphs into conversations to unlock hidden truths
-- **Memory Weaving**: Manipulate dreamscapes by rearranging glyphs and memories
-- **Linguistic Layer Unlocks**: Learning real-world languages reveals new story content
-- **Consequence Tracking**: Decisions ripple through an interconnected web of altered memories
-
-### Technical Features
-- **Responsive Design**: Web version adapts to different screen sizes
-- **Audio System**: Background music and sound effects with configuration options
-- **Theme System**: Multiple visual themes including dark mode
-- **Save System**: Persistent game state across sessions
-- **Accessibility**: Keyboard navigation and screen reader support
-
-## 🛠️ Development
-
-### Web Version Tech Stack
-- **Frontend**: React 19 + TypeScript
-- **Styling**: Styled-components + Framer Motion
-- **Build Tool**: Vite
-- **Testing**: Vitest + Testing Library
-- **Linting**: ESLint with TypeScript support
-
-### Mobile Version Tech Stack
-- **Framework**: React Native + TypeScript
-- **Storage**: AsyncStorage for game saves
-- **Styling**: React Native StyleSheet
-- **Development**: See [Mobile README](mobile/android/MOBILE_README.md)
-
-### Contributing
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
-### Code Style
-- Follow existing code patterns
-- Use TypeScript for type safety
-- Write tests for new features
-- Ensure linting passes: `npm run lint`
-
-## 📚 Game Documentation
-
-Detailed game information is available in the `about/` directory:
-
-- **[Game Lore](about/game-lore.md)**: Complete world-building, factions, and history
-- **[Gameplay](about/gameplay.md)**: Mechanics, player actions, and visual novel structure
-
-## 🎭 Themes
-
-The game explores deep philosophical themes:
-- **Ethics of Reality Manipulation**: The moral implications of rewriting memories
-- **Identity and Language**: How language shapes who we are
-- **Power and Responsibility**: The consequences of linguistic power
-- **Tradition vs Progress**: Oral culture versus systematic cataloging
-
-## 🤝 Community
-
-- **Issues**: Report bugs or suggest features via GitHub Issues
-- **Discussions**: Join conversations about game lore and development
-- **Wiki**: Community-maintained lore and strategy guides (coming soon)
-
-## 📄 License
-
-This project is open source. Please check with the repository maintainer for license details.
-
-## 🙏 Acknowledgments
-
-- Ren'Py community for the excellent visual novel engine
-- React and Vite teams for modern web development tools
-- Contributors who help shape the world of Valdaren
-
----
-
-*"In Valdaren, words are not mere sounds—they are the threads from which reality is woven."*
-
----
-
-### 🚀 Quick Start Guide
-
-**🌐 Web Version (Recommended for New Players)**  
-- **Play Instantly**: [https://echoes-of-ellidra.vercel.app](https://echoes-of-ellidra.vercel.app)
-- **Works on**: All devices with modern browsers
-- **Features**: PWA installable on mobile, offline support
-
-**💻 Desktop**: Download from [GitHub Releases](../../releases) for your platform
-
-**📱 Mobile Development**: See [Mobile README](mobile/android/MOBILE_README.md) for React Native setup
