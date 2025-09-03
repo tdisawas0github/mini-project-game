@@ -4,8 +4,10 @@ import { useGame } from '../hooks/useGame';
 import { VisualNovelGlobalStyle } from '../styles/visualnovel';
 import { VNMainMenu } from './VNMainMenu';
 import { NewDialogSystem } from './NewDialogSystem';
-import { prologueChapter, languageSelectionScene, hubScene } from '../data/dialogue';
+import { prologueChapter, hubScene } from '../data/dialogue';
 import { createLazyComponent } from '../utils/lazyLoading';
+import LanguageSelectionScreen from './LanguageSelectionScreen';
+import NarratingScreen from './NarratingScreen';
 
 // Lazy load heavy components
 const LazyWorldMap = createLazyComponent(
@@ -23,7 +25,7 @@ const LazyMemoryDive = createLazyComponent(
   'Diving into memories...'
 );
 
-type GameScreen = 'main-menu' | 'prologue' | 'language_selection' | 'hub' | 'map' | 'lexicon' | 'memory_dive';
+type GameScreen = 'main-menu' | 'prologue' | 'language_selection' | 'hub' | 'map' | 'lexicon' | 'memory_dive' | 'narrating';
 
 function GameContent() {
   const { state } = useGame();
@@ -79,8 +81,8 @@ function GameContent() {
               }
             }}
             onSettings={() => {
-              // Settings screen logic
-              console.log('Settings opened');
+              // Settings screen logic - let's use this to jump to language selection for testing
+              setCurrentScreen('language_selection');
             }}
             backgroundImage={getBackgroundImage()}
           />
@@ -99,12 +101,26 @@ function GameContent() {
         
       case 'language_selection':
         return (
-          <NewDialogSystem
-            scenes={languageSelectionScene}
-            currentSceneId={currentSceneId}
-            onSceneChange={setCurrentSceneId}
-            onComplete={handleSceneComplete}
-            backgroundImage={getBackgroundImage()}
+          <LanguageSelectionScreen
+            onLanguageSelect={(language) => {
+              // Handle language selection - update game state and proceed to hub
+              console.log('Selected language:', language);
+              setCurrentScreen('hub');
+              setCurrentSceneId('hub_main');
+            }}
+            onSave={() => {
+              // Save game state
+              console.log('Save requested');
+            }}
+            onBack={() => {
+              // Go back to prologue
+              setCurrentScreen('prologue');
+              setCurrentSceneId('prologue_start');
+            }}
+            onExit={() => {
+              // Exit to main menu
+              setCurrentScreen('main-menu');
+            }}
           />
         );
         
@@ -119,6 +135,7 @@ function GameContent() {
               if (choiceId === 'open_map') setCurrentScreen('map');
               else if (choiceId === 'open_lexicon') setCurrentScreen('lexicon');
               else if (choiceId === 'memory_dive') setCurrentScreen('memory_dive');
+              else if (choiceId === 'narrating') setCurrentScreen('narrating');
               else if (choiceId === 'check_languages') {
                 // Show languages in a visual novel friendly way
                 console.log(`Known languages: ${state.knownLanguages.join(', ')}`);
@@ -209,6 +226,24 @@ function GameContent() {
             </button>
             <LazyMemoryDive onClose={returnToHub} />
           </div>
+        );
+        
+      case 'narrating':
+        return (
+          <NarratingScreen
+            onSave={() => {
+              console.log('Save requested');
+            }}
+            onBack={() => {
+              returnToHub();
+            }}
+            onExit={() => {
+              setCurrentScreen('main-menu');
+            }}
+            onNarratorAction={() => {
+              console.log('Narrator action triggered');
+            }}
+          />
         );
         
       default:
