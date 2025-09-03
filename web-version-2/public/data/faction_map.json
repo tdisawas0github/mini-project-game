@@ -1,0 +1,38 @@
+{
+  "map_image": "/assets/map-of-valdaren.png",
+  "regions": [
+    {
+      "id": "ravengard",
+      "name": "Ravengard",
+      "faction": "Institute",
+      "x": 120,
+      "y": 80,
+      "w": 160,
+      "h": 120,
+      "influence": 60,
+      "description": "Urban seat of the Institute of Lingua Arcanum."
+    },
+    {
+      "id": "whispering_woods",
+      "name": "Whispering Woods", 
+      "faction": "Clans",
+      "x": 320,
+      "y": 220,
+      "w": 180,
+      "h": 140,
+      "influence": 50,
+      "description": "Old oral traditions and living glyph-song."
+    },
+    {
+      "id": "fringe_ruins",
+      "name": "Ancient Ruins",
+      "faction": "Echoborn", 
+      "x": 540,
+      "y": 120,
+      "w": 150,
+      "h": 130,
+      "influence": 30,
+      "description": "Forgotten places where glyphs first touched minds."
+    }
+  ]
+}
