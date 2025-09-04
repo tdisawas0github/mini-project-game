@@ -60,6 +60,81 @@ export const initialGlyphs: Glyph[] = [
     emotion: 'Creative purpose',
     mnemonicTether: 'Crafting new from old',
     ethicalResonance: 'Powerful - reshapes identity'
+  },
+  {
+    id: 'authority_challenge',
+    symbol: '⚔️',
+    name: 'Power-question',
+    sound: 'rex-dubium',
+    emotion: 'Defiant courage',
+    mnemonicTether: 'Standing against oppression',
+    ethicalResonance: 'Revolutionary - challenges established order',
+    unlockedBy: ['english']
+  },
+  {
+    id: 'harmonic_balance',
+    symbol: '⚖️',
+    name: 'Harmony-weave',
+    sound: 'aequi-sonitus',
+    emotion: 'Peaceful resolution',
+    mnemonicTether: 'Finding middle ground',
+    ethicalResonance: 'Virtuous - seeks unity over division',
+    unlockedBy: ['english', 'dutch']
+  },
+  {
+    id: 'memory_restoration',
+    symbol: '🔮',
+    name: 'Past-return',
+    sound: 'mnem-redux',
+    emotion: 'Hopeful determination',
+    mnemonicTether: 'Healing what was broken',
+    ethicalResonance: 'Compassionate - restores what was lost'
+  },
+  {
+    id: 'appreciation_resonance',
+    symbol: '🌟',
+    name: 'Beauty-echo',
+    sound: 'pul-amor',
+    emotion: 'Wonder and gratitude',
+    mnemonicTether: 'Recognizing natural perfection',
+    ethicalResonance: 'Pure - celebrates life\'s gifts'
+  },
+  {
+    id: 'forest_communion',
+    symbol: '🌲',
+    name: 'Tree-speak',
+    sound: 'sylv-communis',
+    emotion: 'Deep connection',
+    mnemonicTether: 'Unity with living things',
+    ethicalResonance: 'Sacred - bridges mortal and nature',
+    unlockedBy: ['dutch']
+  },
+  {
+    id: 'memory_dive',
+    symbol: '🌀',
+    name: 'Deep-plunge',
+    sound: 'abysm-mergere',
+    emotion: 'Brave exploration',
+    mnemonicTether: 'Diving into the unconscious',
+    ethicalResonance: 'Perilous - risks losing oneself'
+  },
+  {
+    id: 'memory_alteration_preserve',
+    symbol: '🛡️',
+    name: 'Memory-guard',
+    sound: 'custos-mnem',
+    emotion: 'Protective instinct',
+    mnemonicTether: 'Safeguarding the past',
+    ethicalResonance: 'Conservative - maintains status quo'
+  },
+  {
+    id: 'memory_alteration_freedom',
+    symbol: '🕊️',
+    name: 'Memory-free',
+    sound: 'liber-mnem',
+    emotion: 'Liberating joy',
+    mnemonicTether: 'Breaking chains of the past',
+    ethicalResonance: 'Progressive - embraces change'
   }
 ];
 

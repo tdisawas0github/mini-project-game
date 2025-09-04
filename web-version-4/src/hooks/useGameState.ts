@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import type { GameState, Language, FactionInfluence } from '../types/game';
 import { initialGlyphs } from '../data/gameData';
 
@@ -21,10 +21,20 @@ export const useGameState = () => {
   const [gameState, setGameState] = useState<GameState>(initialGameState);
 
   const setPlayerName = useCallback((name: string) => {
-    setGameState(prev => ({
-      ...prev,
-      playerName: name
-    }));
+    setGameState(prev => {
+      // When setting player name (completing prologue), also set default language state
+      const defaultGlyphs = initialGlyphs.filter(glyph => 
+        !glyph.unlockedBy || glyph.unlockedBy.includes('english')
+      );
+      
+      return {
+        ...prev,
+        playerName: name,
+        currentLanguage: 'english', // Default to English
+        knownLanguages: ['english'], // Default to English
+        unlockedGlyphs: defaultGlyphs.slice(0, 3) // Start with first 3 glyphs
+      };
+    });
   }, []);
 
   const learnLanguage = useCallback((language: Language) => {
@@ -105,7 +115,66 @@ export const useGameState = () => {
 
   const resetGame = useCallback(() => {
     setGameState(initialGameState);
+    localStorage.removeItem('valdaren-save');
   }, []);
+
+  // Save game state to localStorage
+  const saveGame = useCallback(() => {
+    const saveData = {
+      ...gameState,
+      timestamp: Date.now(),
+      version: '1.0.0'
+    };
+    localStorage.setItem('valdaren-save', JSON.stringify(saveData));
+    return true;
+  }, [gameState]);
+
+  // Load game state from localStorage
+  const loadGame = useCallback(() => {
+    try {
+      const saveData = localStorage.getItem('valdaren-save');
+      if (saveData) {
+        const parsedData = JSON.parse(saveData);
+        // Remove version and timestamp before setting state
+        const { version, timestamp, ...gameData } = parsedData;
+        setGameState(gameData);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Failed to load game:', error);
+      return false;
+    }
+  }, []);
+
+  // Check if save exists
+  const hasSaveGame = useCallback(() => {
+    return localStorage.getItem('valdaren-save') !== null;
+  }, []);
+
+  // Auto-save functionality
+  const autoSave = useCallback(() => {
+    if (gameState.playerName) { // Only auto-save if game has started
+      saveGame();
+    }
+  }, [gameState.playerName, saveGame]);
+
+  // Load saved game on initialization
+  React.useEffect(() => {
+    if (hasSaveGame() && !gameState.playerName) {
+      loadGame();
+    }
+  }, []);
+
+  // Auto-save when significant changes occur
+  React.useEffect(() => {
+    if (gameState.playerName) {
+      const timeoutId = setTimeout(() => {
+        autoSave();
+      }, 1000); // Auto-save 1 second after changes
+      return () => clearTimeout(timeoutId);
+    }
+  }, [gameState.currentScene, gameState.knownLanguages.length, gameState.unlockedGlyphs.length, autoSave]);
 
   return {
     gameState,
@@ -115,6 +184,10 @@ export const useGameState = () => {
     addConsequence,
     updateFactionInfluence,
     processChoice,
-    resetGame
+    resetGame,
+    saveGame,
+    loadGame,
+    hasSaveGame,
+    autoSave
   };
 };
