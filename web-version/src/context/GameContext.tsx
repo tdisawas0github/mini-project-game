@@ -1,6 +1,7 @@
-import { createContext, useReducer, useEffect } from 'react';
+import { useReducer, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { GameState, GameAction } from '../types/game';
+import { GameContext } from './GameContextDefinition';
 import { saveGameState } from '../utils/gameUtils';
 
 const initialMemories = {
@@ -105,10 +106,7 @@ function loadPersisted(): Partial<GameState> | null {
   } catch { return null; }
 }
 
-export const GameContext = createContext<{
-  state: GameState;
-  dispatch: React.Dispatch<GameAction>;
-} | null>(null);
+export { GameContext };
 
 export function GameProvider({ children }: { children: ReactNode }) {
   const persisted = loadPersisted();

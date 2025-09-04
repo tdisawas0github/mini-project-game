@@ -1,44 +1,8 @@
-import { useState, createContext } from 'react';
+import { useState } from 'react';
 import type { ReactNode } from 'react';
+import { ThemeContext, type ThemeContextType } from './ThemeContextDefinition';
 
-interface Theme {
-  colors: {
-    primary: string;
-    secondary: string;
-    accent: string;
-    background: string;
-    surface: string;
-    text: string;
-    textSecondary: string;
-    border: string;
-    shadow: string;
-  };
-  spacing: {
-    xs: string;
-    sm: string;
-    md: string;
-    lg: string;
-    xl: string;
-  };
-  typography: {
-    fontFamily: string;
-    fontSize: {
-      xs: string;
-      sm: string;
-      md: string;
-      lg: string;
-      xl: string;
-      xxl: string;
-    };
-  };
-  effects: {
-    blur: string;
-    borderRadius: string;
-    shadow: string;
-  };
-}
-
-const themes: Record<string, Theme> = {
+const themes: Record<string, ThemeContextType['theme']> = {
   dark: {
     colors: {
       primary: '#fbbf24',
@@ -56,7 +20,8 @@ const themes: Record<string, Theme> = {
       sm: '16px',
       md: '24px',
       lg: '32px',
-      xl: '48px'
+      xl: '48px',
+      xxl: '64px'
     },
     typography: {
       fontFamily: '"Inter", "Segoe UI", system-ui, sans-serif',
@@ -73,6 +38,31 @@ const themes: Record<string, Theme> = {
       blur: 'blur(12px)',
       borderRadius: '12px',
       shadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+    },
+    borderRadius: {
+      sm: '4px',
+      md: '8px',
+      lg: '12px',
+      xl: '16px'
+    },
+    transitions: {
+      fast: '0.15s ease-out',
+      normal: '0.3s ease-out',
+      slow: '0.5s ease-out'
+    },
+    zIndex: {
+      background: 0,
+      content: 10,
+      overlay: 100,
+      modal: 1000,
+      tooltip: 1100
+    },
+    breakpoints: {
+      xs: 480,
+      sm: 768,
+      md: 1024,
+      lg: 1280,
+      xl: 1536
     }
   },
   light: {
@@ -92,7 +82,8 @@ const themes: Record<string, Theme> = {
       sm: '16px',
       md: '24px',
       lg: '32px',
-      xl: '48px'
+      xl: '48px',
+      xxl: '64px'
     },
     typography: {
       fontFamily: '"Inter", "Segoe UI", system-ui, sans-serif',
@@ -109,18 +100,36 @@ const themes: Record<string, Theme> = {
       blur: 'blur(12px)',
       borderRadius: '12px',
       shadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
+    },
+    borderRadius: {
+      sm: '4px',
+      md: '8px',
+      lg: '12px',
+      xl: '16px'
+    },
+    transitions: {
+      fast: '0.15s ease-out',
+      normal: '0.3s ease-out',
+      slow: '0.5s ease-out'
+    },
+    zIndex: {
+      background: 0,
+      content: 10,
+      overlay: 100,
+      modal: 1000,
+      tooltip: 1100
+    },
+    breakpoints: {
+      xs: 480,
+      sm: 768,
+      md: 1024,
+      lg: 1280,
+      xl: 1536
     }
   }
 };
 
-interface ThemeContextType {
-  theme: Theme;
-  themeName: string;
-  isDark: boolean;
-  toggleTheme: () => void;
-}
-
-export const ThemeContext = createContext<ThemeContextType | null>(null);
+export { ThemeContext };
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [themeName, setThemeName] = useState<string>(() => {
@@ -142,7 +151,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const isDark = themeName === 'dark';
 
   return (
-    <ThemeContext.Provider value={{ theme, themeName, isDark, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, themeName, setThemeName, isDark, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );
