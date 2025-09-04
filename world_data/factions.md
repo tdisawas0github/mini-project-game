@@ -39,3 +39,8 @@
 | The Polyglot Guild | All languages hold fragments of truth | Sells translation keys |
 | Drift Wardens | Contain unstable Drift Zones | Side quest givers |
 | The Silent Chorus | Communicate only through glyph‑song | Unlocks musical glyph puzzles |
+
+## 🔗 Cross‑References
+- **Lore:** See [`lore.md`](./lore.md) for historical background and geography.
+- **Characters:** See [`characters.md`](./characters.md) for faction members and rivals.
+- **Mechanics:** See [`mechanics.md`](./mechanics.md) for influence meters and branching logic.
