@@ -36,6 +36,13 @@ interface Theme {
     borderRadius: string;
     shadow: string;
   };
+  breakpoints: {
+    xs: number;
+    sm: number;
+    md: number;
+    lg: number;
+    xl: number;
+  };
 }
 
 const themes: Record<string, Theme> = {
@@ -73,6 +80,13 @@ const themes: Record<string, Theme> = {
       blur: 'blur(12px)',
       borderRadius: '12px',
       shadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+    },
+    breakpoints: {
+      xs: 480,
+      sm: 768,
+      md: 1024,
+      lg: 1280,
+      xl: 1536
     }
   },
   light: {
@@ -109,6 +123,13 @@ const themes: Record<string, Theme> = {
       blur: 'blur(12px)',
       borderRadius: '12px',
       shadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
+    },
+    breakpoints: {
+      xs: 480,
+      sm: 768,
+      md: 1024,
+      lg: 1280,
+      xl: 1536
     }
   }
 };
