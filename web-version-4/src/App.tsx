@@ -98,7 +98,7 @@ const App: React.FC = () => {
       case 'lexicon':
         setGameMode('lexicon');
         break;
-      case 'memory_chamber':
+      case 'memory_chamber': {
         // Navigate to memory dive
         const memoryDialogue = getCurrentDialogue('memory_chamber_entry');
         if (memoryDialogue) {
@@ -106,6 +106,7 @@ const App: React.FC = () => {
           setGameMode('dialogue');
         }
         break;
+      }
       case 'faction_overview':
         // TODO: Implement faction overview
         console.log('Faction overview not yet implemented');
@@ -114,7 +115,7 @@ const App: React.FC = () => {
         // TODO: Implement language study
         console.log('Language study not yet implemented');
         break;
-      case 'continue_story':
+      case 'continue_story': {
         // Continue with main story - start Chapter 1
         const storyDialogue = getCurrentDialogue('chapter1_start');
         if (storyDialogue) {
@@ -122,6 +123,7 @@ const App: React.FC = () => {
           setGameMode('dialogue');
         }
         break;
+      }
       default:
         console.log(`Navigation to ${destination} not implemented`);
     }

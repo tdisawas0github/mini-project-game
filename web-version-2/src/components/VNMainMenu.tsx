@@ -52,7 +52,7 @@ export function VNMainMenu({
     }
     
     return () => clearTimeout(timer);
-  }, [bgLoading]);
+  }, [bgLoading, loading]);
 
   if (loading) {
     return (

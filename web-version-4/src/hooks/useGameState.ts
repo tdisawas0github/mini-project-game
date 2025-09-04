@@ -135,8 +135,11 @@ export const useGameState = () => {
       const saveData = localStorage.getItem('valdaren-save');
       if (saveData) {
         const parsedData = JSON.parse(saveData);
-        // Remove version and timestamp before setting state
-        const { version, timestamp, ...gameData } = parsedData;
+        // Extract game data, ignoring version and timestamp
+        const { version: _version, timestamp: _timestamp, ...gameData } = parsedData;
+        // Suppress unused vars warning
+        void _version;
+        void _timestamp;
         setGameState(gameData);
         return true;
       }
@@ -164,7 +167,7 @@ export const useGameState = () => {
     if (hasSaveGame() && !gameState.playerName) {
       loadGame();
     }
-  }, []);
+  }, [gameState.playerName, hasSaveGame, loadGame]);
 
   // Auto-save when significant changes occur
   React.useEffect(() => {
@@ -174,7 +177,7 @@ export const useGameState = () => {
       }, 1000); // Auto-save 1 second after changes
       return () => clearTimeout(timeoutId);
     }
-  }, [gameState.currentScene, gameState.knownLanguages.length, gameState.unlockedGlyphs.length, autoSave]);
+  }, [gameState.currentScene, gameState.knownLanguages.length, gameState.unlockedGlyphs.length, gameState.playerName, autoSave]);
 
   return {
     gameState,

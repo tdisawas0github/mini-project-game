@@ -147,7 +147,7 @@ export function useOptimizedBackgroundImage(imagePath: string) {
       img.src = urlToUse;
       await loadPromise;
       
-    } catch (error) {
+    } catch {
       imageCache.set(`bg-${imagePath}`, { url: imagePath, isLoaded: false });
       setBackgroundImage(`url('${imagePath}')`);
       setIsLoading(false);
