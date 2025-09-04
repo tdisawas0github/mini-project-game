@@ -1,15 +1,20 @@
 import { motion } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
+import { useBreakpoint } from '../../hooks/useBreakpoint';
+import { buildResponsiveStyle, type FlexibleLayoutProps, ResponsiveValue, getResponsiveStyle } from '../../utils/responsive';
 import type { ReactNode, CSSProperties } from 'react';
 
-interface BaseProps {
+interface BaseProps extends FlexibleLayoutProps {
   children?: ReactNode;
   className?: string;
   style?: CSSProperties;
 }
 
-export function Container({ children, className, style }: BaseProps) {
+export function Container({ children, className, style, ...responsiveProps }: BaseProps) {
   const { theme } = useTheme();
+  const breakpoint = useBreakpoint();
+  
+  const responsiveStyle = buildResponsiveStyle(responsiveProps, breakpoint, theme.spacing);
   
   const containerStyle: CSSProperties = {
     minHeight: '100vh',
@@ -21,6 +26,7 @@ export function Container({ children, className, style }: BaseProps) {
     alignItems: 'center',
     padding: theme.spacing.md,
     boxSizing: 'border-box',
+    ...responsiveStyle,
     ...style
   };
 
@@ -31,8 +37,11 @@ export function Container({ children, className, style }: BaseProps) {
   );
 }
 
-export function Surface({ children, className, style }: BaseProps) {
+export function Surface({ children, className, style, ...responsiveProps }: BaseProps) {
   const { theme } = useTheme();
+  const breakpoint = useBreakpoint();
+  
+  const responsiveStyle = buildResponsiveStyle(responsiveProps, breakpoint, theme.spacing);
   
   const surfaceStyle: CSSProperties = {
     background: theme.colors.surface,
@@ -43,6 +52,7 @@ export function Surface({ children, className, style }: BaseProps) {
     padding: theme.spacing.lg,
     width: '100%',
     maxWidth: '900px',
+    ...responsiveStyle,
     ...style
   };
 
@@ -61,9 +71,10 @@ export function Surface({ children, className, style }: BaseProps) {
 
 interface ButtonProps extends BaseProps {
   variant?: 'primary' | 'secondary' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  size?: ResponsiveValue<'sm' | 'md' | 'lg'>;
   disabled?: boolean;
   onClick?: () => void;
+  fullWidth?: ResponsiveValue<boolean>;
 }
 
 export function Button({ 
@@ -73,9 +84,16 @@ export function Button({
   variant = 'primary', 
   size = 'md', 
   disabled = false,
-  onClick
+  onClick,
+  fullWidth = false,
+  ...responsiveProps
 }: ButtonProps) {
   const { theme } = useTheme();
+  const breakpoint = useBreakpoint();
+  
+  const responsiveStyle = buildResponsiveStyle(responsiveProps, breakpoint, theme.spacing);
+  const currentSize = getResponsiveStyle(size, breakpoint, 'md');
+  const isFullWidth = getResponsiveStyle(fullWidth, breakpoint, false);
   
   const getBackground = () => {
     switch (variant) {
@@ -95,7 +113,7 @@ export function Button({
   };
   
   const getPadding = () => {
-    switch (size) {
+    switch (currentSize) {
       case 'sm': return `${theme.spacing.xs} ${theme.spacing.sm}`;
       case 'lg': return `${theme.spacing.md} ${theme.spacing.lg}`;
       default: return `${theme.spacing.sm} ${theme.spacing.md}`;
@@ -103,7 +121,7 @@ export function Button({
   };
   
   const getFontSize = () => {
-    switch (size) {
+    switch (currentSize) {
       case 'sm': return theme.typography.fontSize.sm;
       case 'lg': return theme.typography.fontSize.lg;
       default: return theme.typography.fontSize.md;
@@ -121,6 +139,8 @@ export function Button({
     transition: 'all 0.2s ease',
     fontFamily: 'inherit',
     opacity: disabled ? 0.5 : 1,
+    width: isFullWidth ? '100%' : 'auto',
+    ...responsiveStyle,
     ...style
   };
 
@@ -139,8 +159,12 @@ export function Button({
 }
 
 interface TypographyProps extends BaseProps {
-  variant?: 'h1' | 'h2' | 'h3' | 'body' | 'caption';
+  variant?: ResponsiveValue<'h1' | 'h2' | 'h3' | 'body' | 'caption'>;
   color?: string;
+  fontSize?: ResponsiveValue<string>;
+  fontWeight?: ResponsiveValue<string>;
+  textAlign?: ResponsiveValue<'left' | 'center' | 'right' | 'justify'>;
+  lineHeight?: ResponsiveValue<string>;
 }
 
 export function Typography({ 
@@ -148,12 +172,25 @@ export function Typography({
   className, 
   style, 
   variant = 'body', 
-  color 
+  color,
+  fontSize,
+  fontWeight,
+  textAlign,
+  lineHeight,
+  ...responsiveProps
 }: TypographyProps) {
   const { theme } = useTheme();
+  const breakpoint = useBreakpoint();
+  
+  const responsiveStyle = buildResponsiveStyle(responsiveProps, breakpoint, theme.spacing);
+  const currentVariant = getResponsiveStyle(variant, breakpoint, 'body');
   
   const getFontSize = () => {
-    switch (variant) {
+    if (fontSize) {
+      return getResponsiveStyle(fontSize, breakpoint, theme.typography.fontSize.md);
+    }
+    
+    switch (currentVariant) {
       case 'h1': return theme.typography.fontSize.xxl;
       case 'h2': return theme.typography.fontSize.xl;
       case 'h3': return theme.typography.fontSize.lg;
@@ -164,19 +201,22 @@ export function Typography({
 
   const typographyStyle: CSSProperties = {
     fontSize: getFontSize(),
+    fontWeight: getResponsiveStyle(fontWeight, breakpoint, ''),
+    textAlign: getResponsiveStyle(textAlign, breakpoint, 'left'),
+    lineHeight: getResponsiveStyle(lineHeight, breakpoint, '1.6'),
     color: color || theme.colors.text,
     margin: 0,
-    lineHeight: 1.6,
+    ...responsiveStyle,
     ...style
   };
 
-  if (variant === 'h1') {
+  if (currentVariant === 'h1') {
     return <h1 className={className} style={typographyStyle}>{children}</h1>;
   }
-  if (variant === 'h2') {
+  if (currentVariant === 'h2') {
     return <h2 className={className} style={typographyStyle}>{children}</h2>;
   }
-  if (variant === 'h3') {
+  if (currentVariant === 'h3') {
     return <h3 className={className} style={typographyStyle}>{children}</h3>;
   }
 
@@ -188,10 +228,12 @@ export function Typography({
 }
 
 interface FlexProps extends BaseProps {
-  direction?: 'row' | 'column';
-  gap?: string;
-  align?: string;
-  justify?: string;
+  direction?: ResponsiveValue<'row' | 'column'>;
+  gap?: ResponsiveValue<string>;
+  align?: ResponsiveValue<string>;
+  justify?: ResponsiveValue<string>;
+  wrap?: ResponsiveValue<'nowrap' | 'wrap' | 'wrap-reverse'>;
+  flex?: ResponsiveValue<string>;
 }
 
 export function Flex({ 
@@ -201,21 +243,95 @@ export function Flex({
   direction = 'column', 
   gap, 
   align = 'stretch', 
-  justify = 'flex-start' 
+  justify = 'flex-start',
+  wrap = 'nowrap',
+  flex,
+  ...responsiveProps
 }: FlexProps) {
   const { theme } = useTheme();
+  const breakpoint = useBreakpoint();
+  
+  const responsiveStyle = buildResponsiveStyle(responsiveProps, breakpoint, theme.spacing);
   
   const flexStyle: CSSProperties = {
     display: 'flex',
-    flexDirection: direction,
-    gap: gap || theme.spacing.md,
-    alignItems: align,
-    justifyContent: justify,
+    flexDirection: getResponsiveStyle(direction, breakpoint, 'column'),
+    gap: getResponsiveStyle(gap, breakpoint, theme.spacing.md),
+    alignItems: getResponsiveStyle(align, breakpoint, 'stretch'),
+    justifyContent: getResponsiveStyle(justify, breakpoint, 'flex-start'),
+    flexWrap: getResponsiveStyle(wrap, breakpoint, 'nowrap'),
+    flex: getResponsiveStyle(flex, breakpoint, ''),
+    ...responsiveStyle,
     ...style
   };
 
   return (
     <div className={className} style={flexStyle}>
+      {children}
+    </div>
+  );
+}
+
+interface GridProps extends BaseProps {
+  columns?: ResponsiveValue<number | string>;
+  rows?: ResponsiveValue<number | string>;
+  gap?: ResponsiveValue<string>;
+  columnGap?: ResponsiveValue<string>;
+  rowGap?: ResponsiveValue<string>;
+  autoFlow?: ResponsiveValue<'row' | 'column' | 'row dense' | 'column dense'>;
+  alignItems?: ResponsiveValue<string>;
+  justifyItems?: ResponsiveValue<string>;
+  alignContent?: ResponsiveValue<string>;
+  justifyContent?: ResponsiveValue<string>;
+}
+
+export function Grid({ 
+  children, 
+  className, 
+  style, 
+  columns = 1, 
+  rows, 
+  gap, 
+  columnGap, 
+  rowGap,
+  autoFlow = 'row',
+  alignItems = 'stretch',
+  justifyItems = 'stretch',
+  alignContent,
+  justifyContent,
+  ...responsiveProps
+}: GridProps) {
+  const { theme } = useTheme();
+  const breakpoint = useBreakpoint();
+  
+  const responsiveStyle = buildResponsiveStyle(responsiveProps, breakpoint, theme.spacing);
+  
+  const getGridTemplate = (value: ResponsiveValue<number | string>, fallback: string = 'none') => {
+    const resolved = getResponsiveStyle(value, breakpoint, fallback);
+    if (typeof resolved === 'number') {
+      return `repeat(${resolved}, 1fr)`;
+    }
+    return resolved;
+  };
+  
+  const gridStyle: CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: getGridTemplate(columns, '1fr'),
+    gridTemplateRows: rows ? getGridTemplate(rows) : undefined,
+    gap: getResponsiveStyle(gap, breakpoint, theme.spacing.md),
+    columnGap: getResponsiveStyle(columnGap, breakpoint, ''),
+    rowGap: getResponsiveStyle(rowGap, breakpoint, ''),
+    gridAutoFlow: getResponsiveStyle(autoFlow, breakpoint, 'row'),
+    alignItems: getResponsiveStyle(alignItems, breakpoint, 'stretch'),
+    justifyItems: getResponsiveStyle(justifyItems, breakpoint, 'stretch'),
+    alignContent: getResponsiveStyle(alignContent, breakpoint, ''),
+    justifyContent: getResponsiveStyle(justifyContent, breakpoint, ''),
+    ...responsiveStyle,
+    ...style
+  };
+
+  return (
+    <div className={className} style={gridStyle}>
       {children}
     </div>
   );
