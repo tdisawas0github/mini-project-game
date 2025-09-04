@@ -1,67 +1,93 @@
-# 🌍 World Data: Echoes of Ellidra
+# Echoes of Ellidra – Lore Document
 
-## 🗺 Region Overview
-| Region Name        | Terrain Type   | Climate       | Key Features | Connected Regions |
-|--------------------|---------------|--------------|--------------|-------------------|
-| The Shaded Woods   | Dense Forest  | Temperate     | Ancient ruins, hidden groves | Bay of Illisa, Frostveil Peaks |
-| Frostveil Peaks    | Mountains     | Subarctic     | Snow-capped peaks, ice caves | Shaded Woods, Glacial Highlands |
-| Sunforge Desert    | Desert        | Arid          | Sand dunes, buried temples | Aetherial Expanse, Emberhollow |
+## 🌍 Setting: Valdaren
+A frost‑bound land where **language shapes reality**. Snow‑choked forests, crystal lakes, and ancient ruins are etched with *Ellidric* glyphs that hum with latent power.
 
----
-
-## 🏙 Settlements
-### Cairndel
-- **Type:** City (fortified)
-- **Population:** ~12,000
-- **Notable NPCs:** High Warden Elrynn, Rune‑Smith Kaelor
-- **Economy:** Mining, rune‑crafting
-- **Lore Hook:** Built atop an ancient vault sealed by frost‑runes.
-
-### Westreach
-- **Type:** Port Town
-- **Population:** ~4,500
-- **Economy:** Fishing, trade
-- **Lore Hook:** Gateway to the Sea of Iralach; rumored smuggler haven.
+### Regions
+- **Institute Territories** – Urban, codified knowledge; centered in Ravengard. The Institute seeks to catalogue and control Ellidric.
+- **Clanlands** – Oral tradition keepers in Whispering Woods and Snowveil Forest. They view Ellidric as alive and untamable.
+- **Forgotten Fringe** – Mythic borderlands near Lumisth Glacier and the Ancient Ruins; birthplace of Ellidric.
 
 ---
 
-## 🏞 Landmarks
-| Name              | Type         | Description | Lore Hook |
-|-------------------|-------------|-------------|-----------|
-| Crystalmere       | Lake        | Pristine, ice-fed waters | Said to mirror the stars of another realm |
-| Ashen Ruins       | Wasteland   | Charred remains of a lost city | Destroyed in the Emberfall Cataclysm |
-| Stormcrag Mountains | Mountain Range | Dark, jagged peaks | Home to storm‑elemental clans |
+## 🔤 Ellidric – The Language of Memory
+A constructed tongue of glyphs, each with four layers:
+1. **Sound** – Phonetic form
+2. **Emotion** – Feeling it carries
+3. **Mnemonic Tether** – Memory it links to
+4. **Ethical Resonance** – Moral/spiritual weight
+
+**Effects of Speaking Ellidric:**
+- Unlock buried memories
+- Alter perception of reality
+- Change loyalty, personality, or identity
+
+> No single language fully translates Ellidric — English, Dutch, Classical Latin, and Modern Greek each reveal different facets.
 
 ---
 
-## 🌐 Factions
-### Order of the Runebound
-- **Alignment:** Lawful Neutral
-- **Base:** Cairndel
-- **Goal:** Preserve ancient rune magic
-- **Conflict:** Rivalry with Emberhollow warlords
-
-### Emberhollow Clans
-- **Alignment:** Chaotic Neutral
-- **Base:** Emberhollow
-- **Goal:** Control trade routes through the desert
-- **Conflict:** Raids into Aetherial Expanse
+## 📜 Historical Timeline
+| Era | Event |
+|-----|-------|
+| Pre‑Glyph Era | Ellidric exists only in dreams and chants |
+| Glyph Awakening | First Speaker inscribes glyphs into crystal; memory manipulation begins |
+| Institute Rise | Language codified; Memory Engines built |
+| Clanic Resistance | Whispering War begins to keep Ellidric fluid and sacred |
+| Current Era | Player awakens without memory; glyphs respond to them |
 
 ---
 
-## ✨ Magic & Systems
-- **Rune Power:** Regenerates faster in Frostveil Peaks due to leyline convergence.
-- **Elemental Affinities:**  
-  - Fire: Emberhollow, Sunforge Desert  
-  - Ice: Frostveil Peaks, Glacial Highlands  
-  - Nature: Shaded Woods, Verdant Plains
+## 🧩 Memory Mechanics
+- **Memory‑Dive Chambers** – Dreamscapes accessed through glyphs
+- **Language Unlocks** – Each new tongue opens new interpretations of Ellidric
+- **Consequence Tracker** – Records ripple effects of altered memories
 
 ---
 
-## 📜 Notes for Copilot
-- Keep data modular (regions, factions, NPCs in separate files if needed).
-- Use these entries to generate:
-  - Procedural encounters
-  - Dialogue trees
-  - Quest hooks
-- Maintain lore consistency across all systems.
+## ⚔️ Factions
+- **Institute of Lingua Arcanum** – Precision, control, “healing” via language
+- **Clans of the Whispering Woods** – Protect oral purity of Ellidric
+- **The Echoborn** – Claim to be reborn from glyphs; speak only Ellidric
+
+---
+
+## 🎭 Themes
+- Ethics of rewriting reality
+- Identity built and broken by language
+- Power in perception and memory
+
+---
+
+## 🧙‍♀️ Key Character: Lyra Veyndral
+- **Role:** Mnemonic cartographer mapping altered memories
+- **Faction Ties:** Ex‑Institute, covert ally of select clans
+- **Conflict:** Hides a sealed memory tied to the First Speaker
+- **Gameplay Role:** Introduces Memory Drift Zones, teaches Cartographer’s Syntax
+- **Branch Outcomes:** Loyalty → defensive glyphs; Betrayal → aggressive, reality‑altering phrases
+
+---
+
+## 🗺️ Notable Locations
+- **Ravengard** – Institute capital
+- **Whispering Woods** – Clan heartland
+- **Snowveil Forest** – Borderland forest
+- **Lumisth Glacier** – Frozen Fringe
+- **Ancient Ruins** – Cradle of Ellidric glyphs
+- **Lake Eirysa** – Central landmark
+
+---
+
+## 🕹️ Gameplay Loop (VN Adaptation)
+1. Read and explore branching dialogue
+2. Investigate Drift Zones for glyph nodes
+3. Build or betray trust with characters
+4. Solve syntax puzzles to unlock new routes
+5. Watch consequences ripple through the world
+
+---
+
+## 📂 File Notes
+This `lore.md` is intended for:
+- Feeding GitHub Copilot contextual worldbuilding data
+- Serving as a reference for writers, artists, and scripters
+- Maintaining consistency across narrative branches
