@@ -33,7 +33,7 @@ const HubNavigation: React.FC<HubNavigationProps> = ({ onNavigate }) => {
       id: 'memory_chamber',
       title: '🧠 Memory-Dive Chamber',
       description: 'Enter dreamscapes to recover lost memories',
-      available: gameState.knownLanguages.length > 0
+      available: gameState.playerName !== '' // Available after prologue
     },
     {
       id: 'faction_overview',
@@ -51,7 +51,7 @@ const HubNavigation: React.FC<HubNavigationProps> = ({ onNavigate }) => {
       id: 'continue_story',
       title: '📖 Continue Journey',
       description: 'Advance the main story of the First Speaker',
-      available: gameState.currentLanguage !== null
+      available: gameState.playerName !== '' // If they have a name, they completed prologue
     }
   ];
 

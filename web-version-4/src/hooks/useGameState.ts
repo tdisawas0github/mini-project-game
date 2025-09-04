@@ -21,10 +21,20 @@ export const useGameState = () => {
   const [gameState, setGameState] = useState<GameState>(initialGameState);
 
   const setPlayerName = useCallback((name: string) => {
-    setGameState(prev => ({
-      ...prev,
-      playerName: name
-    }));
+    setGameState(prev => {
+      // When setting player name (completing prologue), also set default language state
+      const defaultGlyphs = initialGlyphs.filter(glyph => 
+        !glyph.unlockedBy || glyph.unlockedBy.includes('english')
+      );
+      
+      return {
+        ...prev,
+        playerName: name,
+        currentLanguage: 'english', // Default to English
+        knownLanguages: ['english'], // Default to English
+        unlockedGlyphs: defaultGlyphs.slice(0, 3) // Start with first 3 glyphs
+      };
+    });
   }, []);
 
   const learnLanguage = useCallback((language: Language) => {
