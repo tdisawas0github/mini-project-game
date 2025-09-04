@@ -121,3 +121,22 @@ This `mechanics.md` is intended for:
 - **Lore:** See [`lore.md`](./lore.md) for narrative context of mechanics.
 - **Characters:** See [`characters.md`](./characters.md) for NPCs tied to specific systems.
 - **Factions:** See [`factions.md`](./factions.md) for how mechanics affect political balance.
+
+## Ellidric Language Mechanics
+
+### Unlocking Dialects
+- Players begin with **Codex Ellidric**.
+- Dialects are unlocked via faction quests, artifacts, or linguistic puzzles.
+
+### Gameplay Effects
+- **Codex Ellidric:** Low puzzle complexity; unlocks official archives.
+- **Verdant Ellidric:** Enables “Living Glyph” puzzles (glyphs shift mid‑scene).
+- **Glacial Ellidric:** Enables “Light‑Shift” puzzles (rotate glyphs to reveal hidden meaning).
+- **Pure Ellidric:** Requires knowledge of 2+ dialects; bypasses certain faction locks.
+
+### Replayability Hooks
+- Certain lore, routes, and endings require specific dialect combinations.
+- Mastery of all dialects unlocks **Proto‑Ellidric** fragments, revealing hidden world events.
+
+### Cross‑Faction Synergy
+- Combining dialects in dialogue can persuade, deceive, or unlock hybrid magic.
