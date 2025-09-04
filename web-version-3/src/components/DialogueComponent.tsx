@@ -103,9 +103,10 @@ const DialogueComponent: React.FC<DialogueComponentProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.6 }}
-            dangerouslySetInnerHTML={{ __html: processText(dialogue.text) }}
           >
-            <DialogueText />
+            <DialogueText 
+              dangerouslySetInnerHTML={{ __html: processText(dialogue.text) }}
+            />
           </motion.div>
 
           {/* Name Input for name entry scene */}

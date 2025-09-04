@@ -2,8 +2,6 @@ import styled, { keyframes, createGlobalStyle } from 'styled-components';
 
 // Global styles for the Valdaren theme
 export const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Fira+Code:wght@300;400&display=swap');
-  
   * {
     margin: 0;
     padding: 0;
@@ -11,7 +9,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: 'Crimson Text', serif;
+    font-family: 'Georgia', 'Times New Roman', serif;
     background: linear-gradient(135deg, 
       #0f0f23 0%, 
       #1a1a2e 25%, 
@@ -120,7 +118,7 @@ export const SpeakerName = styled.div`
   color: #d4af37;
   margin-bottom: 12px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-  font-family: 'Fira Code', monospace;
+  font-family: 'Monaco', 'Consolas', monospace;
 
   &::before {
     content: '◉ ';
@@ -192,7 +190,7 @@ export const ChoiceButton = styled.button`
   color: #e2e8f0;
   padding: 16px 24px;
   font-size: 1.05em;
-  font-family: 'Crimson Text', serif;
+  font-family: 'Georgia', 'Times New Roman', serif;
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: left;
@@ -270,7 +268,7 @@ export const HubTitle = styled.h1`
   text-shadow: 
     0 4px 8px rgba(0, 0, 0, 0.8),
     0 0 20px rgba(212, 175, 55, 0.3);
-  font-family: 'Crimson Text', serif;
+  font-family: 'Georgia', 'Times New Roman', serif;
 `;
 
 export const HubSubtitle = styled.p`
@@ -290,7 +288,7 @@ export const PlayerNameInput = styled.input`
   color: #e2e8f0;
   padding: 16px 20px;
   font-size: 1.1em;
-  font-family: 'Crimson Text', serif;
+  font-family: 'Georgia', 'Times New Roman', serif;
   margin: 20px 0;
   width: 100%;
   max-width: 400px;
