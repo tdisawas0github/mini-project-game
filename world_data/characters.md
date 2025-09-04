@@ -53,3 +53,8 @@
 | Glyph Scholar | Provides lore dumps, puzzle hints | Archivist Meren |
 | Drift Survivor | Gives side quests tied to altered memories | Old Man Thrynn |
 | Language Merchant | Sells rare translation keys | Sava the Polyglot |
+
+## 🔗 Cross‑References
+- **Lore:** See [`lore.md`](./lore.md) for setting, history, and thematic context.
+- **Factions:** See [`factions.md`](./factions.md) for each character’s political alignment.
+- **Mechanics:** See [`mechanics.md`](./mechanics.md) for systems affecting character arcs.
