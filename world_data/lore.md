@@ -96,3 +96,27 @@ This `lore.md` is intended for:
 - **Characters:** See [`characters.md`](./characters.md) for detailed bios and dialogue hooks.
 - **Factions:** See [`factions.md`](./factions.md) for political and cultural groups.
 - **Mechanics:** See [`mechanics.md`](./mechanics.md) for gameplay systems tied to lore.
+
+## 🌳 The Ellidric Language Family
+
+**Proto‑Ellidric** — The mythic root language, spoken by the First Speaker. Only fragments survive in ancient glyphs, often misinterpreted by modern scholars.
+
+### Codex Ellidric (Institute Dialect)
+- **Faction:** Institute of Lingua Arcanum
+- **Traits:** Standardized, precise, optimized for written glyph codification.
+- **Cultural Notes:** Seen as the “official” form, but criticized for stripping away poetic nuance.
+
+### Verdant Ellidric (Clan Dialect)
+- **Faction:** Clans of the Whispering Woods
+- **Traits:** Oral, tonal, rhythm‑based; glyphs sung or carved into living wood.
+- **Cultural Notes:** Language is considered alive; meanings shift with performance.
+
+### Glacial Ellidric (Fringe Dialect)
+- **Faction:** Lumisth Glacier dwellers
+- **Traits:** Sparse, symbolic; glyphs etched into ice/crystal, meaning changes with light.
+- **Cultural Notes:** Used for ritual and prophecy; outsiders find it cryptic.
+
+### Pure Ellidric (Echoborn Dialect)
+- **Faction:** The Echoborn
+- **Traits:** Closest to Proto‑Ellidric; fragmented glyph‑bursts, often incomprehensible without other dialects.
+- **Cultural Notes:** Holds keys to ancient magic; feared and revered.
