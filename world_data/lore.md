@@ -91,3 +91,8 @@ This `lore.md` is intended for:
 - Feeding GitHub Copilot contextual worldbuilding data
 - Serving as a reference for writers, artists, and scripters
 - Maintaining consistency across narrative branches
+
+## 🔗 Cross‑References
+- **Characters:** See [`characters.md`](./characters.md) for detailed bios and dialogue hooks.
+- **Factions:** See [`factions.md`](./factions.md) for political and cultural groups.
+- **Mechanics:** See [`mechanics.md`](./mechanics.md) for gameplay systems tied to lore.
