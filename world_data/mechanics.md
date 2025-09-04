@@ -116,3 +116,8 @@ This `mechanics.md` is intended for:
 - Feeding GitHub Copilot consistent gameplay logic
 - Serving as a reference for writers, scripters, and puzzle designers
 - Ensuring mechanical consistency across narrative branches
+
+## 🔗 Cross‑References
+- **Lore:** See [`lore.md`](./lore.md) for narrative context of mechanics.
+- **Characters:** See [`characters.md`](./characters.md) for NPCs tied to specific systems.
+- **Factions:** See [`factions.md`](./factions.md) for how mechanics affect political balance.
