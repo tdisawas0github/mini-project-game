@@ -115,11 +115,11 @@ jobs:
         with:
           node-version: '18'
       - name: Install dependencies
-        run: cd web-version && npm ci
+        run: cd web-version-4 && npm ci
       - name: Run tests
-        run: cd web-version && npm test
+        run: cd web-version-4 && npm test
       - name: Build project
-        run: cd web-version && npm run build
+        run: cd web-version-4 && npm run build
       - name: Deploy to [Platform]
         # Platform-specific deployment step
 ```

@@ -64,16 +64,16 @@ Our `vercel.json` file pre-configures everything:
       "dest": "/index.html"
     }
   ],
-  "buildCommand": "cd web-version && npm ci && npm run build",
+  "buildCommand": "cd web-version-4 && npm ci && npm run build",
   "outputDirectory": "web-version/dist",
-  "installCommand": "cd web-version && npm ci"
+  "installCommand": "cd web-version-4 && npm ci"
 }
 ```
 
 **Key Settings**:
-- **Build Command**: `cd web-version && npm ci && npm run build`
+- **Build Command**: `cd web-version-4 && npm ci && npm run build`
 - **Output Directory**: `web-version/dist`
-- **Install Command**: `cd web-version && npm ci`
+- **Install Command**: `cd web-version-4 && npm ci`
 - **SPA Routing**: Automatically configured
 
 ### Environment Variables
