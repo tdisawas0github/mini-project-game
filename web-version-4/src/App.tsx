@@ -6,13 +6,18 @@ import HubNavigation from './components/HubNavigation';
 import WorldMap from './components/WorldMap';
 import Lexicon from './components/Lexicon';
 import MemoryDiveComponent from './components/MemoryDiveComponent';
+import FactionOverview from './components/FactionOverview';
+import LanguageStudy from './components/LanguageStudy';
+import CharacterRelationships from './components/CharacterRelationships';
+import AchievementSystem from './components/AchievementSystem';
+import SaveLoadSystem from './components/SaveLoadSystem';
 import { prologueDialogue, hubDialogue, chapter1Dialogue, chapter2Dialogue, memoryDiveDialogue } from './data/dialogue';
 import type { DialogueNode, Choice } from './types/game';
 
 const App: React.FC = () => {
   const { gameState, processChoice } = useGameState();
   const [currentDialogue, setCurrentDialogue] = useState<DialogueNode | null>(null);
-  const [gameMode, setGameMode] = useState<'dialogue' | 'hub' | 'world_map' | 'lexicon' | 'memory_dive' | 'special'>('dialogue');
+  const [gameMode, setGameMode] = useState<'dialogue' | 'hub' | 'world_map' | 'lexicon' | 'memory_dive' | 'faction_overview' | 'language_study' | 'character_relationships' | 'achievements' | 'save_load' | 'special'>('dialogue');
 
   // Get current dialogue node
   const getCurrentDialogue = useCallback((sceneId: string): DialogueNode | null => {
@@ -108,12 +113,19 @@ const App: React.FC = () => {
         break;
       }
       case 'faction_overview':
-        // TODO: Implement faction overview
-        console.log('Faction overview not yet implemented');
+        setGameMode('faction_overview');
         break;
       case 'language_study':
-        // TODO: Implement language study
-        console.log('Language study not yet implemented');
+        setGameMode('language_study');
+        break;
+      case 'character_relationships':
+        setGameMode('character_relationships');
+        break;
+      case 'achievements':
+        setGameMode('achievements');
+        break;
+      case 'save_load':
+        setGameMode('save_load');
         break;
       case 'continue_story': {
         // Continue with main story - start Chapter 1
@@ -166,6 +178,47 @@ const App: React.FC = () => {
 
           {gameMode === 'lexicon' && (
             <Lexicon onReturn={handleReturnToHub} />
+          )}
+
+          {gameMode === 'faction_overview' && (
+            <FactionOverview 
+              onReturn={handleReturnToHub}
+              onFactionInteraction={(factionId: string, action: string) => {
+                console.log(`Faction interaction: ${action} with ${factionId}`);
+                // Here you would handle faction interactions
+              }}
+            />
+          )}
+
+          {gameMode === 'language_study' && (
+            <LanguageStudy onReturn={handleReturnToHub} />
+          )}
+
+          {gameMode === 'character_relationships' && (
+            <CharacterRelationships 
+              onReturn={handleReturnToHub}
+              onCharacterInteraction={(characterId: string, action: string) => {
+                console.log(`Character interaction: ${action} with ${characterId}`);
+                // Here you would handle character interactions
+              }}
+            />
+          )}
+
+          {gameMode === 'achievements' && (
+            <AchievementSystem onReturn={handleReturnToHub} />
+          )}
+
+          {gameMode === 'save_load' && (
+            <SaveLoadSystem 
+              onReturn={handleReturnToHub}
+              currentGameState={gameState}
+              onLoadGame={(loadedState) => {
+                // Here you would handle loading the game state
+                console.log('Loading game state:', loadedState);
+                // processChoice would need to be updated to handle full state loading
+                handleReturnToHub();
+              }}
+            />
           )}
         </NovelInterface>
       </GameContainer>

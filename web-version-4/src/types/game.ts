@@ -67,3 +67,15 @@ export interface Region {
   description: string;
   influence: number;
 }
+
+export interface Faction {
+  id: string;
+  name: string;
+  description: string;
+  philosophy: string;
+  stronghold: string;
+  color: string;
+  territories?: string[];
+  traits?: string[];
+  leaders?: string[];
+}

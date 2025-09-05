@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { useGameState } from '../hooks/useGameState';
 import {
@@ -13,7 +12,7 @@ interface HubNavigationProps {
   onNavigate: (destination: string) => void;
 }
 
-const HubNavigation: React.FC<HubNavigationProps> = ({ onNavigate }) => {
+const HubNavigation = ({ onNavigate }: HubNavigationProps) => {
   const { gameState } = useGameState();
 
   const hubOptions = [
@@ -46,6 +45,24 @@ const HubNavigation: React.FC<HubNavigationProps> = ({ onNavigate }) => {
       title: '🔤 Linguistic Studies',
       description: 'Deepen your understanding of mortal tongues',
       available: gameState.knownLanguages.length > 0
+    },
+    {
+      id: 'character_relationships',
+      title: '👥 Character Relations',
+      description: 'Review your connections and alliances with key figures',
+      available: gameState.playerName !== ''
+    },
+    {
+      id: 'achievements',
+      title: '🏆 Achievements',
+      description: 'Track your progress and accomplishments in Valdaren',
+      available: true
+    },
+    {
+      id: 'save_load',
+      title: '💾 Save & Load',
+      description: 'Preserve your journey or continue from a previous save',
+      available: true
     },
     {
       id: 'continue_story',

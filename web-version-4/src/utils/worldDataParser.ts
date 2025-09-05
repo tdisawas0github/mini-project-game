@@ -1,5 +1,5 @@
 // Utility to parse world_data markdown files and Valdaren game data
-import type { Region } from '../types/game';
+import type { Region, Faction } from '../types/game';
 
 // Since we can't dynamically import markdown files in the browser,
 // we'll create structured data based on the world_data and Valdaren sources
@@ -49,35 +49,59 @@ export const valdarenRegions: Region[] = [
   }
 ];
 
-export const valdarenFactions = {
-  institute: {
+export const valdarenFactions: Faction[] = [
+  {
+    id: 'institute',
     name: 'Institute of Lingua Arcanum',
     description: 'Seekers of precision, control, and "healing" through language. They believe Ellidric can be codified and used to fix broken minds.',
     stronghold: 'Ravengard',
-    philosophy: 'Language as science',
-    color: '#3b82f6' // Blue
+    philosophy: 'Language as science - Ellidric should be catalogued, controlled, and used for the betterment of society through structured learning',
+    color: '#3b82f6', // Blue
+    territories: ['Ravengard', 'Institute Archives', 'Research Outposts'],
+    traits: ['Methodical approach to Ellidric', 'Extensive written records', 'Structured hierarchy', 'Suspicious of uncontrolled usage'],
+    leaders: ['Magistrate Korven', 'Chief Archivist Vex', 'Senior Researcher Thalia']
   },
-  clans: {
+  {
+    id: 'clans',
     name: 'Clans of the Whispering Woods',
     description: 'Guardians of oral tradition who protect the pure, fluid nature of Ellidric. They fear what happens when the sacred becomes structured.',
     stronghold: 'Whispering Woods',
-    philosophy: 'Language as living spirit',
-    color: '#22c55e' // Green
+    philosophy: 'Language as living spirit - Ellidric is alive and must remain free-flowing, passed through voice and breath rather than cold inscription',
+    color: '#22c55e', // Green
+    territories: ['Whispering Woods', 'Snowveil Forest', 'Sacred Groves'],
+    traits: ['Oral traditions only', 'Deep connection to nature', 'Tribal council leadership', 'Distrustful of written Ellidric'],
+    leaders: ['Elder Thane', 'Moonwhisper Kira', 'Sage Branwen']
   },
-  echoborn: {
+  {
+    id: 'echoborn',
     name: 'The Echoborn',
     description: 'Mysterious entities claiming to be reborn from glyphs themselves. They understand Ellidric in ways that transcend human comprehension.',
     stronghold: 'Ancient Ruins',
-    philosophy: 'Language as existence itself',
-    color: '#a855f7' // Purple
+    philosophy: 'Language as existence itself - Ellidric is not merely communication but the fundamental force that shapes reality and consciousness',
+    color: '#a855f7', // Purple
+    territories: ['Ancient Ruins', 'Lumisth Glacier', 'Forgotten Sanctuaries'],
+    traits: ['Speak only Pure Ellidric', 'Cryptic and enigmatic', 'Born from glyphs', 'Transcendent understanding'],
+    leaders: ['The Echo Child', 'Silence Speaker', 'Glyph-Heart Zara']
   },
-  neutral: {
+  {
+    id: 'neutral',
     name: 'Neutral Territories',
     description: 'Regions that maintain independence or serve as meeting grounds between the major factions.',
     stronghold: 'Lake Eirysa',
-    philosophy: 'Balance and diplomacy',
-    color: '#6b7280' // Gray
+    philosophy: 'Balance and diplomacy - Seek to understand all perspectives on Ellidric while maintaining neutrality in factional conflicts',
+    color: '#6b7280', // Gray
+    territories: ['Lake Eirysa', 'Crossroads Market', 'Diplomatic Halls'],
+    traits: ['Political neutrality', 'Trade-focused', 'Diplomatic immunity', 'Multi-factional acceptance'],
+    leaders: ['Merchant Prince Kael', 'Ambassador Elyn', 'Neutral Council']
   }
+];
+
+// Legacy object format for backward compatibility
+export const valdarenFactionsLegacy = {
+  institute: valdarenFactions[0],
+  clans: valdarenFactions[1], 
+  echoborn: valdarenFactions[2],
+  neutral: valdarenFactions[3]
 };
 
 // Map data structure that matches the Valdaren faction_map.json format
