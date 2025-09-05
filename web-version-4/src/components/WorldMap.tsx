@@ -20,7 +20,7 @@ const MapContainer = styled.div`
 const MapImage = styled.div`
   position: relative;
   width: 100%;
-  height: 600px;
+  height: 700px;
   background: 
     linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
     url('/src/maps/factions-of-valdaren.png') center/cover no-repeat,
@@ -307,7 +307,7 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             {/* Map Regions */}
             <MapRegion 
               faction="institute" 
-              top="20%" 
+              top="15%" 
               left="15%" 
               width="15%" 
               height="12%"
@@ -319,7 +319,7 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             
             <MapRegion 
               faction="clans" 
-              top="60%" 
+              top="70%" 
               left="20%" 
               width="18%" 
               height="15%"
@@ -331,7 +331,7 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             
             <MapRegion 
               faction="echoborn" 
-              top="10%" 
+              top="8%" 
               left="70%" 
               width="14%" 
               height="10%"
@@ -343,7 +343,7 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             
             <MapRegion 
               faction="clans" 
-              top="50%" 
+              top="55%" 
               left="60%" 
               width="16%" 
               height="12%"
@@ -355,7 +355,7 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             
             <MapRegion 
               faction="echoborn" 
-              top="5%" 
+              top="3%" 
               left="50%" 
               width="10%" 
               height="10%"
@@ -368,7 +368,7 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             
             <MapRegion 
               faction="neutral" 
-              top="45%" 
+              top="35%" 
               left="35%" 
               width="12%" 
               height="10%"
