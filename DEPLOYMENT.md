@@ -40,7 +40,7 @@ For comprehensive step-by-step guides with advanced configurations, troubleshoot
 1. **Fork or clone** this repository to your GitHub account
 2. **Ensure the build works locally**:
    ```bash
-   cd web-version
+   cd web-version-4
    npm install
    npm run build
    # Should complete without errors

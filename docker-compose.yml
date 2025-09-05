@@ -2,7 +2,7 @@ services:
   # Web application - Production build (uses pre-built dist folder)
   web:
     build:
-      context: ./web-version
+      context: ./web-version-4
       dockerfile: Dockerfile
     ports:
       - "3000:80"
@@ -17,7 +17,7 @@ services:
   # Web application - Production build from source (builds everything)
   web-build:
     build:
-      context: ./web-version
+      context: ./web-version-4
       dockerfile: Dockerfile.build
     ports:
       - "3001:80"
@@ -34,12 +34,12 @@ services:
   # Web application - Development build
   web-dev:
     build:
-      context: ./web-version
+      context: ./web-version-4
       dockerfile: Dockerfile.dev
     ports:
       - "5173:5173"
     volumes:
-      - ./web-version:/app
+      - ./web-version-4:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development

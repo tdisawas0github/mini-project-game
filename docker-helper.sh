@@ -6,7 +6,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-WEB_DIR="$SCRIPT_DIR/web-version"
+WEB_DIR="$SCRIPT_DIR/web-version-4"
 
 show_help() {
     echo "Docker Helper for Echoes of Ellidra"
