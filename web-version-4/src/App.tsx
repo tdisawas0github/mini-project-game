@@ -12,13 +12,14 @@ import CharacterRelationships from './components/CharacterRelationships';
 import AchievementSystem from './components/AchievementSystem';
 import SaveLoadSystem from './components/SaveLoadSystem';
 import GameSystemsTest from './components/GameSystemsTest';
+import GlyphResonance from './components/GlyphResonance';
 import { prologueDialogue, hubDialogue, chapter1Dialogue, chapter2Dialogue, memoryDiveDialogue } from './data/dialogue';
 import type { DialogueNode, Choice } from './types/game';
 
 const App: React.FC = () => {
   const { gameState, processChoice } = useGameState();
   const [currentDialogue, setCurrentDialogue] = useState<DialogueNode | null>(null);
-  const [gameMode, setGameMode] = useState<'dialogue' | 'hub' | 'world_map' | 'lexicon' | 'memory_dive' | 'faction_overview' | 'language_study' | 'character_relationships' | 'achievements' | 'save_load' | 'systems_test' | 'special'>('dialogue');
+  const [gameMode, setGameMode] = useState<'dialogue' | 'hub' | 'world_map' | 'lexicon' | 'memory_dive' | 'faction_overview' | 'language_study' | 'character_relationships' | 'achievements' | 'save_load' | 'systems_test' | 'glyph_resonance' | 'special'>('dialogue');
 
   // Get current dialogue node
   const getCurrentDialogue = useCallback((sceneId: string): DialogueNode | null => {
@@ -119,6 +120,9 @@ const App: React.FC = () => {
       case 'language_study':
         setGameMode('language_study');
         break;
+      case 'glyph_resonance':
+        setGameMode('glyph_resonance');
+        break;
       case 'character_relationships':
         setGameMode('character_relationships');
         break;
@@ -196,6 +200,10 @@ const App: React.FC = () => {
 
           {gameMode === 'language_study' && (
             <LanguageStudy onReturn={handleReturnToHub} />
+          )}
+
+          {gameMode === 'glyph_resonance' && (
+            <GlyphResonance onReturn={handleReturnToHub} />
           )}
 
           {gameMode === 'character_relationships' && (
