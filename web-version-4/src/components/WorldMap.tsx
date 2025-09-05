@@ -18,32 +18,21 @@ const MapContainer = styled.div`
 `;
 
 const MapImage = styled.div`
-  width: 100%;
-  max-width: 800px;
-  height: 500px;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-  border: 3px solid rgba(212, 175, 55, 0.3);
-  border-radius: 16px;
   position: relative;
-  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    url('/src/maps/factions-of-valdaren.png') center/cover no-repeat,
+    url('/src/maps/map-of-valdaren.png') center/cover no-repeat;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
   
-  /* Base terrain */
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-      /* Snow-covered mountains */
-      radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-      /* Forest areas */
-      radial-gradient(circle at 30% 70%, rgba(34, 139, 34, 0.1) 0%, transparent 40%),
-      radial-gradient(circle at 70% 60%, rgba(34, 139, 34, 0.1) 0%, transparent 40%),
-      /* Water bodies */
-      radial-gradient(circle at 50% 50%, rgba(30, 144, 255, 0.15) 0%, transparent 30%);
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
   }
 `;
 
@@ -152,6 +141,27 @@ const LegendItem = styled.div<{ faction: string }>`
     margin-right: 6px;
     border: 1px solid rgba(255, 255, 255, 0.3);
   }
+`;
+
+const LegendTitle = styled.div`
+  font-weight: bold;
+  color: #d4af37;
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+`;
+
+const LegendColor = styled.div<{ faction: string }>`
+  width: 12px;
+  height: 12px;
+  background: ${props => 
+    props.faction === 'institute' ? '#3b82f6' :
+    props.faction === 'clans' ? '#22c55e' :
+    props.faction === 'echoborn' ? '#a855f7' :
+    '#6b7280'
+  };
+  border-radius: 2px;
+  margin-right: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 `;
 
 const RegionGrid = styled.div`
@@ -273,21 +283,34 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
           transition={{ delay: 0.4, duration: 0.6 }}
         >
           <MapImage>
-            {/* Legend */}
+            {/* Map Legend */}
             <MapLegend>
-              <LegendItem faction="institute">Institute</LegendItem>
-              <LegendItem faction="clans">Clans</LegendItem>
-              <LegendItem faction="echoborn">Echoborn</LegendItem>
-              <LegendItem faction="neutral">Neutral</LegendItem>
+              <LegendTitle>Factions of Valdaren</LegendTitle>
+              <LegendItem faction="institute">
+                <LegendColor faction="institute" />
+                Institute of Lingua Arcanum
+              </LegendItem>
+              <LegendItem faction="clans">
+                <LegendColor faction="clans" />
+                Whispering Woods Clans
+              </LegendItem>
+              <LegendItem faction="echoborn">
+                <LegendColor faction="echoborn" />
+                Echoborn Order
+              </LegendItem>
+              <LegendItem faction="neutral">
+                <LegendColor faction="neutral" />
+                Neutral Territories
+              </LegendItem>
             </MapLegend>
             
             {/* Map Regions */}
             <MapRegion 
               faction="institute" 
-              top="15%" 
-              left="10%" 
-              width="25%" 
-              height="20%"
+              top="25%" 
+              left="20%" 
+              width="18%" 
+              height="15%"
               data-label="Ravengard"
               data-tooltip="Urban seat of the Institute of Lingua Arcanum"
             >
@@ -296,10 +319,10 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             
             <MapRegion 
               faction="clans" 
-              top="60%" 
-              left="15%" 
-              width="30%" 
-              height="25%"
+              top="55%" 
+              left="25%" 
+              width="22%" 
+              height="18%"
               data-label="Whispering Woods"
               data-tooltip="Ancient forests where oral traditions keep Ellidric alive"
             >
@@ -308,10 +331,10 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             
             <MapRegion 
               faction="echoborn" 
-              top="10%" 
-              left="70%" 
-              width="20%" 
-              height="15%"
+              top="15%" 
+              left="65%" 
+              width="16%" 
+              height="12%"
               data-label="Ancient Ruins"
               data-tooltip="Forgotten places where glyphs first touched human minds"
             >
@@ -320,10 +343,10 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             
             <MapRegion 
               faction="clans" 
-              top="40%" 
-              left="50%" 
-              width="25%" 
-              height="20%"
+              top="45%" 
+              left="55%" 
+              width="20%" 
+              height="15%"
               data-label="Snowveil Forest"
               data-tooltip="Borderland forest where clan storytellers practice traditions"
             >
@@ -332,10 +355,10 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             
             <MapRegion 
               faction="echoborn" 
-              top="5%" 
+              top="8%" 
               left="45%" 
-              width="15%" 
-              height="15%"
+              width="12%" 
+              height="12%"
               shape="circle"
               data-label="Lumisth Glacier"
               data-tooltip="Frozen Fringe where the first Ellidric glyphs were discovered"
@@ -345,10 +368,10 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             
             <MapRegion 
               faction="neutral" 
-              top="45%" 
-              left="35%" 
-              width="20%" 
-              height="15%"
+              top="40%" 
+              left="40%" 
+              width="15%" 
+              height="12%"
               shape="circle"
               data-label="Lake Eirysa"
               data-tooltip="Central landmark where all factions meet for diplomacy"
