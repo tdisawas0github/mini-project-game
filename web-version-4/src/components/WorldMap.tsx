@@ -24,97 +24,34 @@ const MapImage = styled.div`
   width: 100%;
   height: min(90vh, 1200px);
   padding: 56px 36px;
-  background: 
-    linear-gradient(rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)),
-    url('/src/maps/factions-of-valdaren.png') center/cover no-repeat,
-    url('/src/maps/map-of-valdaren.png') center/cover no-repeat;
-  background-size: cover;
+  background: linear-gradient(rgba(0,0,0,0.04), rgba(0,0,0,0.04));
   border-radius: 12px;
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.38);
   cursor: pointer;
   transition: all 0.22s ease;
-  overflow: visible;
-  
-  &:hover {
-    transform: scale(1.005);
-    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.45);
-  }
-`;
-
-const MapRegion = styled.div<{ 
-  faction: string; 
-  top: string; 
-  left: string; 
-  width: string; 
-  height: string;
-  shape?: string;
-}>`
-  position: absolute;
-  top: ${props => props.top};
-  left: ${props => props.left};
-  width: ${props => props.width};
-  height: ${props => props.height};
-  background: ${props => 
-    props.faction === 'institute' ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0.1))' :
-    props.faction === 'clans' ? 'linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(34, 197, 94, 0.1))' :
-    props.faction === 'echoborn' ? 'linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(168, 85, 247, 0.1))' :
-    'linear-gradient(135deg, rgba(107, 114, 128, 0.3), rgba(107, 114, 128, 0.1))'
-  };
-  border: 2px solid ${props => 
-    props.faction === 'institute' ? 'rgba(59, 130, 246, 0.6)' :
-    props.faction === 'clans' ? 'rgba(34, 197, 94, 0.6)' :
-    props.faction === 'echoborn' ? 'rgba(168, 85, 247, 0.6)' :
-    'rgba(107, 114, 128, 0.6)'
-  };
-  border-radius: ${props => props.shape === 'circle' ? '50%' : '8px'};
-  cursor: pointer;
-  transition: all 0.3s ease;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
-  font-weight: bold;
-  color: white;
-  text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
-  
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px ${props => 
-      props.faction === 'institute' ? 'rgba(59, 130, 246, 0.4)' :
-      props.faction === 'clans' ? 'rgba(34, 197, 94, 0.4)' :
-      props.faction === 'echoborn' ? 'rgba(168, 85, 247, 0.4)' :
-      'rgba(107, 114, 128, 0.4)'
-    };
-    
-    &::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.9);
-      color: white;
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-size: 0.7rem;
-      white-space: nowrap;
-      z-index: 10;
-      margin-bottom: 5px;
-    }
-  }
-  
-  /* Region labels */
-  &::before {
-    content: attr(data-label);
-    position: absolute;
-    bottom: -25px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.6rem;
-    color: #d4af37;
-    text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
-    font-weight: bold;
-  }
+`;
+
+const ImgMain = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 8px;
+`;
+
+const ImgOverlay = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  opacity: 0.98;
 `;
 
 const MapLegend = styled.div`
@@ -297,81 +234,10 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
         >
           <MapRow>
             <MapImage>
-            {/* Map Regions */}
-            <MapRegion 
-              faction="institute" 
-              top="8%" 
-              left="12%" 
-              width="12%" 
-              height="10%"
-              data-label="Ravengard"
-              data-tooltip="Urban seat of the Institute of Lingua Arcanum"
-            >
-              🏛️
-            </MapRegion>
-            
-            <MapRegion 
-              faction="clans" 
-              top="78%" 
-              left="18%" 
-              width="14%" 
-              height="12%"
-              data-label="Whispering Woods"
-              data-tooltip="Ancient forests where oral traditions keep Ellidric alive"
-            >
-              🌲
-            </MapRegion>
-            
-            <MapRegion 
-              faction="echoborn" 
-              top="18%" 
-              left="68%" 
-              width="12%" 
-              height="9%"
-              data-label="Ancient Ruins"
-              data-tooltip="Forgotten places where glyphs first touched human minds"
-            >
-              🏛️
-            </MapRegion>
-            
-            <MapRegion 
-              faction="clans" 
-              top="48%" 
-              left="58%" 
-              width="14%" 
-              height="11%"
-              data-label="Snowveil Forest"
-              data-tooltip="Borderland forest where clan storytellers practice traditions"
-            >
-              🌲
-            </MapRegion>
-            
-            <MapRegion 
-              faction="echoborn" 
-              top="3%" 
-              left="50%" 
-              width="9%" 
-              height="9%"
-              shape="circle"
-              data-label="Lumisth Glacier"
-              data-tooltip="Frozen Fringe where the first Ellidric glyphs were discovered"
-            >
-              🏔️
-            </MapRegion>
-            
-            <MapRegion 
-              faction="neutral" 
-              top="28%" 
-              left="38%" 
-              width="10%" 
-              height="9%"
-              shape="circle"
-              data-label="Lake Eirysa"
-              data-tooltip="Central landmark where all factions meet for diplomacy"
-            >
-              🏞️
-            </MapRegion>
-          </MapImage>
+              {/* Static image map — no CSS hotspots */}
+              <ImgMain src="/src/maps/map-of-valdaren.png" alt="Map of Valdaren" />
+              <ImgOverlay src="/src/maps/factions-of-valdaren.png" alt="Faction overlay" />
+            </MapImage>
             {/* Sidebar Legend */}
             <MapLegend>
               <LegendTitle>Factions of Valdaren</LegendTitle>
