@@ -1,7 +1,6 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { useGameState } from '../hooks/useGameState';
-import { regions, factionInfo } from '../data/gameData';
+import { valdarenRegions, valdarenFactionsLegacy } from '../utils/worldDataParser';
 import {
   HubContainer,
   HubTitle,
@@ -22,11 +21,21 @@ const MapImage = styled.div`
   width: 100%;
   max-width: 600px;
   height: 400px;
-  background: url('/assets/map-of-valdaren.png') center/contain no-repeat;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f4c75 100%);
   border: 3px solid rgba(212, 175, 55, 0.3);
   border-radius: 16px;
   position: relative;
-  background-color: rgba(15, 15, 35, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &::before {
+    content: '🗺️ Map of Valdaren';
+    color: #d4af37;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+  }
 `;
 
 const RegionGrid = styled.div`
@@ -100,6 +109,7 @@ const InfluenceBar = styled.div<{ influence: number; faction: string }>`
       props.faction === 'echoborn' ? '#a855f7' :
       '#6b7280'
     };
+    border-radius: 4px;
     transition: width 0.5s ease;
   }
 `;
@@ -108,7 +118,7 @@ interface WorldMapProps {
   onReturn: () => void;
 }
 
-const WorldMap: React.FC<WorldMapProps> = ({ onReturn }) => {
+const WorldMap = ({ onReturn }: WorldMapProps) => {
   const { gameState } = useGameState();
 
   return (
@@ -123,28 +133,34 @@ const WorldMap: React.FC<WorldMapProps> = ({ onReturn }) => {
 
       <MapContainer>
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.6 }}
+          style={{ textAlign: 'center', marginBottom: '2rem' }}
+        >
+          <p style={{ 
+            fontSize: '1.1rem', 
+            color: '#d1d5db', 
+            maxWidth: '800px', 
+            margin: '0 auto',
+            lineHeight: '1.6'
+          }}>
+            Explore the frozen realm of Valdaren, where three major factions vie for control 
+            over the ancient language of Ellidric. Each region holds secrets of the past 
+            and influence over the future of linguistic power.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
         >
           <MapImage />
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.6 }}
-          style={{ textAlign: 'center', color: '#9ca3af', maxWidth: '600px' }}
-        >
-          <p>
-            The frost-wrapped realm of Valdaren, where three powers struggle for control 
-            over the ancient language of Ellidric. Each region reflects the philosophy 
-            of those who dwell there.
-          </p>
-        </motion.div>
-
         <RegionGrid>
-          {regions.map((region, index) => (
+          {valdarenRegions.map((region, index) => (
             <motion.div
               key={region.id}
               initial={{ opacity: 0, y: 30 }}
@@ -154,7 +170,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ onReturn }) => {
               <RegionCard faction={region.faction}>
                 <RegionName>{region.name}</RegionName>
                 <FactionName faction={region.faction}>
-                  {factionInfo[region.faction].name}
+                  {valdarenFactionsLegacy[region.faction as keyof typeof valdarenFactionsLegacy]?.name || 'Unknown Faction'}
                 </FactionName>
                 <p style={{ 
                   fontSize: '0.9em', 
@@ -166,7 +182,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ onReturn }) => {
                 </p>
                 
                 <div style={{ fontSize: '0.85em', color: '#9ca3af' }}>
-                  <strong>Philosophy:</strong> {factionInfo[region.faction].philosophy}
+                  <strong>Philosophy:</strong> {valdarenFactionsLegacy[region.faction as keyof typeof valdarenFactionsLegacy]?.philosophy || 'Unknown'}
                 </div>
                 
                 <div style={{ 
@@ -186,7 +202,7 @@ const WorldMap: React.FC<WorldMapProps> = ({ onReturn }) => {
                 {gameState.knownLanguages.length > 0 && (
                   <div style={{ marginTop: '12px', fontSize: '0.85em' }}>
                     <strong>Your Standing:</strong>{' '}
-                    {gameState.factionInfluence[region.faction as keyof typeof gameState.factionInfluence]}
+                    {gameState.factionInfluence?.[region.faction as keyof typeof gameState.factionInfluence] || 'Unknown'}
                   </div>
                 )}
               </RegionCard>

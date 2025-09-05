@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import type { GameState } from '../types/game';
+import { 
+  gameCache, 
+  cacheGameState, 
+  loadGameState
+} from '../utils/cacheManager';
+import { useGameCache } from '../hooks/useGameCache';
 
 const SaveLoadContainer = styled.div`
   background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
@@ -252,6 +258,96 @@ const QuickSaveSection = styled.div`
   }
 `;
 
+const CacheManagementSection = styled.div`
+  background: linear-gradient(135deg, #2a2a3e 0%, #1a1a2e 100%);
+  border: 1px solid #444;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  
+  h3 {
+    color: #64b5f6;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .cache-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    
+    .stat {
+      text-align: center;
+      background: #1a1a2e;
+      padding: 1rem;
+      border-radius: 8px;
+      
+      .value {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #64b5f6;
+        display: block;
+        margin-bottom: 0.3rem;
+      }
+      
+      .label {
+        color: #b0b0b0;
+        font-size: 0.9rem;
+      }
+    }
+  }
+  
+  .cache-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    
+    button {
+      padding: 0.8rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: bold;
+      transition: all 0.2s ease;
+      
+      &.clear-cache {
+        background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+        color: white;
+        
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+        }
+      }
+      
+      &.export-data {
+        background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+        color: white;
+        
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+        }
+      }
+      
+      &.import-data {
+        background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+        color: white;
+        
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+      }
+    }
+  }
+`;
+
 const ReturnButton = styled.button`
   position: fixed;
   top: 2rem;
@@ -287,22 +383,23 @@ interface SaveLoadSystemProps {
 }
 
 const SaveLoadSystem = ({ onReturn, currentGameState, onLoadGame }: SaveLoadSystemProps) => {
-  const [activeTab, setActiveTab] = useState<'save' | 'load'>('save');
+  const { exportData, importData, clearAllData, cacheStats, refreshCacheStats } = useGameCache();
+  const [activeTab, setActiveTab] = useState<'save' | 'load' | 'manage'>('save');
   const [saveSlots, setSaveSlots] = useState<(SaveData | null)[]>(Array(6).fill(null));
   const [quickSaveData, setQuickSaveData] = useState<SaveData | null>(null);
 
-  // Load save data from localStorage on component mount
+  // Load save data from cache on component mount
   useEffect(() => {
     const savedSlots = [];
     for (let i = 0; i < 6; i++) {
-      const slotData = localStorage.getItem(`echoes_save_slot_${i}`);
-      if (slotData) {
-        try {
-          savedSlots[i] = JSON.parse(slotData);
-        } catch (error) {
-          console.error(`Error loading save slot ${i}:`, error);
-          savedSlots[i] = null;
-        }
+      const saveData = loadGameState(i);
+      if (saveData) {
+        savedSlots[i] = {
+          id: i,
+          gameState: saveData,
+          saveDate: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
+          sceneName: getSceneName(saveData.currentScene)
+        };
       } else {
         savedSlots[i] = null;
       }
@@ -310,15 +407,18 @@ const SaveLoadSystem = ({ onReturn, currentGameState, onLoadGame }: SaveLoadSyst
     setSaveSlots(savedSlots);
 
     // Load quick save
-    const quickSave = localStorage.getItem('echoes_quick_save');
+    const quickSave = loadGameState();
     if (quickSave) {
-      try {
-        setQuickSaveData(JSON.parse(quickSave));
-      } catch (error) {
-        console.error('Error loading quick save:', error);
-        setQuickSaveData(null);
-      }
+      setQuickSaveData({
+        id: -1,
+        gameState: quickSave,
+        saveDate: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
+        sceneName: getSceneName(quickSave.currentScene)
+      });
     }
+    
+    // Load cache stats
+    refreshCacheStats();
   }, []);
 
   const getSceneName = (sceneId: string): string => {
@@ -333,20 +433,22 @@ const SaveLoadSystem = ({ onReturn, currentGameState, onLoadGame }: SaveLoadSyst
   };
 
   const handleSave = (slotIndex: number) => {
-    const saveData: SaveData = {
-      id: slotIndex,
-      gameState: currentGameState,
-      saveDate: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
-      sceneName: getSceneName(currentGameState.currentScene)
-    };
+    const success = cacheGameState(currentGameState, slotIndex);
+    
+    if (success) {
+      const saveData: SaveData = {
+        id: slotIndex,
+        gameState: currentGameState,
+        saveDate: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
+        sceneName: getSceneName(currentGameState.currentScene)
+      };
 
-    try {
-      localStorage.setItem(`echoes_save_slot_${slotIndex}`, JSON.stringify(saveData));
       const newSaveSlots = [...saveSlots];
       newSaveSlots[slotIndex] = saveData;
       setSaveSlots(newSaveSlots);
-    } catch (error) {
-      console.error('Error saving game:', error);
+      
+      alert('Game saved successfully!');
+    } else {
       alert('Failed to save game. Please try again.');
     }
   };
@@ -361,30 +463,29 @@ const SaveLoadSystem = ({ onReturn, currentGameState, onLoadGame }: SaveLoadSyst
 
   const handleDelete = (slotIndex: number) => {
     if (confirm('Are you sure you want to delete this save?')) {
-      try {
-        localStorage.removeItem(`echoes_save_slot_${slotIndex}`);
+      const success = gameCache.remove(`save_slots_${slotIndex}`);
+      if (success) {
         const newSaveSlots = [...saveSlots];
         newSaveSlots[slotIndex] = null;
         setSaveSlots(newSaveSlots);
-      } catch (error) {
-        console.error('Error deleting save:', error);
       }
     }
   };
 
   const handleQuickSave = () => {
-    const saveData: SaveData = {
-      id: -1, // Quick save ID
-      gameState: currentGameState,
-      saveDate: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
-      sceneName: getSceneName(currentGameState.currentScene)
-    };
+    const success = cacheGameState(currentGameState);
+    
+    if (success) {
+      const saveData: SaveData = {
+        id: -1,
+        gameState: currentGameState,
+        saveDate: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
+        sceneName: getSceneName(currentGameState.currentScene)
+      };
 
-    try {
-      localStorage.setItem('echoes_quick_save', JSON.stringify(saveData));
       setQuickSaveData(saveData);
-    } catch (error) {
-      console.error('Error quick saving:', error);
+      alert('Quick save successful!');
+    } else {
       alert('Failed to quick save. Please try again.');
     }
   };
@@ -396,6 +497,66 @@ const SaveLoadSystem = ({ onReturn, currentGameState, onLoadGame }: SaveLoadSyst
     }
   };
 
+  const handleClearAllCache = () => {
+    if (confirm('Are you sure you want to clear ALL cached data? This will delete all saves, preferences, and progress!')) {
+      clearAllData();
+      setSaveSlots(Array(6).fill(null));
+      setQuickSaveData(null);
+      alert('All cache data cleared successfully!');
+    }
+  };
+
+  const handleExportData = async () => {
+    try {
+      const dataStr = await exportData();
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+      
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `echoes_ellidra_backup_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      alert('Game data exported successfully!');
+    } catch (error) {
+      console.error('Export error:', error);
+      alert('Failed to export game data.');
+    }
+  };
+
+  const handleImportData = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = async (event) => {
+      const file = (event.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          try {
+            const dataStr = e.target?.result as string;
+            const success = await importData(dataStr);
+            
+            if (success) {
+              alert('Game data imported successfully!');
+              // Reload the component to show new data
+              window.location.reload();
+            } else {
+              alert('Failed to import game data. Please check the file format.');
+            }
+          } catch (error) {
+            console.error('Import error:', error);
+            alert('Failed to import game data.');
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
+  };
   return (
     <SaveLoadContainer>
       <ReturnButton onClick={onReturn}>
@@ -446,10 +607,50 @@ const SaveLoadSystem = ({ onReturn, currentGameState, onLoadGame }: SaveLoadSyst
         >
           📂 Load Game
         </Tab>
+        <Tab 
+          $active={activeTab === 'manage'} 
+          onClick={() => setActiveTab('manage')}
+        >
+          🛠️ Manage Cache
+        </Tab>
       </SaveLoadTabs>
 
       <SaveSlotGrid>
-        {saveSlots.map((saveData, index) => (
+        {activeTab === 'manage' ? (
+          <CacheManagementSection>
+            <h3>🛠️ Cache Management</h3>
+            
+            {cacheStats && (
+              <div className="cache-stats">
+                <div className="stat">
+                  <span className="value">{Math.round(cacheStats.localStorageUsed / 1024)}KB</span>
+                  <span className="label">Local Storage</span>
+                </div>
+                <div className="stat">
+                  <span className="value">{Math.round(cacheStats.sessionStorageUsed / 1024)}KB</span>
+                  <span className="label">Session Storage</span>
+                </div>
+                <div className="stat">
+                  <span className="value">{cacheStats.totalItems}</span>
+                  <span className="label">Cached Items</span>
+                </div>
+              </div>
+            )}
+            
+            <div className="cache-actions">
+              <button className="export-data" onClick={handleExportData}>
+                📤 Export All Data
+              </button>
+              <button className="import-data" onClick={handleImportData}>
+                📥 Import Data
+              </button>
+              <button className="clear-cache" onClick={handleClearAllCache}>
+                🗑️ Clear All Cache
+              </button>
+            </div>
+          </CacheManagementSection>
+        ) : (
+          saveSlots.map((saveData, index) => (
           <SaveSlot key={index} $isEmpty={!saveData}>
             <div className="slot-header">
               <div className="slot-number">Save Slot {index + 1}</div>
@@ -512,7 +713,8 @@ const SaveLoadSystem = ({ onReturn, currentGameState, onLoadGame }: SaveLoadSyst
               </>
             )}
           </SaveSlot>
-        ))}
+        ))
+        )}
       </SaveSlotGrid>
     </SaveLoadContainer>
   );

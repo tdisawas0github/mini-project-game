@@ -65,6 +65,12 @@ const HubNavigation = ({ onNavigate }: HubNavigationProps) => {
       available: true
     },
     {
+      id: 'systems_test',
+      title: '🧪 Systems Test',
+      description: 'Test and debug the enhanced game systems',
+      available: true
+    },
+    {
       id: 'continue_story',
       title: '📖 Continue Journey',
       description: 'Advance the main story of the First Speaker',

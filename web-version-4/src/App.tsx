@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { GlobalStyle, GameContainer, NovelInterface } from './styles/visualNovel';
 import { useGameState } from './hooks/useGameState';
 import DialogueComponent from './components/DialogueComponent';
@@ -11,13 +11,14 @@ import LanguageStudy from './components/LanguageStudy';
 import CharacterRelationships from './components/CharacterRelationships';
 import AchievementSystem from './components/AchievementSystem';
 import SaveLoadSystem from './components/SaveLoadSystem';
+import GameSystemsTest from './components/GameSystemsTest';
 import { prologueDialogue, hubDialogue, chapter1Dialogue, chapter2Dialogue, memoryDiveDialogue } from './data/dialogue';
 import type { DialogueNode, Choice } from './types/game';
 
 const App: React.FC = () => {
   const { gameState, processChoice } = useGameState();
   const [currentDialogue, setCurrentDialogue] = useState<DialogueNode | null>(null);
-  const [gameMode, setGameMode] = useState<'dialogue' | 'hub' | 'world_map' | 'lexicon' | 'memory_dive' | 'faction_overview' | 'language_study' | 'character_relationships' | 'achievements' | 'save_load' | 'special'>('dialogue');
+  const [gameMode, setGameMode] = useState<'dialogue' | 'hub' | 'world_map' | 'lexicon' | 'memory_dive' | 'faction_overview' | 'language_study' | 'character_relationships' | 'achievements' | 'save_load' | 'systems_test' | 'special'>('dialogue');
 
   // Get current dialogue node
   const getCurrentDialogue = useCallback((sceneId: string): DialogueNode | null => {
@@ -45,7 +46,7 @@ const App: React.FC = () => {
   }, []);
 
   // Initialize with first dialogue if not already set
-  React.useEffect(() => {
+  useEffect(() => {
     if (!currentDialogue) {
       const initialDialogue = getCurrentDialogue(gameState.currentScene);
       setCurrentDialogue(initialDialogue);
@@ -126,6 +127,9 @@ const App: React.FC = () => {
         break;
       case 'save_load':
         setGameMode('save_load');
+        break;
+      case 'systems_test':
+        setGameMode('systems_test');
         break;
       case 'continue_story': {
         // Continue with main story - start Chapter 1
@@ -219,6 +223,10 @@ const App: React.FC = () => {
                 handleReturnToHub();
               }}
             />
+          )}
+
+          {gameMode === 'systems_test' && (
+            <GameSystemsTest onReturn={handleReturnToHub} />
           )}
         </NovelInterface>
       </GameContainer>
