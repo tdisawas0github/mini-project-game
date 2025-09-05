@@ -19,20 +19,25 @@ const MapContainer = styled.div`
 
 const MapImage = styled.div`
   position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
   width: 100%;
-  height: 700px;
+  height: min(90vh, 1200px);
+  padding: 56px 36px;
   background: 
-    linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    linear-gradient(rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)),
     url('/src/maps/factions-of-valdaren.png') center/cover no-repeat,
     url('/src/maps/map-of-valdaren.png') center/cover no-repeat;
+  background-size: cover;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.38);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.22s ease;
+  overflow: visible;
   
   &:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+    transform: scale(1.005);
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.45);
   }
 `;
 
@@ -113,13 +118,21 @@ const MapRegion = styled.div<{
 `;
 
 const MapLegend = styled.div`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 0.7rem;
+  width: 220px;
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const MapRow = styled.div`
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  width: 100%;
 `;
 
 const LegendItem = styled.div<{ faction: string }>`
@@ -282,8 +295,84 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4, duration: 0.6 }}
         >
-          <MapImage>
-            {/* Map Legend */}
+          <MapRow>
+            <MapImage>
+            {/* Map Regions */}
+            <MapRegion 
+              faction="institute" 
+              top="8%" 
+              left="12%" 
+              width="12%" 
+              height="10%"
+              data-label="Ravengard"
+              data-tooltip="Urban seat of the Institute of Lingua Arcanum"
+            >
+              🏛️
+            </MapRegion>
+            
+            <MapRegion 
+              faction="clans" 
+              top="78%" 
+              left="18%" 
+              width="14%" 
+              height="12%"
+              data-label="Whispering Woods"
+              data-tooltip="Ancient forests where oral traditions keep Ellidric alive"
+            >
+              🌲
+            </MapRegion>
+            
+            <MapRegion 
+              faction="echoborn" 
+              top="18%" 
+              left="68%" 
+              width="12%" 
+              height="9%"
+              data-label="Ancient Ruins"
+              data-tooltip="Forgotten places where glyphs first touched human minds"
+            >
+              🏛️
+            </MapRegion>
+            
+            <MapRegion 
+              faction="clans" 
+              top="48%" 
+              left="58%" 
+              width="14%" 
+              height="11%"
+              data-label="Snowveil Forest"
+              data-tooltip="Borderland forest where clan storytellers practice traditions"
+            >
+              🌲
+            </MapRegion>
+            
+            <MapRegion 
+              faction="echoborn" 
+              top="3%" 
+              left="50%" 
+              width="9%" 
+              height="9%"
+              shape="circle"
+              data-label="Lumisth Glacier"
+              data-tooltip="Frozen Fringe where the first Ellidric glyphs were discovered"
+            >
+              🏔️
+            </MapRegion>
+            
+            <MapRegion 
+              faction="neutral" 
+              top="28%" 
+              left="38%" 
+              width="10%" 
+              height="9%"
+              shape="circle"
+              data-label="Lake Eirysa"
+              data-tooltip="Central landmark where all factions meet for diplomacy"
+            >
+              🏞️
+            </MapRegion>
+          </MapImage>
+            {/* Sidebar Legend */}
             <MapLegend>
               <LegendTitle>Factions of Valdaren</LegendTitle>
               <LegendItem faction="institute">
@@ -303,82 +392,7 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
                 Neutral Territories
               </LegendItem>
             </MapLegend>
-            
-            {/* Map Regions */}
-            <MapRegion 
-              faction="institute" 
-              top="15%" 
-              left="15%" 
-              width="15%" 
-              height="12%"
-              data-label="Ravengard"
-              data-tooltip="Urban seat of the Institute of Lingua Arcanum"
-            >
-              🏛️
-            </MapRegion>
-            
-            <MapRegion 
-              faction="clans" 
-              top="70%" 
-              left="20%" 
-              width="18%" 
-              height="15%"
-              data-label="Whispering Woods"
-              data-tooltip="Ancient forests where oral traditions keep Ellidric alive"
-            >
-              🌲
-            </MapRegion>
-            
-            <MapRegion 
-              faction="echoborn" 
-              top="8%" 
-              left="70%" 
-              width="14%" 
-              height="10%"
-              data-label="Ancient Ruins"
-              data-tooltip="Forgotten places where glyphs first touched human minds"
-            >
-              🏛️
-            </MapRegion>
-            
-            <MapRegion 
-              faction="clans" 
-              top="55%" 
-              left="60%" 
-              width="16%" 
-              height="12%"
-              data-label="Snowveil Forest"
-              data-tooltip="Borderland forest where clan storytellers practice traditions"
-            >
-              🌲
-            </MapRegion>
-            
-            <MapRegion 
-              faction="echoborn" 
-              top="3%" 
-              left="50%" 
-              width="10%" 
-              height="10%"
-              shape="circle"
-              data-label="Lumisth Glacier"
-              data-tooltip="Frozen Fringe where the first Ellidric glyphs were discovered"
-            >
-              🏔️
-            </MapRegion>
-            
-            <MapRegion 
-              faction="neutral" 
-              top="35%" 
-              left="35%" 
-              width="12%" 
-              height="10%"
-              shape="circle"
-              data-label="Lake Eirysa"
-              data-tooltip="Central landmark where all factions meet for diplomacy"
-            >
-              🏞️
-            </MapRegion>
-          </MapImage>
+          </MapRow>
         </motion.div>
 
         <RegionGrid>
