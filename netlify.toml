@@ -1,6 +1,6 @@
 [build]
-  base = "web-version-4"
-  publish = "web-version-4/dist"
+  base = "web-version-5"
+  publish = "web-version-5/dist"
   command = "npm ci && npm run build"
 
 [build.environment]

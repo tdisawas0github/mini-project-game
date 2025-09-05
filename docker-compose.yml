@@ -2,7 +2,7 @@ services:
   # Web application - Production build (uses pre-built dist folder)
   web:
     build:
-      context: ./web-version-4
+      context: ./web-version-5
       dockerfile: Dockerfile
     ports:
       - "3000:80"
@@ -17,7 +17,7 @@ services:
   # Web application - Production build from source (builds everything)
   web-build:
     build:
-      context: ./web-version-4
+      context: ./web-version-5
       dockerfile: Dockerfile.build
     ports:
       - "3001:80"
@@ -34,12 +34,12 @@ services:
   # Web application - Development build
   web-dev:
     build:
-      context: ./web-version-4
+      context: ./web-version-5
       dockerfile: Dockerfile.dev
     ports:
-      - "5173:5173"
+      - "5174:5174"
     volumes:
-      - ./web-version-4:/app
+      - ./web-version-5:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
@@ -47,7 +47,7 @@ services:
     profiles:
       - dev
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:5173/"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:5174/"]
       interval: 30s
       timeout: 10s
       retries: 3

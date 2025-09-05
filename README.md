@@ -2,19 +2,19 @@
 
 > **An immersive visual novel where ancient language magic reshapes reality and memory** 🪄📚
 
-![Status](https://img.shields.io/badge/status-enhanced_integration-success) ![Built With](https://img.shields.io/badge/built_with-react_typescript-blue) ![Version](https://img.shields.io/badge/version-4.0_valdaren_integration-purple)
+![Status](https://img.shields.io/badge/status-complete_quest_integration-success) ![Built With](https://img.shields.io/badge/built_with-react_typescript-blue) ![Version](https://img.shields.io/badge/version-5.0_ultimate_expansion-purple)
 
 You awaken in the frost-wrapped realm of Valdaren with no memory, but ancient **Ellidric** glyphs respond to your touch as if recognizing their creator. Discover your identity as the **First Speaker** while wielding a mystical language that can rewrite memories and reality itself.
 
-Navigate faction politics, master a multi-layered constructed language, and shape destinies through choices that ripple across an interconnected world of magic and mystery.
+Embark on a comprehensive RPG experience featuring **15+ main quests**, **5 Ellidric dialects**, **memory drift exploration**, and **dynamic character relationships** across **6 major regions**. Navigate faction politics, master advanced language systems, and shape destinies through choices that ripple across an interconnected world of magic and mystery.
 
 ## 🚀 Try It Now
 
 ### 🕹️ **Play the Web Version** (Recommended)
 ```bash
-cd web-version-4
+cd web-version-5
 npm install && npm run dev
-# Visit localhost:3000 to start your journey
+# Visit localhost:5174 to start your journey
 ```
 
 ### 📱 **Mobile Experience**
@@ -33,22 +33,48 @@ npm run ios                     # iOS (macOS required)
 ## ✨ What Makes This Special
 
 ### 🧙‍♀️ **Rich Narrative Experience**
-- **Discover your legacy** as the First Speaker who created Ellidric
-- **Memory manipulation mechanics** - Reshape identities and reality through dreamscapes
-- **Ethical complexity** - Navigate the moral implications of altering minds
-- **Multiple story paths** based on faction loyalty and linguistic mastery
+- **Complete Quest System** - 15+ main quests spanning 4 acts, plus faction and side quests
+- **Memory Drift Zones** - Explore unstable memories with glyph-based stabilization puzzles
+- **Dynamic Character Relations** - Build relationships with 20+ named NPCs across all factions
+- **Branching Storylines** - Multiple paths based on faction loyalty and linguistic mastery
 
 ### 🗺️ **Living World of Valdaren**
-- **Six distinct regions** each with unique characteristics and cultures
-- **Four major factions** with conflicting philosophies about language and power
-- **Consequence tracking** - Every choice creates ripple effects across the world
-- **Rich lore integration** from comprehensive world-building documents
+- **Six distinct regions** each with unique characteristics, cultures, and location-based quests
+- **Four major factions** with conflicting philosophies and specialized questlines
+- **Advanced consequence tracking** - Every choice creates ripple effects across characters and world state
+- **Rich lore integration** from comprehensive world-building documents with memory fragment collection
 
-### 🔤 **Linguistic Magic System**
-- **Multi-layered Ellidric language** that evolves based on your choices
+### 🔤 **Advanced Linguistic Magic System**
+- **Five Ellidric dialects** - Codex, Verdant, Glacial, Echo, and Pure Ellidric with mastery progression
 - **Multiple interpretation languages** (Dutch, Latin, Greek) reveal different story aspects
-- **Language unlocks** open new story interpretations and abilities
-- **Interactive glyph system** where symbols respond to your touch
+- **Practical language application** - Dialect mastery affects dialogue options and abilities
+- **Interactive memory stabilization** - Use glyph combinations to solve environmental puzzles
+
+## 🎮 Expanded Game Systems
+
+### 📜 **Quest Management**
+- **Prerequisites and Unlocks** - Content unlocks based on completed objectives
+- **Branching Objectives** - Multiple paths through quest completion
+- **Progress Tracking** - Detailed statistics and completion rates
+- **Integrated Rewards** - Experience, glyphs, faction reputation, and content unlocks
+
+### 🌀 **Memory Drift Exploration**
+- **4+ Unique Drift Zones** - Each with varying stability levels and challenges
+- **Risk vs Reward** - Higher corruption zones offer better rewards but greater danger
+- **Memory Fragment Collection** - Uncover hidden lore pieces throughout Valdaren
+- **Stabilization Mechanics** - Glyph-based puzzle solving to restore memories
+
+### 🎭 **Character Relationship System**
+- **Trust Levels** - Dynamic relationships affecting quest availability
+- **Character Arcs** - Multiple outcome paths based on player choices
+- **Faction Allegiances** - Character loyalties create story branch consequences
+- **20+ Named NPCs** - Each with detailed backgrounds and progression tracking
+
+### 🏆 **Achievement Integration**
+- **Multiple Categories** - Story, language, exploration, and social achievements
+- **Progress Milestones** - Clear objectives for dedicated players
+- **Unlock Rewards** - Achievements provide tangible gameplay benefits
+- **Completion Tracking** - Comprehensive statistics across all game systems
 
 ## 🏗️ For Developers
 
@@ -62,7 +88,7 @@ npm run ios                     # iOS (macOS required)
 ### 🔧 **Development Setup**
 ```bash
 # Web development
-cd web-version-4
+cd web-version-5
 npm install
 npm run dev          # Start development server
 npm run build        # Production build
@@ -83,7 +109,8 @@ npm run ios          # Launch on iOS (macOS required)
 │   ├── characters.md        # Character profiles and relationships
 │   ├── factions.md          # Detailed faction information
 │   └── mechanics.md         # Game systems and mechanics
-├── 🌐 web-version-4/        # Latest enhanced web experience
+├── 🌐 web-version-5/        # Ultimate expansion with complete quest integration
+├── 🌐 web-version-4/        # Enhanced web experience (previous version)
 ├── 📱 mobile/               # React Native mobile implementation
 ├── 📚 docs/                 # Deployment and technical documentation
 └── 🎨 about/                # Game lore, assets, and world maps
@@ -97,9 +124,14 @@ src/
 ├── data/
 │   └── gameData.ts          # Game data imports from world parser
 ├── components/
+│   ├── QuestSystem.tsx      # Complete quest management and tracking
+│   ├── MemoryDriftSystem.tsx # Memory exploration and stabilization
+│   ├── AdvancedLanguageSystem.tsx # 5-dialect language learning system
+│   ├── CharacterRelationships.tsx # Dynamic NPC relationship tracking
+│   ├── AchievementSystem.tsx # Comprehensive achievement system
 │   └── WorldMap.tsx         # Enhanced map with all regions and factions
 └── types/
-    └── game.ts              # Updated types with neutral faction support
+    └── game.ts              # Extended types for all new game systems
 ```
 
 ## 🗺️ The World of Valdaren
@@ -122,6 +154,32 @@ src/
 - **Lumisth Glacier** - Echoborn fringe with deep mythic resonance
 - **Lake Eirysa** - Neutral waters where factions meet for diplomacy
 
+## 📊 Content Scale & Features
+
+### 🎮 **Quest Content**
+- **15+ Main Quests** - Complete 4-act storyline from prologue to final convergence
+- **12+ Faction Quests** - 3-4 specialized questlines per major faction
+- **10+ Side Quests** - Rich optional content from NPCs across Valdaren
+- **100+ Objectives** - Varied quest objective types with branching paths
+
+### 🌐 **World Exploration**
+- **6 Major Regions** - Each with unique atmosphere, challenges, and storylines
+- **20+ Sub-locations** - Detailed areas within each region for exploration
+- **4+ Memory Drift Zones** - Explorable unstable memories with rewards
+- **Hidden Secrets** - Discoverable lore fragments and achievements
+
+### 👥 **Character Interactions**
+- **20+ Named Characters** - Each with detailed backgrounds and progression
+- **Dynamic Relationships** - Trust/betrayal system with meaningful consequences
+- **Faction Representatives** - Key figures representing each major power
+- **Character Arcs** - Multiple outcome paths based on relationship choices
+
+### 🗣️ **Language Mastery**
+- **5 Ellidric Dialects** - Codex, Verdant, Glacial, Echo, and Pure Ellidric
+- **Progression Tiers** - Novice → Adept → Master for each dialect
+- **Timed Challenges** - Polyglot tests requiring multi-language synthesis
+- **Practical Application** - Language skills unlock dialogue options and abilities
+
 ## 🌟 Community & Resources
 
 ### 📚 **Documentation**
@@ -136,12 +194,14 @@ src/
 - **[💬 Discussions](../../discussions)** - Join the community conversation
 
 ### 🔮 **Player Testimonials**
-> *"The enhanced world integration makes every choice feel meaningful. The faction system creates genuine moral complexity."* - @WorldBuilderPro
+> *"Web Version 5's quest system transforms this from a visual novel into a full RPG experience. The memory drift mechanics are genuinely innovative."* - @QuestMasterPro
 
-> *"Version 4.0's map system brings Valdaren to life. Each region has its own personality and philosophy."* - @NarrativeGamer
+> *"The five Ellidric dialects each feel distinct and meaningful. Mastering them unlocks completely different story experiences."* - @LanguageLoreMaster
+
+> *"Character relationships matter in ways I've never seen before. Every conversation choice ripples through the entire world state."* - @NarrativeGamer
 
 ---
 
-**✨ May your words reshape reality, and may reality reshape your words ✨**
+**✨ May your quests reshape destiny, and may destiny reshape your quests ✨**
 
-*Crafted with 💜 by narrative designers who believe games are interactive literature*
+*Crafted with 💜 by narrative designers who believe interactive stories can rival any epic*
