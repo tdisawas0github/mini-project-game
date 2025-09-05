@@ -3,7 +3,7 @@
   "name": "echoes-of-ellidra",
   "builds": [
     {
-      "src": "web-version-4/package.json",
+      "src": "web-version-5/package.json",
       "use": "@vercel/static-build",
       "config": {
         "distDir": "dist"
@@ -19,7 +19,7 @@
       "dest": "/index.html"
     }
   ],
-  "buildCommand": "cd web-version-4 && npm ci && npm run build",
-  "outputDirectory": "web-version-4/dist",
-  "installCommand": "cd web-version-4 && npm ci"
+  "buildCommand": "cd web-version-5 && npm ci && npm run build",
+  "outputDirectory": "web-version-5/dist",
+  "installCommand": "cd web-version-5 && npm ci"
 }
