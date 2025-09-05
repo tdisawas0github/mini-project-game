@@ -20,7 +20,7 @@ const MapContainer = styled.div`
 const MapImage = styled.div`
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 600px;
   background: 
     linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
     url('/src/maps/factions-of-valdaren.png') center/cover no-repeat,
@@ -307,10 +307,10 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             {/* Map Regions */}
             <MapRegion 
               faction="institute" 
-              top="25%" 
-              left="20%" 
-              width="18%" 
-              height="15%"
+              top="20%" 
+              left="15%" 
+              width="15%" 
+              height="12%"
               data-label="Ravengard"
               data-tooltip="Urban seat of the Institute of Lingua Arcanum"
             >
@@ -319,10 +319,10 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             
             <MapRegion 
               faction="clans" 
-              top="55%" 
-              left="25%" 
-              width="22%" 
-              height="18%"
+              top="60%" 
+              left="20%" 
+              width="18%" 
+              height="15%"
               data-label="Whispering Woods"
               data-tooltip="Ancient forests where oral traditions keep Ellidric alive"
             >
@@ -331,10 +331,10 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             
             <MapRegion 
               faction="echoborn" 
-              top="15%" 
-              left="65%" 
-              width="16%" 
-              height="12%"
+              top="10%" 
+              left="70%" 
+              width="14%" 
+              height="10%"
               data-label="Ancient Ruins"
               data-tooltip="Forgotten places where glyphs first touched human minds"
             >
@@ -343,10 +343,10 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             
             <MapRegion 
               faction="clans" 
-              top="45%" 
-              left="55%" 
-              width="20%" 
-              height="15%"
+              top="50%" 
+              left="60%" 
+              width="16%" 
+              height="12%"
               data-label="Snowveil Forest"
               data-tooltip="Borderland forest where clan storytellers practice traditions"
             >
@@ -355,10 +355,10 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             
             <MapRegion 
               faction="echoborn" 
-              top="8%" 
-              left="45%" 
-              width="12%" 
-              height="12%"
+              top="5%" 
+              left="50%" 
+              width="10%" 
+              height="10%"
               shape="circle"
               data-label="Lumisth Glacier"
               data-tooltip="Frozen Fringe where the first Ellidric glyphs were discovered"
@@ -368,10 +368,10 @@ const WorldMap = ({ onReturn }: WorldMapProps) => {
             
             <MapRegion 
               faction="neutral" 
-              top="40%" 
-              left="40%" 
-              width="15%" 
-              height="12%"
+              top="45%" 
+              left="35%" 
+              width="12%" 
+              height="10%"
               shape="circle"
               data-label="Lake Eirysa"
               data-tooltip="Central landmark where all factions meet for diplomacy"
