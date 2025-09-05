@@ -58,7 +58,7 @@ export function useDebounce<T>(value: T, delay: number): T {
  * @param delay - Throttle delay in milliseconds
  * @returns Throttled function
  */
-export function useThrottle<T extends (...args: any[]) => any>(
+export function useThrottle<T extends (...args: unknown[]) => unknown>(
   callback: T, 
   delay: number
 ): T {
@@ -79,7 +79,7 @@ export function useThrottle<T extends (...args: any[]) => any>(
  * @returns Lazily initialized value
  */
 export function useLazyValue<T>(initializer: () => T): T {
-  return useMemo(initializer, []);
+  return useMemo(() => initializer(), [initializer]);
 }
 
 /**
@@ -87,7 +87,7 @@ export function useLazyValue<T>(initializer: () => T): T {
  * @param object - Object to stabilize
  * @returns Stable object reference
  */
-export function useStableObject<T extends Record<string, any>>(object: T): T {
+export function useStableObject<T extends Record<string, unknown>>(object: T): T {
   return useMemoCompare(() => object, Object.values(object));
 }
 

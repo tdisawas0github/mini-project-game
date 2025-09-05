@@ -39,7 +39,7 @@ class AudioManager {
   private createAudio(frequency: number, duration: number, type: 'sine' | 'square' | 'sawtooth' = 'sine'): HTMLAudioElement {
     // Try to create a simple audio using Web Audio API and convert to data URL
     try {
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const audioContext = new (window.AudioContext || ((window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext))();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
       
@@ -60,7 +60,7 @@ class AudioManager {
       // Use a data URL for a simple beep
       audio.src = `data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeCS2H0fLMcyIFGWm48+CVTQ0PV6zl7bVoFgUiOAAAAAAAGBEAAD8A`;
       return audio;
-    } catch (error) {
+    } catch {
       // Fallback: create silent audio element
       const audio = new Audio();
       audio.src = `data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeCS2H0fLMcyIFGWm48+CVTQ0PV6zl7bVoFgUiOAAAAAAAGBEAAD8A`;

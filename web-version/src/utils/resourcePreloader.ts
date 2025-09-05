@@ -31,7 +31,7 @@ export function preloadResource(href: string, options: PreloadOptions = {}) {
   if (options.type) link.type = options.type;
   if (options.media) link.media = options.media;
   if (options.priority && 'fetchPriority' in link) {
-    (link as any).fetchPriority = options.priority;
+    (link as HTMLLinkElement & { fetchPriority: string }).fetchPriority = options.priority;
   }
 
   document.head.appendChild(link);

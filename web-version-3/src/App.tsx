@@ -97,7 +97,7 @@ const App: React.FC = () => {
         // TODO: Implement language study
         console.log('Language study not yet implemented');
         break;
-      case 'continue_story':
+      case 'continue_story': {
         // Continue with main story - for now return to dialogue
         const continueDialogue = getCurrentDialogue('hub_main');
         if (continueDialogue) {
@@ -105,6 +105,7 @@ const App: React.FC = () => {
           setGameMode('dialogue');
         }
         break;
+      }
       default:
         console.log(`Navigation to ${destination} not implemented`);
     }

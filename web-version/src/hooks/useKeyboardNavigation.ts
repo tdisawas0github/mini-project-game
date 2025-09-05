@@ -6,7 +6,7 @@ interface KeyboardNavigationConfig {
   onChoice?: (index: number) => void;
   onMenu?: () => void;
   onSkip?: () => void;
-  choices?: any[];
+  choices?: unknown[];
   disabled?: boolean;
 }
 
@@ -62,13 +62,14 @@ export function useKeyboardNavigation({
       case '6':
       case '7':
       case '8':
-      case '9':
+      case '9': {
         event.preventDefault();
         const choiceIndex = parseInt(event.key) - 1;
         if (choiceIndex < choices.length && onChoice) {
           onChoice(choiceIndex);
         }
         break;
+      }
         
       default:
         // Let other keys through
