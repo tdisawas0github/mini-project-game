@@ -47,6 +47,12 @@ const HubNavigation = ({ onNavigate }: HubNavigationProps) => {
       available: gameState.knownLanguages.length > 0
     },
     {
+      id: 'glyph_resonance',
+      title: '🔮 Glyph Resonance',
+      description: 'Experiment with combining Ellidric glyphs to discover new powers',
+      available: gameState.unlockedGlyphs.length >= 3 // Need at least 3 glyphs
+    },
+    {
       id: 'character_relationships',
       title: '👥 Character Relations',
       description: 'Review your connections and alliances with key figures',

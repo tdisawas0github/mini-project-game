@@ -104,7 +104,7 @@ export const valdarenFactionsLegacy = {
   neutral: valdarenFactions[3]
 };
 
-// Map data structure that matches the Valdaren faction_map.json format
+// Map data structure with percentage-based coordinates
 export const valdarenMapData = {
   map_image: '/assets/map-of-valdaren.png',
   regions: [
@@ -112,10 +112,10 @@ export const valdarenMapData = {
       id: 'ravengard',
       name: 'Ravengard',
       faction: 'Institute',
-      x: 120,
-      y: 80,
-      w: 160,
-      h: 120,
+      x: 50,   // Left side of map
+      y: 100,  // Upper portion
+      w: 120,  // Reasonable size
+      h: 80,   // Reasonable size
       influence: 60,
       description: 'Urban seat of the Institute of Lingua Arcanum.'
     },
@@ -123,10 +123,10 @@ export const valdarenMapData = {
       id: 'whispering_woods',
       name: 'Whispering Woods',
       faction: 'Clans',
-      x: 320,
-      y: 220,
-      w: 180,
-      h: 140,
+      x: 50,   // Left-center
+      y: 300,  // Lower portion
+      w: 150,  // Larger region
+      h: 100,  // Larger region
       influence: 50,
       description: 'Old oral traditions and living glyph-song.'
     },
@@ -134,43 +134,21 @@ export const valdarenMapData = {
       id: 'ancient_ruins',
       name: 'Ancient Ruins',
       faction: 'Echoborn',
-      x: 540,
-      y: 120,
-      w: 150,
-      h: 130,
+      x: 350,  // Right side
+      y: 150,  // Middle-right
+      w: 120,  // Medium size
+      h: 90,   // Medium size
       influence: 30,
       description: 'Forgotten places where glyphs first touched minds.'
-    },
-    {
-      id: 'snowveil_forest',
-      name: 'Snowveil Forest',
-      faction: 'Clans',
-      x: 200,
-      y: 350,
-      w: 140,
-      h: 100,
-      influence: 35,
-      description: 'Borderland forest of storytellers.'
-    },
-    {
-      id: 'lumisth_glacier',
-      name: 'Lumisth Glacier',
-      faction: 'Echoborn',
-      x: 450,
-      y: 50,
-      w: 120,
-      h: 80,
-      influence: 25,
-      description: 'Frozen Fringe of first discoveries.'
     },
     {
       id: 'lake_eirysa',
       name: 'Lake Eirysa',
       faction: 'Neutral',
-      x: 300,
-      y: 150,
-      w: 100,
-      h: 80,
+      x: 200,  // Center of map
+      y: 200,  // Center vertically
+      w: 100,  // Central lake
+      h: 60,   // Central lake
       influence: 40,
       description: 'Central diplomatic meeting ground.'
     }
