@@ -8,7 +8,7 @@ const LanguageSystemContainer = styled(motion.div)`
   background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   padding: 2rem;
   color: white;
-  font-family: 'Cinzel', serif;
+  font-family: 'Merriweather', serif;
 `;
 
 const LanguageHeader = styled.div`

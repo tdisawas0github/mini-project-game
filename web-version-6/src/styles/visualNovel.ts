@@ -9,7 +9,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+    font-family: 'Playfair Display', 'Georgia', 'Times New Roman', serif;
     background: linear-gradient(135deg, 
       #0f0f23 0%, 
       #1a1a2e 25%, 
@@ -122,7 +122,7 @@ export const SpeakerName = styled.div`
   color: #d4af37;
   margin-bottom: 12px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-  font-family: 'Cinzel', 'Cormorant Garamond', serif;
+  font-family: 'Merriweather', 'Playfair Display', serif;
   letter-spacing: 0.05em;
 
   &::before {
@@ -139,7 +139,7 @@ export const DialogueText = styled.div`
   margin-bottom: 20px;
   white-space: pre-wrap;
   word-wrap: break-word;
-  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-family: 'Playfair Display', 'Georgia', serif;
   font-weight: 400;
   letter-spacing: 0.01em;
   
@@ -200,7 +200,7 @@ export const ChoiceButton = styled.button`
   color: #e2e8f0;
   padding: 16px 24px;
   font-size: 1.05em;
-  font-family: 'Inter', 'Cormorant Garamond', serif;
+  font-family: 'Poppins', 'Playfair Display', sans-serif;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -302,7 +302,7 @@ export const HubTitle = styled.h1`
   text-shadow: 
     0 4px 8px rgba(0, 0, 0, 0.8),
     0 0 20px rgba(212, 175, 55, 0.3);
-  font-family: 'Cinzel', 'Cormorant Garamond', serif;
+  font-family: 'Merriweather', 'Playfair Display', serif;
   letter-spacing: 0.02em;
 `;
 
@@ -313,7 +313,7 @@ export const HubSubtitle = styled.p`
   margin-bottom: 40px;
   max-width: 600px;
   line-height: 1.6;
-  font-family: 'Inter', 'Cormorant Garamond', sans-serif;
+  font-family: 'Poppins', 'Playfair Display', sans-serif;
   font-weight: 400;
   letter-spacing: 0.01em;
 `;
@@ -326,7 +326,7 @@ export const PlayerNameInput = styled.input`
   color: #e2e8f0;
   padding: 16px 20px;
   font-size: 1.1em;
-  font-family: 'Inter', 'Cormorant Garamond', sans-serif;
+  font-family: 'Poppins', 'Playfair Display', sans-serif;
   font-weight: 400;
   margin: 20px 0;
   width: 100%;
