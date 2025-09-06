@@ -10,21 +10,21 @@ Web Version 6 transforms the visual and interactive experience of "Echoes of Ell
 We've integrated carefully selected Google Fonts to create a sophisticated typographic hierarchy:
 
 #### Primary Fonts Added:
-- **Cormorant Garamond** - Elegant serif for body text and dialogue
-- **Cinzel** - Majestic serif for titles and character names  
-- **Inter** - Modern sans-serif for UI elements and subtitles
+- **Playfair Display** - Elegant serif for body text and dialogue
+- **Merriweather** - Modern serif for titles and character names  
+- **Poppins** - Clean sans-serif for UI elements and subtitles
 - **Source Code Pro** - Monospace for technical elements (ready for future use)
 
 ### Font Mapping & Usage:
 
 | Element | New Font | Old Font | Enhancement |
 |---------|----------|----------|-------------|
-| **Body Text** | Cormorant Garamond | Georgia | More elegant, better readability |
-| **Game Title** | Cinzel | Georgia | Majestic, fantasy-appropriate |
-| **Character Names** | Cinzel | Monaco | Elegant, befitting mystical characters |
-| **Choice Buttons** | Inter | Georgia | Modern, clear UI font |
-| **UI Elements** | Inter | Georgia | Consistent modern interface |
-| **Input Fields** | Inter | Georgia | Better form readability |
+| **Body Text** | Playfair Display | Georgia | More elegant, better readability |
+| **Game Title** | Merriweather | Georgia | Modern, fantasy-appropriate |
+| **Character Names** | Merriweather | Monaco | Elegant, befitting mystical characters |
+| **Choice Buttons** | Poppins | Georgia | Modern, clear UI font |
+| **UI Elements** | Poppins | Georgia | Consistent modern interface |
+| **Input Fields** | Poppins | Georgia | Better form readability |
 
 ### Typography Enhancements:
 - ✨ **Enhanced Letter Spacing**: Improved character spacing for better readability
@@ -68,14 +68,14 @@ We've integrated carefully selected Google Fonts to create a sophisticated typog
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <!-- Optimized font loading with display=swap -->
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Poppins:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&family=Merriweather:wght@400;500;600;700&display=swap" rel="stylesheet">
 ```
 
 ### Fallback Strategy:
 Each font includes comprehensive fallbacks:
-- **Cormorant Garamond** → Georgia → Times New Roman → serif
-- **Cinzel** → Cormorant Garamond → serif  
-- **Inter** → system-ui → sans-serif
+- **Playfair Display** → Georgia → Times New Roman → serif
+- **Merriweather** → Playfair Display → serif  
+- **Poppins** → system-ui → sans-serif
 - **Source Code Pro** → Consolas → Monaco → monospace
 
 ## 🎯 User Experience Impact
