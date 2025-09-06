@@ -1,8 +1,7 @@
 import { motion } from 'framer-motion';
-import React from 'react';
 import { useGameState } from '../hooks/useGameState';
 import { valdarenRegions, valdarenFactionsLegacy } from '../utils/worldDataParser';
-import { HubContainer, HubTitle, ChoiceButton } from '../styles/visualNovel';
+import { HubTitle, ChoiceButton } from '../styles/visualNovel';
 import styled from 'styled-components';
 
 const Container = styled.div`
